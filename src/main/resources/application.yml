@@ -12,5 +12,7 @@ server:
   port: 8002
 mybatis:
   mapper-locations: classpath:/mybatis/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 file:
   path: /home/leadeon/下载/

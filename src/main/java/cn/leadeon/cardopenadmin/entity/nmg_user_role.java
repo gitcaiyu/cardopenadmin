@@ -4,9 +4,13 @@ import lombok.Data;
 
 @Data
 public class nmg_user_role {
-    private String userId;
-
     private String roleId;
 
-    private String grantDate;
+    private String roleName;
+
+    private String roleType;
+
+    private String createTime;
+
+    private String createPeople;
 }

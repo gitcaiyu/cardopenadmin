@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_user_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_user_info" >
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_pass" property="userPass" jdbcType="VARCHAR" />
+    <result column="user_role" property="userRole" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="user_tel" property="userTel" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_user_info" >
+    insert into nmg_user_info (user_id, user_name, user_pass, 
+      user_role, user_type, user_tel, 
+      city_code, flag, create_time, 
+      update_time)
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPass,jdbcType=VARCHAR}, 
+      #{userRole,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR}, 
+      #{cityCode,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_user_info" >
+    insert into nmg_user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userPass != null" >
+        user_pass,
+      </if>
+      <if test="userRole != null" >
+        user_role,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="userTel != null" >
+        user_tel,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null" >
+        #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null" >
+        #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="userTel != null" >
+        #{userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getUserInfoByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select user_id,user_name,user_pass,user_role,user_type,user_tel,city_code,flag,create_time,update_time from nmg_user_info where user_tel = #{phone,jdbcType=VARCHAR} and flag = 'Y'
+  </select>
+
+  <select id="userValid" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select user_id,user_name,user_pass,user_role,user_type,user_tel,city_code,flag,create_time,update_time from nmg_user_info where user_name = #{userName,jdbcType=VARCHAR} and user_pass = #{userPass,jdbcType=VARCHAR} and flag = 'Y'
+  </select>
+
+</mapper>

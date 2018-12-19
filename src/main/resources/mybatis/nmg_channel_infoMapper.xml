@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_channel_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_channel_info" >
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="charge_name" property="chargeName" jdbcType="VARCHAR" />
+    <result column="charge_tel" property="chargeTel" jdbcType="VARCHAR" />
+    <result column="channel_address" property="channelAddress" jdbcType="VARCHAR" />
+      <result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info" >
+    insert into nmg_channel_info (channel_id, channel_name, channel_type, 
+      city, county, charge_name, 
+      charge_tel, channel_address,channel_code)
+    values (#{channelId,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{chargeName,jdbcType=VARCHAR}, 
+      #{chargeTel,jdbcType=VARCHAR}, #{channelAddress,jdbcType=VARCHAR},#{channelCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info" >
+    insert into nmg_channel_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="channelType != null" >
+        channel_type,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="chargeName != null" >
+        charge_name,
+      </if>
+      <if test="chargeTel != null" >
+        charge_tel,
+      </if>
+      <if test="channelAddress != null" >
+        channel_address,
+      </if>
+      <if test="channelCode != null">
+          channel_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        #{channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeName != null" >
+        #{chargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeTel != null" >
+        #{chargeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="channelAddress != null" >
+        #{channelAddress,jdbcType=VARCHAR},
+      </if>
+        <if test="channelCode != null">
+            #{channelCode,jdbcType=VARCHAR},
+        </if>
+    </trim>
+  </insert>
+
+  <select id="myChannelInfo" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+    channel_id,
+    channel_name,
+    CASE
+    WHEN channel_type = 1 THEN
+    '社会渠道' ELSE '自营渠道'
+    END channel_type,
+    city.city_name,
+    county.county_name,
+    charge_name,
+    charge_tel,
+    channel_address,
+    channel_code
+    FROM
+    nmg_channel_info channel
+    INNER JOIN nmg_city_info city ON channel.city = city.city_id
+    INNER JOIN nmg_county_info county ON channel.county = county.county_id
+    where 1 = 1
+    <if test="chargeTel != null">
+      and charge_tel = #{chargeTel,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and city = (select city_id from nmg_city_info where city_code = #{city,jdbcType=VARCHAR})
+    </if>
+    <if test="channelType != null" >
+      and channel_type = #{channelType,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <delete id="channelDel" parameterType="java.lang.String">
+    delete from nmg_channel_info where channel_id = #{channelId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

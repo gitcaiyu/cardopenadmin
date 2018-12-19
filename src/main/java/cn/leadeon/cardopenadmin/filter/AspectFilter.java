@@ -26,26 +26,19 @@ public class AspectFilter {
     }
 
     @Around("AspectMethod()")
-    public Object handle(ProceedingJoinPoint proceedingJoinPoint) {
+    public Object handle(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();
         if (servletRequestAttributes != null) {
             HttpServletRequest request = servletRequestAttributes.getRequest();
             startTime.set(System.currentTimeMillis());
-            String exception = null;
-            try {
-                result = proceedingJoinPoint.proceed();
-            } catch (Throwable e) {
-                exception = e.getMessage();
-            }
-            if (exception == null) {
-                log.info("--------------------------------------------------------");
-                log.info("URL : " + request.getRequestURL().toString());
-                log.info("ARGS : " + Arrays.toString(proceedingJoinPoint.getArgs()));
-                log.info("RESPONSE : " + result.toString());
-                log.info("SPEND TIME : " + (System.currentTimeMillis() - startTime.get()));
-                log.info("--------------------------------------------------------");
-            }
+            result = proceedingJoinPoint.proceed();
+            log.info("--------------------------------------------------------");
+            log.info("URL : " + request.getRequestURL().toString());
+            log.info("ARGS : " + Arrays.toString(proceedingJoinPoint.getArgs()));
+            log.info("RESPONSE : " + result.toString());
+            log.info("SPEND TIME : " + (System.currentTimeMillis() - startTime.get()));
+            log.info("--------------------------------------------------------");
         }
         return result;
     }

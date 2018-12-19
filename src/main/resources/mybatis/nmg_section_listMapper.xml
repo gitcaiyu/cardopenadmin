@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_section_listMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_section_list" >
+    <result column="SECTION" property="section" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="ID" property="id" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_section_list" >
+    insert into nmg_section_list (SECTION, CITY_CODE, ID
+      )
+    values (#{section,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_section_list" >
+    insert into nmg_section_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="section != null" >
+        SECTION,
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE,
+      </if>
+      <if test="id != null" >
+        ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="section != null" >
+        #{section,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="isValid" parameterType="java.lang.String" resultType="java.lang.String">
+    select section from nmg_section_list where left(#{phone,jdbcType=VARCHAR},7) = section
+  </select>
+</mapper>
