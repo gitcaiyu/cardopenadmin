@@ -54,6 +54,18 @@ public class nmg_channel_infoService {
             }
             result.put("county", nmg_county_infoMapper.countyInfo(param));
         }
+        if (null != nmg_channel_info.getChannelName() || !"".equals(nmg_channel_info.getChannelName())) {
+            param.put("channelName",nmg_channel_info.getChannelName());
+        }
+        if (null != nmg_channel_info.getChannelCode() || !"".equals(nmg_channel_info.getChannelCode())) {
+            param.put("channelCode",nmg_channel_info.getChannelCode());
+        }
+        if (null != nmg_channel_info.getChargeName() || !"".equals(nmg_channel_info.getChargeName())) {
+            param.put("chargeName",nmg_channel_info.getChargeName());
+        }
+        if (null != nmg_channel_info.getChargeTel() || !"".equals(nmg_channel_info.getChargeTel())) {
+            param.put("channelTel",nmg_channel_info.getChargeTel());
+        }
         result.put("channel",nmg_channel_infoMapper.myChannelInfo(param));
         results.add(result);
         cardResponse.setResBody(results);

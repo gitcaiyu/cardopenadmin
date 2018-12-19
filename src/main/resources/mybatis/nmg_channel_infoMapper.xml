@@ -110,6 +110,18 @@
     <if test="channelType != null" >
       and channel_type = #{channelType,jdbcType=VARCHAR}
     </if>
+    <if test="channelName != null" >
+      and channel_name = #{channelName,jdbcType=VARCHAR}
+    </if>
+    <if test="channelCode != null">
+      and channel_code = #{channelCode,jdbcType=VARCHAR}
+    </if>
+    <if test="chargeName != null" >
+      and charge_name = #{chargeName,jdbcType=VARCHAR}
+    </if>
+    <if test="chargeTel != null" >
+      and charge_tel = #{chargeTel,jdbcType=VARCHAR}
+    </if>
   </select>
 
   <delete id="channelDel" parameterType="java.lang.String">
