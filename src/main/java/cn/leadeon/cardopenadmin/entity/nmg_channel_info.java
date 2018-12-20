@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class nmg_channel_info {
+
     private String channelId;
 
     private String channelName;

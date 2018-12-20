@@ -39,6 +39,15 @@
   </insert>
 
   <select id="countyInfo" parameterType="java.util.Map" resultType="java.util.Map">
-    select county_id,county_name,city_code from nmg_county_info where city_code = #{city,jdbcType=VARCHAR}
+    select county_id,county_name,city_code from nmg_county_info where 1=1
+    <if test="city != null">
+      and city_code = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and county_id = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="cityName != null">
+      and city_code = (select city_code from nmg_city_info where city_name = #{cityName,jdbcType=VARCHAR})
+    </if>
   </select>
 </mapper>

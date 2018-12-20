@@ -37,7 +37,7 @@
       </if>
       <if test="county != null" >
         county,
-      </if>
+      </if>channelUpdate
       <if test="chargeName != null" >
         charge_name,
       </if>
@@ -98,20 +98,23 @@
     channel_code
     FROM
     nmg_channel_info channel
-    INNER JOIN nmg_city_info city ON channel.city = city.city_id
+    INNER JOIN nmg_city_info city ON channel.city = city.city_code
     INNER JOIN nmg_county_info county ON channel.county = county.county_id
     where 1 = 1
     <if test="chargeTel != null">
       and charge_tel = #{chargeTel,jdbcType=VARCHAR}
     </if>
     <if test="city != null">
-      and city = (select city_id from nmg_city_info where city_code = #{city,jdbcType=VARCHAR})
+      and city = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and county = #{county,jdbcType=VARCHAR}
     </if>
     <if test="channelType != null" >
       and channel_type = #{channelType,jdbcType=VARCHAR}
     </if>
     <if test="channelName != null" >
-      and channel_name = #{channelName,jdbcType=VARCHAR}
+      and channel_name = #{channelName,jdbcType=VARCHAR}String
     </if>
     <if test="channelCode != null">
       and channel_code = #{channelCode,jdbcType=VARCHAR}
@@ -127,5 +130,19 @@
   <delete id="channelDel" parameterType="java.lang.String">
     delete from nmg_channel_info where channel_id = #{channelId,jdbcType=VARCHAR}
   </delete>
+
+  <update id="channelUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info">
+    update
+      nmg_channel_info
+    set
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      charge_name = #{chargeName,jdbcType=VARCHAR},
+      charge_tel = #{chargeTel,jdbcType=VARCHAR},
+      channel_address = #{channelAddress,jdbcType=VARCHAR}
+    where
+      channel_id = #{channelId,jdbcType=VARCHAR}
+  </update>
 
 </mapper>

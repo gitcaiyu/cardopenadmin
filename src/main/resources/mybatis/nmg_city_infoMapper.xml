@@ -73,6 +73,9 @@
     <if test="city != null">
       and city_code = #{city,jdbcType=VARCHAR}
     </if>
+    <if test="cityName != null">
+      and city_name = #{cityName,jdbcType=VARCHAR}
+    </if>
   </select>
 
 </mapper>
