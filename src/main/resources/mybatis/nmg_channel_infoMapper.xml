@@ -127,7 +127,12 @@
     </if>
   </select>
 
-  <delete id="channelDel" parameterType="java.lang.String">
+    <select id="isExists" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info"
+            resultType="java.lang.Integer">
+    select count(*) from nmg_channel_info where charge_tel = #{chargeTel,jdbcType=VARCHAR}
+  </select>
+
+    <delete id="channelDel" parameterType="java.lang.String">
     delete from nmg_channel_info where channel_id = #{channelId,jdbcType=VARCHAR}
   </delete>
 
@@ -144,5 +149,9 @@
     where
       channel_id = #{channelId,jdbcType=VARCHAR}
   </update>
+
+    <delete id="truncatChannel">
+    truncate table nmg_channel_info
+  </delete>
 
 </mapper>

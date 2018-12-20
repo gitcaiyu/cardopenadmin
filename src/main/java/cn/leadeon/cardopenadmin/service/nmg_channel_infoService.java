@@ -123,46 +123,51 @@ public class nmg_channel_infoService {
         HSSFSheet sheet= hssfWorkbook.createSheet("工单信息");
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = row.createCell(0);
-        cell.setCellValue("渠道名称");
+        cell.setCellValue("渠道编码");
         cell = row.createCell(1);
-        cell.setCellValue("渠道类型");
+        cell.setCellValue("渠道名称");
         cell = row.createCell(2);
-        cell.setCellValue("盟市");
+        cell.setCellValue("渠道类型");
         cell = row.createCell(3);
-        cell.setCellValue("县区");
+        cell.setCellValue("盟市");
         cell = row.createCell(4);
-        cell.setCellValue("负责人");
+        cell.setCellValue("县区");
         cell = row.createCell(5);
-        cell.setCellValue("负责人机号");
+        cell.setCellValue("负责人");
         cell = row.createCell(6);
+        cell.setCellValue("负责人机号");
+        cell = row.createCell(7);
         cell.setCellValue("渠道地址");
         List<Map<String,Object>> result = nmg_channel_infoMapper.myChannelInfo(param);
         for (int i = 0; i < result.size(); i++) {
             Map maps = result.get(i);
             row = sheet.createRow(i + 1);
+            if (null != maps.get("channel_id")) {
+                row.createCell(0).setCellValue((String) maps.get("channel_id"));
+            }
             if (null != maps.get("channel_name")) {
-                row.createCell(0).setCellValue((String) maps.get("channel_name"));
+                row.createCell(1).setCellValue((String) maps.get("channel_name"));
                 if (i == 0) {
-                    fileName = fileName + maps.get("channel_name").toString()+ DateUtil.getDateString() +".xls";
+                    fileName = fileName + maps.get("channel_name").toString() + DateUtil.getDateString() + ".xls";
                 }
             }
             if (null != maps.get("channel_type")) {
-                row.createCell(1).setCellValue((String) maps.get("channel_type"));
+                row.createCell(2).setCellValue((String) maps.get("channel_type"));
             }
             if (null != maps.get("city_name")) {
-                row.createCell(2).setCellValue((String) maps.get("city_name"));
+                row.createCell(3).setCellValue((String) maps.get("city_name"));
             }
             if (null != maps.get("county_name")) {
-                row.createCell(3).setCellValue((String) maps.get("county_name"));
+                row.createCell(4).setCellValue((String) maps.get("county_name"));
             }
             if (null != maps.get("charge_name")) {
-                row.createCell(4).setCellValue((String) maps.get("charge_name"));
+                row.createCell(5).setCellValue((String) maps.get("charge_name"));
             }
             if (null != maps.get("charge_tel")) {
-                row.createCell(5).setCellValue((String) maps.get("charge_tel"));
+                row.createCell(6).setCellValue((String) maps.get("charge_tel"));
             }
             if (null != maps.get("channel_address")) {
-                row.createCell(6).setCellValue((String) maps.get("channel_address"));
+                row.createCell(7).setCellValue((String) maps.get("channel_address"));
             }
         }
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
@@ -187,25 +192,29 @@ public class nmg_channel_infoService {
                 nmg_channel_info nmg_channel_info = new nmg_channel_info();
                 HSSFRow row = sheetAt.getRow(j);
                 //渠道ID
-                nmg_channel_info.setChannelId(new RandomUtil().uuid);
+                nmg_channel_info.setChannelId(row.getCell(0).getStringCellValue());
                 //渠道名称
-                nmg_channel_info.setChannelName(row.getCell(0).getStringCellValue());
+                nmg_channel_info.setChannelName(row.getCell(1).getStringCellValue());
                 //渠道类型
-                if ("社会渠道".equals(row.getCell(1).getStringCellValue())) {
+                if ("社会渠道".equals(row.getCell(2).getStringCellValue())) {
                     nmg_channel_info.setChannelType("1");
                 } else {
                     nmg_channel_info.setChannelType("2");
                 }
                 //盟市
-                param.put("cityName",row.getCell(2).getStringCellValue());
+                param.put("cityName", row.getCell(3).getStringCellValue());
                 nmg_city_info city = nmg_city_infoMapper.cityInfo(param).get(0);
                 nmg_channel_info.setCity(city.getCityCode());
                 Map county = nmg_county_infoMapper.countyInfo(param).get(0);
                 nmg_channel_info.setCounty(county.get("county_id").toString());
-                nmg_channel_info.setChargeName(row.getCell(4).getStringCellValue());
-                nmg_channel_info.setChargeTel(row.getCell(5).getStringCellValue());
-                nmg_channel_info.setChannelAddress(row.getCell(6).getStringCellValue());
-                nmg_channel_infoMapper.insert(nmg_channel_info);
+                nmg_channel_info.setChargeName(row.getCell(5).getStringCellValue());
+                nmg_channel_info.setChargeTel(row.getCell(6).getStringCellValue());
+                nmg_channel_info.setChannelAddress(row.getCell(7).getStringCellValue());
+                if (nmg_channel_infoMapper.isExists(nmg_channel_info) == 0) {
+                    nmg_channel_infoMapper.insert(nmg_channel_info);
+                } else {
+                    nmg_channel_infoMapper.channelUpdate(nmg_channel_info);
+                }
             }
         }
         return cardResponse;

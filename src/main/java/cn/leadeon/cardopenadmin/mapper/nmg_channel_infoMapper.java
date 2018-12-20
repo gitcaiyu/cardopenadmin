@@ -15,4 +15,6 @@ public interface nmg_channel_infoMapper {
     int channelUpdate(nmg_channel_info nmg_channel_info);
 
     int channelDel(String channelId);
+
+    int isExists(nmg_channel_info nmg_channel_info);
 }
