@@ -26,10 +26,10 @@ public class nmg_user_infoService {
         param.put("userName",nmg_user_info.getUserName());
         param.put("userPass",nmg_user_info.getUserPass());
         nmg_user_info userInfo = nmg_user_infoMapper.userValid(param);
-        if (null != userInfo.getUserRole()) {
+        try {
             cardResponse = nmg_menu_infoService.menuList(userInfo.getUserRole());
             session.setAttribute("userInfo",userInfo);
-        } else {
+        } catch (Exception e) {
             cardResponse.setResCode(CodeEnum.loginFaild.getCode());
             cardResponse.setResDesc(CodeEnum.loginFaild.getDesc());
         }
