@@ -10,7 +10,7 @@ public interface nmg_order_infoMapper {
 
     int insertSelective(nmg_order_info record);
 
-    List<Map<String,Object>> detail(String phone);
+    List<Map<String,Object>> detail(Map map);
 
     int updateOrderInfo(nmg_order_info record);
 
@@ -18,5 +18,5 @@ public interface nmg_order_infoMapper {
 
     int orderStateUpdate(Map param);
 
-    List<Map<String,Object>> exportOrder(String orderId);
+    List<Map<String,Object>> exportOrder(Map map);
 }
