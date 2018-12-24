@@ -2,12 +2,14 @@ package cn.leadeon.cardopenadmin.service;
 
 import cn.leadeon.cardopenadmin.common.CodeEnum;
 import cn.leadeon.cardopenadmin.common.DateUtil;
+import cn.leadeon.cardopenadmin.common.RandomUtil;
 import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
 import cn.leadeon.cardopenadmin.entity.nmg_city_info;
-import cn.leadeon.cardopenadmin.entity.nmg_county_info;
+import cn.leadeon.cardopenadmin.entity.nmg_order_detail;
 import cn.leadeon.cardopenadmin.entity.nmg_order_info;
 import cn.leadeon.cardopenadmin.entity.nmg_user_info;
 import cn.leadeon.cardopenadmin.mapper.*;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -16,11 +18,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,9 @@ public class nmg_order_infoService {
 
     @Autowired
     private nmg_order_infoMapper nmg_order_infoMapper;
+
+    @Autowired
+    private nmg_order_detailMapper nmg_order_detailMapper;
 
     @Autowired
     private nmg_city_infoMapper nmg_city_infoMapper;
@@ -218,4 +222,130 @@ public class nmg_order_infoService {
         return cardResponse;
     }
 
+    @Transactional
+    public CardResponse orderDel(nmg_order_info nmg_order_info) {
+        CardResponse cardResponse = new CardResponse();
+        nmg_order_infoMapper.orderDel(nmg_order_info.getOrderId());
+        return cardResponse;
+    }
+
+    /**
+     * 订单状态->待审批：1，已审批:2，已写卡:3，已邮寄:4，已取消：5
+     * @param nmg_order_info
+     * @return
+     */
+    @Transactional
+    public CardResponse orderPrint(nmg_order_info nmg_order_info) {
+        CardResponse cardResponse = new CardResponse();
+        Map param = new HashMap();
+        param.put("orderState","3");
+        param.put("orderId",nmg_order_info.getOrderId());
+        nmg_order_infoMapper.orderStateUpdate(param);
+        return cardResponse;
+    }
+
+    /**
+     * 如果状态为已写卡则展示订单详细信息，用页面选择的工单号码去工单明细表查询
+     * @param date
+     * @return
+     */
+    public CardResponse orderDetail(String date) {
+        CardResponse cardResponse = new CardResponse();
+        JSONObject jsonObject = JSONObject.parseObject(date);
+        if (jsonObject.get("orderState").equals("3")) {
+            Map param = new HashMap();
+            param.put("orderId",jsonObject.get("orderId"));
+            List<Map<String,Object>> details = nmg_order_infoMapper.exportOrder(param);
+            cardResponse.setResBody(details);
+        }
+        return cardResponse;
+    }
+
+    /**
+     *工单明细导出
+     * @param nmg_order_info
+     * @return
+     */
+    public CardResponse orderDetailExport(nmg_order_info nmg_order_info) {
+        CardResponse cardResponse = new CardResponse();
+        String fileName = path;
+        Map param = new HashMap();
+        try {
+            HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+            HSSFSheet sheet= hssfWorkbook.createSheet("工单信息");
+            HSSFRow row = sheet.createRow(0);
+            HSSFCell cell = row.createCell(0);
+            cell.setCellValue("工单编号");
+            cell = row.createCell(1);
+            cell.setCellValue("套餐资费");
+            cell = row.createCell(2);
+            cell.setCellValue("资费代码");
+            cell = row.createCell(3);
+            cell.setCellValue("优惠促销");
+            cell = row.createCell(4);
+            cell.setCellValue("选购号码");
+            cell = row.createCell(5);
+            cell.setCellValue("SIM卡号");
+            param.put("orderId",nmg_order_info.getOrderId());
+            List<Map<String,Object>> result = nmg_order_infoMapper.exportOrder(param);
+            for (int i = 0; i < result.size(); i++) {
+                Map maps = result.get(i);
+                row = sheet.createRow(i+1);
+                if (maps.get("order_id") != null) {
+                    row.createCell(0).setCellValue((String) maps.get("order_id"));
+                    if (i == 0) {
+                        fileName = fileName + maps.get("order_id").toString()+"SIM卡回录.xls";
+                    }
+                }
+                if (maps.get("meal_name") != null) {
+                    row.createCell(1).setCellValue((String) maps.get("meal_name"));
+                }
+                if (maps.get("meal_code") != null) {
+                    row.createCell(2).setCellValue((String) maps.get("meal_code"));
+                }
+                if (maps.get("discount_name") != null) {
+                    row.createCell(3).setCellValue((String) maps.get("discount_name"));
+                }
+                if (maps.get("cardNum") != null) {
+                    row.createCell(4).setCellValue((String) maps.get("cardNum"));
+                }
+                if (maps.get("SIMNum") != null) {
+                    row.createCell(5).setCellValue((String) maps.get("SIMNum"));
+                }
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            hssfWorkbook.write(fileOutputStream);
+            fileOutputStream.close();
+            hssfWorkbook.close();
+            cardResponse.setResDesc(fileName);
+        } catch (Exception e) {
+            cardResponse.setResCode(CodeEnum.failed.getCode());
+            cardResponse.setResDesc(CodeEnum.failed.getDesc());
+        }
+        return cardResponse;
+    }
+
+    /**
+     * 工单详细信息删除
+     * @param data
+     * @return
+     */
+    @Transactional
+    public CardResponse orderDetailDel(String data) {
+        CardResponse cardResponse = new CardResponse();
+        JSONArray jsonArray = JSONArray.parseArray(data);
+        for (int i = 0; i < jsonArray.size(); i++) {
+            String detailId = JSONObject.parseObject(jsonArray.getString(i)).getString("detailId");
+            nmg_order_infoMapper.orderDetailDel(detailId);
+        }
+        return cardResponse;
+    }
+
+    @Transactional
+    public CardResponse orderDetailAdd(nmg_order_detail nmg_order_detail) {
+        CardResponse cardResponse = new CardResponse();
+        nmg_order_detail.setDetailId(new RandomUtil().uuid);
+        nmg_order_detailMapper.insert(nmg_order_detail);
+        return cardResponse;
+    }
 }

@@ -13,4 +13,10 @@ public class nmg_order_detail {
     private String cardnum;
 
     private String simnum;
+
+    private String orderMeal;
+
+    private String orderTariff;
+
+    private String orderDiscount;
 }

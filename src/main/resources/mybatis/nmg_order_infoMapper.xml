@@ -282,8 +282,16 @@
     delete from nmg_order_info where batch_id = #{batchId,jdbcType=VARCHAR}
   </delete>
 
+  <delete id="orderDel" parameterType="java.lang.String">
+    delete from nmg_order_info where order_id = #{order_id,jdbcType=VARCHAR}
+  </delete>
+
   <update id="orderStateUpdate" parameterType="java.util.Map">
     update nmg_order_info set order_state = #{orderState,jdbcType=VARCHAR} where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
+
+  <delete id="orderDetailDel" parameterType="java.lang.String">
+    delete from nmg_order_detail where detail_id = #{detailId,jdbcType=VARCHAR}
+  </delete>
 
 </mapper>
