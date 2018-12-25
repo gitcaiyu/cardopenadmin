@@ -19,9 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,8 +73,9 @@ public class nmg_order_infoService {
             result.put("city",city);
             result.put("county", nmg_county_infoMapper.countyInfo(param));
         }
-        result.put("meal",nmg_meal_infoMapper.applyCardMeal());
-        result.put("discount",nmg_discount_infoMapper.applyCardDisc());
+        param.put("flag","T");
+        result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
+        result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
         if (null != nmg_order_info.getOrderPhone() && !"".equals(nmg_order_info.getOrderPhone())) {
             param.put("phone",nmg_order_info.getOrderPhone());
         }
@@ -249,15 +253,38 @@ public class nmg_order_infoService {
      * @param date
      * @return
      */
-    public CardResponse orderDetail(String date) {
+    public CardResponse orderDetail(String date,HttpSession httpSession) {
+        nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
+        String city = nmg_user_info.getCityCode();
         CardResponse cardResponse = new CardResponse();
         JSONObject jsonObject = JSONObject.parseObject(date);
-        if (jsonObject.get("orderState").equals("3")) {
-            Map param = new HashMap();
-            param.put("orderId",jsonObject.get("orderId"));
-            List<Map<String,Object>> details = nmg_order_infoMapper.exportOrder(param);
-            cardResponse.setResBody(details);
+        Map param = new HashMap();
+        if (null != jsonObject.getString("cardnum")) {
+            param.put("cardnum",jsonObject.getString("cardnum"));
         }
+        if (null != jsonObject.getString("simnum")) {
+            param.put("simnum",jsonObject.getString("simnum"));
+        }
+        if (null != jsonObject.getString("orderMeal")) {
+            param.put("orderMeal",jsonObject.getString("orderMeal"));
+        }
+        if (null != jsonObject.getString("orderTariff")) {
+            param.put("orderTariff",jsonObject.getString("orderTariff"));
+        }
+        if (null != jsonObject.getString("orderDiscount")) {
+            param.put("orderDiscount",jsonObject.getString("orderDiscount"));
+        }
+        if (null != jsonObject.get("orderState") && jsonObject.get("orderState").equals("3")) {
+            param.put("orderId",jsonObject.get("orderId"));
+        }
+        List<Map<String,Object>> details = nmg_order_infoMapper.exportOrder(param);
+        Map result = new HashMap();
+        param.put("city",city);
+        param.put("flag","T");
+        result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
+        result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
+        details.add(result);
+        cardResponse.setResBody(details);
         return cardResponse;
     }
 
@@ -346,6 +373,31 @@ public class nmg_order_infoService {
         CardResponse cardResponse = new CardResponse();
         nmg_order_detail.setDetailId(new RandomUtil().uuid);
         nmg_order_detailMapper.insert(nmg_order_detail);
+        return cardResponse;
+    }
+
+    @Transactional
+    public CardResponse detailBatchImport(MultipartFile file) throws IOException {
+        CardResponse cardResponse = new CardResponse();
+        InputStream inputStream = file.getInputStream();
+        HSSFWorkbook xssfWorkbook = new HSSFWorkbook(inputStream);
+        int numberOfSheets = xssfWorkbook.getNumberOfSheets();
+        for (int i = 0; i < numberOfSheets; i++) {
+            HSSFSheet sheetAt = xssfWorkbook.getSheetAt(i);
+            int lastRowNum = sheetAt.getLastRowNum();
+            for (int j = 1; j <= lastRowNum; j++) {
+                nmg_order_detail nmg_order_detail = new nmg_order_detail();
+                HSSFRow row = sheetAt.getRow(j);
+                nmg_order_detail.setDetailId(new RandomUtil().uuid);
+                nmg_order_detail.setOrderId(row.getCell(0).getStringCellValue());
+                nmg_order_detail.setOrderMeal(row.getCell(1).getStringCellValue());
+                nmg_order_detail.setOrderTariff(row.getCell(2).getStringCellValue());
+                nmg_order_detail.setOrderDiscount(row.getCell(3).getStringCellValue());
+                nmg_order_detail.setCardnum(row.getCell(4).getStringCellValue());
+                nmg_order_detail.setSimnum(row.getCell(5).getStringCellValue());
+                nmg_order_detailMapper.insert(nmg_order_detail);
+            }
+        }
         return cardResponse;
     }
 }

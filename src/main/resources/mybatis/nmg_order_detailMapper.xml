@@ -74,4 +74,8 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateDetail" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_detail">
+    update nmg_order_detail set cardNum = #{cardnum,jdbcType=VARCHAR} ,simnum = #{simnum,jdbcType=VARCHAR}, #{orderMeal,jdbcType=VARCHAR},order_tariff = #{orderTariff,jdbcType=VARCHAR},order_discount = #{orderDiscount,jdbcType=VARCHAR} where detail_id = #{detailId,jdbcType=VARCHAR}
+  </update>
 </mapper>

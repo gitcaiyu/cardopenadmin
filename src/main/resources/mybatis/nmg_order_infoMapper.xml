@@ -259,6 +259,21 @@
     <if test="city != null">
       and noi.city = #{city,jdbcType=VARCHAR}
     </if>
+    <if test="cardnum != null">
+      and nod.cardnum = #{cardnum,jdbcType=VARCHAR}
+    </if>
+    <if test="simnum != null">
+      and nod.simnum = #{simnum,jdbcType=VARCHAR}
+    </if>
+    <if test="orderMeal != null">
+      and nod.orderMeal = #{orderMeal,jdbcType=VARCHAR}
+    </if>
+    <if test="orderTariff != null">
+      and nod.orderTariff = #{orderTariff,jdbcType=VARCHAR}
+    </if>
+    <if test="orderDiscount != null">
+      and nod.orderDiscount = #{orderDiscount,jdbcType=VARCHAR}
+    </if>
     ORDER BY
         noi.order_phone,
         noi.order_meal

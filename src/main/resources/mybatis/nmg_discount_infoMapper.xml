@@ -6,12 +6,13 @@
     <result column="discount_code" property="discountCode" jdbcType="VARCHAR" />
     <result column="discount_name" property="discountName" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
   </resultMap>
   <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_discount_info" >
     insert into nmg_discount_info (discount_id, discount_code, discount_name, 
-      city)
+      city,flag)
     values (#{discountId,jdbcType=VARCHAR}, #{discountCode,jdbcType=VARCHAR}, #{discountName,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR})
+      #{city,jdbcType=VARCHAR},#{flag,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_discount_info" >
     insert into nmg_discount_info
@@ -28,6 +29,9 @@
       <if test="city != null" >
         city,
       </if>
+      <if test="flag != null">
+        flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="discountId != null" >
@@ -42,10 +46,22 @@
       <if test="city != null" >
         #{city,jdbcType=VARCHAR},
       </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR}
+      </if>
     </trim>
   </insert>
 
   <select id="applyCardDisc" parameterType="java.lang.String" resultType="java.util.Map">
-    select discount_id,discount_code,discount_name,city from nmg_discount_info
+    select discount_id,discount_code,discount_name,city,flag from nmg_discount_info where 1 = 1
+    <if test="city != null">
+      and city = #{city,jdbcType=VARCHAR} or city = null or city = ""
+    </if>
+    <if test="city == null">
+      and city = null or city = ""
+    </if>
+    <if test="flag != null">
+      and flag = #{flag,jdbcType=VARCHAR}
+    </if>
   </select>
 </mapper>

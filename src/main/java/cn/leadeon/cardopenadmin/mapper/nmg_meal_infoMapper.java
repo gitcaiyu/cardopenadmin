@@ -14,5 +14,9 @@ public interface nmg_meal_infoMapper {
      * 获取所有套餐列表
      * @return
      */
-    List<Map<String,String>> applyCardMeal();
+    List<Map<String,String>> applyCardMeal(Map param);
+
+    int cardMealDel(String mealId);
+
+    int cardMealUpdate(nmg_meal_info nmg_meal_info);
 }

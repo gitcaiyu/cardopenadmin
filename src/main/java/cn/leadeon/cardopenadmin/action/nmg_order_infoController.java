@@ -6,6 +6,7 @@ import cn.leadeon.cardopenadmin.entity.nmg_order_info;
 import cn.leadeon.cardopenadmin.service.nmg_order_infoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -64,8 +65,8 @@ public class nmg_order_infoController {
      * @return
      */
     @PostMapping(value = "/orderDetail")
-    public CardResponse orderDetail(@RequestBody String data) {
-        return nmg_order_infoService.orderDetail(data);
+    public CardResponse orderDetail(@RequestBody String data,HttpSession httpSession) {
+        return nmg_order_infoService.orderDetail(data,httpSession);
     }
 
     /**
@@ -96,6 +97,17 @@ public class nmg_order_infoController {
     @PostMapping(value = "/orderDetailAdd")
     public CardResponse orderDetailAdd(@RequestBody nmg_order_detail nmg_order_detail){
         return nmg_order_infoService.orderDetailAdd(nmg_order_detail);
+    }
+
+    /**
+     * 工单详细信息导出
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @PostMapping(value = "/detailBatchImport")
+    public CardResponse detailBatchImport(@RequestBody MultipartFile file) throws IOException {
+        return nmg_order_infoService.detailBatchImport(file);
     }
 
 }

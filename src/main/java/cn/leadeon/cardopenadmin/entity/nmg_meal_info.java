@@ -11,4 +11,6 @@ public class nmg_meal_info {
     private String mealName;
 
     private String city;
+
+    private String flag = "T";
 }

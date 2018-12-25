@@ -6,12 +6,13 @@
     <result column="meal_code" property="mealCode" jdbcType="VARCHAR" />
     <result column="meal_name" property="mealName" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
   </resultMap>
   <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info" >
     insert into nmg_meal_info (meal_id, meal_code, meal_name, 
-      city)
+      city,flag)
     values (#{mealId,jdbcType=VARCHAR}, #{mealCode,jdbcType=VARCHAR}, #{mealName,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR})
+      #{city,jdbcType=VARCHAR},#{flag,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info" >
     insert into nmg_meal_info
@@ -28,6 +29,9 @@
       <if test="city != null" >
         city,
       </if>
+      <if test="flag != null">
+        flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="mealId != null" >
@@ -42,10 +46,33 @@
       <if test="city != null" >
         #{city,jdbcType=VARCHAR},
       </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR}
+      </if>
     </trim>
   </insert>
   
   <select id="applyCardMeal" parameterType="java.lang.String" resultType="java.util.Map">
-    select meal_id,meal_code,meal_name,city from nmg_meal_info
+    select meal_id,meal_code,meal_name,city,flag from nmg_meal_info where 1 = 1
+    <if test="city != null">
+      and city = #{city,jdbcType=VARCHAR} or city = null or city = ""
+    </if>
+    <if test="city == null">
+      and city = null or city = ""
+    </if>
+    <if test="flag != null">
+      and flag = #{flag,jdbcType=VARCHAR}
+    </if>
+    <if test="mealId != null">
+      and meal_id = #{mealId,jdbcType=VARCHAR}
+    </if>
   </select>
+
+  <delete id="cardMealDel" parameterType="java.lang.String">
+    delete from nmg_meal_info where meal_id = #{mealId,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="cardMealUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info">
+    update
+  </update>
 </mapper>

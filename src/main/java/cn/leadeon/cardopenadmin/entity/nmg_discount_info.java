@@ -11,4 +11,6 @@ public class nmg_discount_info {
     private String discountName;
 
     private String city;
+
+    private String flag;
 }
