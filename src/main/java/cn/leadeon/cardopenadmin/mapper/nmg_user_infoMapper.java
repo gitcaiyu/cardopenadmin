@@ -2,6 +2,7 @@ package cn.leadeon.cardopenadmin.mapper;
 
 import cn.leadeon.cardopenadmin.entity.nmg_user_info;
 
+import java.util.List;
 import java.util.Map;
 
 public interface nmg_user_infoMapper {
@@ -12,4 +13,8 @@ public interface nmg_user_infoMapper {
     nmg_user_info getUserInfoByPhone(String phone);
 
     nmg_user_info userValid(Map param);
+
+    List<Map<String,Object>> allUserInfo(Map param);
+
+    int userDel(String userId);
 }

@@ -15,4 +15,8 @@ public interface nmg_discount_infoMapper {
      * @return
      */
     List<Map<String,String>> applyCardDisc(Map param);
+
+    int cardDiscountDel(String discountId);
+
+    int cardDiscountUpdate(nmg_discount_info nmg_discount_info);
 }

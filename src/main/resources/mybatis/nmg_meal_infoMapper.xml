@@ -73,6 +73,6 @@
   </delete>
 
   <update id="cardMealUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info">
-    update
+    update nmg_meal_info set meal_code = #{mealCode,jdbcType=VARCHAR} ,meal_name = #{mealName,jdbcType=VARCHAR} ,city=#{city,jdbcType=VARCHAR} where meal_id = #{mealId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -63,5 +63,16 @@
     <if test="flag != null">
       and flag = #{flag,jdbcType=VARCHAR}
     </if>
+    <if test="discountId != null">
+      and discount_id = #{discountId,jdbcType=VARCHAR}
+    </if>
   </select>
+
+  <delete id="cardDiscountDel" parameterType="java.lang.String">
+    delete from nmg_discount_info where discount_id = #{discountId,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="cardDiscountUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_discount_info">
+    update nmg_discount_info set discount_code=#{discountCode,jdbcType=VARCHAR},discount_name=#{discountName,jdbcType=VARCHAR},city=#{city,jdbcType=VARCHAR} where discount_id=#{discountId,jdbcType=VARCHAR}
+  </update>
 </mapper>

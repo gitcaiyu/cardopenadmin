@@ -22,9 +22,11 @@ public class nmg_user_info {
 
     private String cityCode;
 
-    private String flag;
+    private String flag = "Y";
 
     private String createTime;
 
     private String updateTime;
+
+    private String createPeople;
 }

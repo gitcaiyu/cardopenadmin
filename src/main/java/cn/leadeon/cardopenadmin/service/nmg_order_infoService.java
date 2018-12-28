@@ -250,14 +250,14 @@ public class nmg_order_infoService {
 
     /**
      * 如果状态为已写卡则展示订单详细信息，用页面选择的工单号码去工单明细表查询
-     * @param date
+     * @param data
      * @return
      */
-    public CardResponse orderDetail(String date,HttpSession httpSession) {
+    public CardResponse orderDetail(String data,HttpSession httpSession) {
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         String city = nmg_user_info.getCityCode();
         CardResponse cardResponse = new CardResponse();
-        JSONObject jsonObject = JSONObject.parseObject(date);
+        JSONObject jsonObject = JSONObject.parseObject(data);
         Map param = new HashMap();
         if (null != jsonObject.getString("cardnum")) {
             param.put("cardnum",jsonObject.getString("cardnum"));

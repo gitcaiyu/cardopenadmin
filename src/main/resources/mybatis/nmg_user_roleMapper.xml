@@ -51,4 +51,25 @@
       </if>
     </trim>
   </insert>
+
+  <select id="userRole" resultType="java.util.Map" parameterType="java.util.Map">
+    select role_id,role_name,role_type,create_time,create_people from nmg_user_role where 1=1
+    <if test="role_id != null">
+      and role_id = #{role_id,jdbcType=VARCHAR}
+    </if>
+    <if test="role_name != null">
+      and role_name = #{role_name,jdbcType=VARCHAR}
+    </if>
+    <if test="createPeople != null">
+      and create_people = #{createPeople,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <delete id="roleDel" parameterType="java.lang.String">
+    delete from nmg_user_role where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+
+    <update id="roleUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_user_role">
+        update nmg_user_role set role_name = #{roleName,jdbcType=VARCHAR},role_type=#{roleType,jdbcType=VARCHAR},create_time=#{createTime,jdbcType=VARCHAR},create_people=#{createPeople,jdbcType=VARCHAR} where role_id=#{roleId,jdbcType=VARCHAR}
+    </update>
 </mapper>
