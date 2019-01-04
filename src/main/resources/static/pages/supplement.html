@@ -1,0 +1,114 @@
+<div>
+    <form id="suppleBtns" class="layui-form">
+        <a class="layui-btn layui-btn-normal" @click="add()">
+            <i class="layui-icon"></i> 本月数据补录</a>
+            <a v-on:click="edit()" class="layui-btn layui-btn-normal" >本月数据修正</a>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" placeholder="请选择月份" id="date1" class="layui-input" v-model="month">
+        </div>
+        <div class="layui-input-inline ml10">
+            <a @click="searchSupple()" class="layui-btn layui-btn-normal" >立即查询</a>
+            <a @click="searchReset()" class="layui-btn layui-btn-primary">重置</a>
+        </div>
+        
+    </form>
+    <div class="layui-form" style="position: relative;">
+        <div style="overflow-x:auto;">
+            <table class="layui-table" style="width: 100%;">
+                <colgroup>
+                    <col width="170">
+                    <col width="170">
+                    <col width="170">
+                    <col width="200">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>期数</th>
+                        <th>编码</th>
+                        <th>名称</th>
+                        <th>实际值</th>
+                        <th>更新日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in codeList" v-bink::key="index">
+                        <td>{{item.PARAM_VALUE}}</td>
+                        <td>{{item.RECORD_MONTH}}</td>
+                        <td>{{item.RECORD_CODE}}</td>
+                        <td>{{item.RECORD_NAME}}</td>
+                        <td>{{item.RECORD_VALUE}}</td>
+                        <td>{{item.RECORD_DATE}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+    <!--add-->
+    <form class="layui-form mt20" id="suppleAdd" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="PARAM_TYPE" required lay-verify="required" lay-filter="addTypeSelect" v-model="type">
+                            <option value=""></option>
+                            <option v-for="typeItem in typeList" v-bind:value="typeItem.PARAM_TYPE">{{typeItem.PARAM_VALUE}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" v-for="name in nameList">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{name.PARAM_NAME}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-bind:name="name.PARAM_CODE" required lay-verify="number" maxlength="8" autocomplete="off" placeholder="" class="layui-input" v-model="name.RECORD_VALUE">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="add">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--edit-->
+    <form class="layui-form mt20" id="suppleEdit" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="PARAM_TYPE" required lay-verify="required" lay-filter="editTypeSelect" v-model="type">
+                            <option value=""></option>
+                            <option v-for="typeItem in typeList" v-bind:value="typeItem.PARAM_TYPE">{{typeItem.PARAM_VALUE}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" v-for="name in nameList">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{name.PARAM_NAME}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-bind:name="name.PARAM_CODE" required lay-verify="number" maxlength="8" autocomplete="off" placeholder="" class="layui-input" v-model="name.RECORD_VALUE">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="edit">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

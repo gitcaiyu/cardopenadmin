@@ -59,7 +59,6 @@ public class nmg_order_infoService {
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         Map param = new HashMap();
         Map result = new HashMap();
-        List results = new ArrayList();
         //如果是盟市管理员，则仅能操作当前盟市的SIM卡信息
         if (nmg_user_info.getUserRole().equals("2")) {
             param.put("city",nmg_user_info.getCityCode());
@@ -116,8 +115,7 @@ public class nmg_order_infoService {
             param.put("channelType",nmg_order_info.getChannelType());
         }
         result.put("order",nmg_order_infoMapper.detail(param));
-        results.add(result);
-        cardResponse.setResBody(results);
+        cardResponse.setResBody(result);
         return cardResponse;
     }
 
@@ -283,8 +281,7 @@ public class nmg_order_infoService {
         param.put("flag","T");
         result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
         result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
-        details.add(result);
-        cardResponse.setResBody(details);
+        cardResponse.setResBody(result);
         return cardResponse;
     }
 

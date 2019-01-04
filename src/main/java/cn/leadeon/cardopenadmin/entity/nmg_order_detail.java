@@ -1,9 +1,10 @@
 package cn.leadeon.cardopenadmin.entity;
 
+import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 @Data
-public class nmg_order_detail {
+public class nmg_order_detail extends BaseEntity {
     private String detailId;
 
     private String orderId;

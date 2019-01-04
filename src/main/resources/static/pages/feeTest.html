@@ -1,0 +1,475 @@
+<div>
+        <div class="layui-form">
+            <a class="layui-btn layui-btn-normal" @click="add()">
+                <i class="layui-icon"></i> 添加</a>
+            <div class="layui-input-inline ml10">
+                <input type="text" name="keyword" value="" placeholder="请输入费用代码" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline ml10">
+                <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-normal">立即查询</button>
+            </div>
+        </div>
+        <div class="layui-form">
+            <div>
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200">
+                        <col width="200">
+                        <col width="270">
+                        <col>
+                        <col width="100">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>费用代码</th>
+                            <th>创建时间</th>
+                            <th>费用类型</th>
+                            <th>费用描述</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in feelist" v-bink::key="index">
+                            <td>{{item.feeCde}}</td>
+                            <td>{{item.create_date}}</td>
+                            <td>{{item.delete_by}}</td>
+                            <td>{{item.feeDesc}}</td>
+                            <td>
+                                <a class="layui-btn layui-btn-sm layui-btn-normal" v-on:click="edit(item)" href="javascript:">编辑</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-sm" v-on:click="del(item)" href="javascript:">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="page"></div>
+        </div>
+        <!--add-->
+        <form class="layui-form mt20" id="feeAdd" style="display: none;">
+            <div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用代码<i class="required-red">*</i></label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="" v-bind:disabled="edit_disable" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-bind:class="{'input-disabled':edit_disable}" v-model="feeSetItem.feeCde">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用类型<i class="required-red">*</i></label>
+                        <div class="layui-input-inline">
+                            <select name="feeTyp" lay-verify="required" lay-filter="feeTyp" v-model="feeSetItem.feeTyp">
+                                <option selected value=""></option>
+                                <option :value="item.PARAM_CODE" v-for="item in feeouterlist.FEE_TYP">{{item.PARAM_NAME}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">入账金额类型</label>
+                        <div class="layui-input-inline">
+                            <select name="feeAmtTyp" lay-verify="" lay-filter="feeAmtTyp" v-model="feeSetItem.feeAmtTyp">
+                                <option value=""></option>
+                                <option :value="item.PARAM_CODE" v-for="item in feeouterlist.AMT_TYP">{{item.PARAM_NAME}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">摊销金额类型<i class="required-red">*</i></label>
+                        <div class="layui-input-inline">
+                            <select name="accAmtTyp" lay-verify="required" lay-filter="accAmtTyp" v-model="feeSetItem.accAmtTyp">
+                                <option value=""></option>
+                                <option :value="item.PARAM_CODE" v-for="item in feeouterlist.AMT_TYP">{{item.PARAM_NAME}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用描述<i class="required-red">*</i></label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="feeDesc" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="feeSetItem.feeDesc">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:40px; ">
+                    <label class="layui-form-label">收费条件<i class="required-red">*</i></label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="feeCondOpt" name="condition" value="01" title="帐管手续费" checked="" v-model="feeSetItem.feeCondOpt">
+                        <input type="radio" lay-filter="feeCondOpt" name="condition"  value="02" title="提前还款手续费" v-model="feeSetItem.feeCondOpt">
+                        <input type="radio" lay-filter="feeCondOpt" name="condition"  value="03" title="滞纳金/按天计算违约金" v-model="feeSetItem.feeCondOpt">
+                    </div>
+                </div>
+    
+                <!--"01" 帐管/手续费 start-->
+                <div id="showAddPFeeDtlList" style="position: relative;" v-show="feeConditionList">
+                    <a style=" position: absolute;top: -35px;left: 26px;" class="layui-btn layui-btn-normal" v-on:click="fcAddInit()">新增</a>
+                    <div style="width: 95%;overflow-x: auto; height: 300px; margin: 0 auto; ">
+                        <table class="layui-table" style="width: 1890px;">
+                            <colgroup>
+                                <col width="180">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="130">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="120">
+                                <col width="100">
+                                <col width="160">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>收取类型<i class="required-red">*</i></th>
+                                    <th>支持最小期限<i class="required-red">*</i></th>
+                                    <th>支持最大期限<i class="required-red">*</i></th>
+                                    <th>贷款最小金额（含）</th>
+                                    <th>贷款最大金额（含）</th>
+                                    <th>期限单位<i class="required-red">*</i></th>
+                                    <th>计算类型<i class="required-red">*</i></th>
+                                    <th>计算基础</th>
+                                    <th>开始期数</th>
+                                    <th>结束期数</th>
+                                    <th>费用比例</th>
+                                    <th>费用金额</th>
+                                    <th>最低费用</th>
+                                    <th>最高费用</th>
+                                    <th>收取方<i class="required-red">*</i></th>
+                                    <th>是否摊销</th>
+                                    <th>空</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-show="feeConditionAdd && fcAddInitShow" class="layui-form" lay-filter="feeConditionAdd">
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeTnrTyp}">
+                                            <select name="feeTnrTyp" id="feeTnrTyp" v-model="feeCondition_curr.feeTnrTyp.value" :disabled="feeCondition_curr.feeTnrTyp.disabled"
+                                                lay-filter="feeTnrTyp">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.FEE_TNR_TYPE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeMinTnr}">
+                                            <input v-on:input="fcRequired()" type="number" class="layui-input" name="" lay-verify="" v-model="feeCondition_curr.feeMinTnr.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeMaxTnr}">
+                                            <input v-on:input="fcRequired()" type="number" class="layui-input" name="" lay-verify="" v-model="feeCondition_curr.feeMaxTnr.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':is_number&&is_loanMinAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" class="layui-input" name="" v-model="feeCondition_curr.loanMinAmt.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_loanMaxAmt}">
+                                            <input v-on:input="fcRequired()" type="number" class="layui-input" name="" v-model="feeCondition_curr.loanMaxAmt.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_tnrUnit}">
+                                            <select name="tnrUnit" lay-verify="" lay-filter="tnrUnit" v-model="feeCondition_curr.tnrUnit.value">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.TNR_UNIT">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeActionTyp}">
+                                            <select name="feeActionTyp" lay-verify="" lay-filter="feeActionTyp" v-model="feeCondition_curr.feeActionTyp.value">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.FEE_ACTION_TYP">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="layui-form" lay-filter="FEE_PCT_BASE">
+                                            <select name="feePctBase" id="feePctBase" v-model="feeCondition_curr.feePctBase.value" lay-filter="feePctBase">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.FEE_PCT_BASE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':is_number&&is_feeTnrStr}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="feeCondition_curr.feeTnrStr.disabled" class="layui-input" name="" v-model="feeCondition_curr.feeTnrStr.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeTnrEnd}">
+                                            <input v-on:input="fcRequired()" type="number" :disabled="feeCondition_curr.feeTnrEnd.disabled" class="layui-input" name="" v-model="feeCondition_curr.feeTnrEnd.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':is_number&&is_feePct}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="feeCondition_curr.feePct.disabled" class="layui-input" name="" v-model="feeCondition_curr.feePct.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':is_number&&is_feeFixAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="feeCondition_curr.feeFixAmt.disabled" class="layui-input" name="" v-model="feeCondition_curr.feeFixAmt.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':is_number&&is_feeMinAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="feeCondition_curr.feeMinAmt.disabled" class="layui-input" name="" v-model="feeCondition_curr.feeMinAmt.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeMaxAmt}">
+                                            <input v-on:input="fcRequired()" type="number" :disabled="feeCondition_curr.feeMaxAmt.disabled" class="layui-input" name="" v-model="feeCondition_curr.feeMaxAmt.value">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-bind:class="{'inner-required':innerRequired&&!is_feeResource}">
+                                            <select name="feeResource" lay-verify="" v-model="feeCondition_curr.feeResource.value" lay-filter="feeResource">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.FEE_RESOURCE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="layui-form" lay-filter="YES_NO">
+                                            <select  name="feeAccInd" id="feeAccInd" v-model="feeCondition_curr.feeAccInd.value" v-bind:disabled="feeCondition_curr.feeAccInd.disabled" lay-filter="feeAccInd">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in feeinnerlist.YES_NO">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="layui-btn layui-btn-sm layui-btn-normal">空</span>
+                                    </td>
+                                </tr>
+                                <tr v-for="fc in feeCondition_list" class="layui-form feeConditionList" lay-filter="feeConditionEdit">
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeTnrTyp}">
+                                            <select name="" lay-verify="" v-model="fc.feeTnrTyp.value" :disabled="fc.feeTnrTyp.disabled"
+                                                lay-filter="feeTnrTyp">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).FEE_TNR_TYPE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'feeTnrTyp','FEE_TNR_TYPE')}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeMinTnr}">
+                                            <input v-on:input="fcRequired(fc)" type="number" v-model="fc.feeMinTnr.value" class="layui-input" name="" value="">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeMinTnr.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeMaxTnr}">
+                                            <input v-on:input="fcRequired(fc)" type="number" class="layui-input" name="" lay-verify="" v-model="fc.feeMaxTnr.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeMaxTnr.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':is_number&&is_loanMinAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" class="layui-input" name="" v-model="fc.loanMinAmt.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.loanMinAmt.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_loanMaxAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" class="layui-input" name="" v-model="fc.loanMaxAmt.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.loanMaxAmt.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_tnrUnit}">
+                                            <select name="" lay-verify="" lay-filter="tnrUnit" v-model="fc.tnrUnit.value">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).TNR_UNIT">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'tnrUnit','TNR_UNIT')}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeActionTyp}">
+                                            <select name="" lay-verify="" lay-filter="feeActionTyp" v-model="fc.feeActionTyp.value">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).FEE_ACTION_TYP">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'feeActionTyp','FEE_ACTION_TYP')}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" class="layui-form" lay-filter="FEE_PCT_BASE">
+                                            <select name="" v-bind:id="'feePctBase_'+fc.fcId*1" v-model="fc.feePctBase.value" lay-filter="feePctBase">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).FEE_PCT_BASE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'feePctBase','FEE_PCT_BASE')}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':is_number&&is_feeTnrStr}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feeTnrStr.disabled" class="layui-input" name="" v-model="fc.feeTnrStr.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeTnrStr.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeTnrEnd}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feeTnrEnd.disabled" class="layui-input" name="" v-model="fc.feeTnrEnd.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeTnrEnd.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':is_number&&is_feePct}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feePct.disabled" v-model="fc.feePct.value" class="layui-input" name="" value="">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feePct.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':is_number&&is_feeFixAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feeFixAmt.disabled" class="layui-input" name="" v-model="fc.feeFixAmt.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeFixAmt.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':is_number&&is_feeMinAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feeMinAmt.disabled" class="layui-input" name="" v-model="fc.feeMinAmt.value">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeMinAmt.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeMaxAmt}">
+                                            <input v-on:input="fcRequired(fc)" type="number" :disabled="fc.feeMaxAmt.disabled" v-model="fc.feeMaxAmt.value" class="layui-input" name="" value="">
+                                        </div>
+                                        <div v-show="!fc.edit">{{fc.feeMaxAmt.value}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" v-bind:class="{'inner-required':innerRequired&&!is_feeResource}">
+                                            <select name="" lay-verify="" v-model="fc.feeResource.value" lay-filter="feeResource">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).FEE_RESOURCE">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'feeResource','FEE_RESOURCE')}}</div>
+                                    </td>
+                                    <td>
+                                        <div v-show="fc.edit" class="layui-form" lay-filter="YES_NO">
+                                            <select name="" v-bind:id="'feeAccInd_'+fc.fcId*1" v-model="fc.feeAccInd.value" v-bind:disabled="fc.feeAccInd.disabled" lay-filter="feeAccInd">
+                                                <option value=""></option>
+                                                <option :value="item.PARAM_CODE" v-for="item in fcSelectData(fc).YES_NO">{{item.PARAM_NAME}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-show="!fc.edit">{{showSelectName(fc,'feeAccInd','YES_NO')}}</div>
+                                    </td>
+                                    <td>
+                                        <span class="layui-btn layui-btn-sm layui-btn-normal">空</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center" style="position: absolute; right: 20px; top:0; " v-show="!feeConditionEdit">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="130">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-show="feeConditionAdd && fcAddInitShow">
+                                    <td>
+                                        <a class="layui-btn layui-btn-sm layui-btn-normal" @click="fcAdd()" href="javascript:">保存</a>
+                                        <a class="layui-btn layui-btn-danger layui-btn-sm" @click="addDel()" href="javascript:">删除</a>
+                                    </td>
+    
+                                </tr>
+                                <tr v-for="fc in feeCondition_list">
+                                    <td>
+                                        <a v-show="fc.edit" class="layui-btn layui-btn-sm layui-btn-normal" @click="fcSave(fc)" href="javascript:">保存</a>
+                                        <a v-show="!fc.edit" style="margin-left: 0px;" class="layui-btn layui-btn-sm layui-btn-normal" @click="fcEdit(fc)" href="javascript:">编辑</a>
+                                        <a class="layui-btn layui-btn-danger layui-btn-sm" @click="fcDel(fc)" href="javascript:">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--"01" 帐管/手续费 end-->
+                <div v-show="!feeConditionList" class="layui-form" lay-filter="otherCondition">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">收取方</label>
+                            <div class="layui-input-inline">
+                                <select name="feeResource" lay-verify="" lay-filter="other_feeResource" v-model="feeSetItem.other_condition.feeResource">
+                                    <option value=""></option>
+                                    <option :value="item.PARAM_CODE" v-for="item in feeouterlist.FEE_RESOURCE">{{item.PARAM_NAME}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">最低费用</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="" lay-verify="number" autocomplete="off" placeholder="" class="layui-input" v-model="feeSetItem.other_condition.feeMinAmt">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">最高费用</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="" lay-verify="number|checkFee" autocomplete="off" placeholder="" class="layui-input" v-model="feeSetItem.other_condition.feeMaxAmt">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" v-bind:class="{show_required:isRequired}">费用计算类型<i class="required-red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="radio" lay-filter="feeActionTyp" name="calcuType" value="NOAMT" title="自定义费用" v-model="feeSetItem.other_condition.feeActionTyp">
+                            <input type="radio" lay-filter="feeActionTyp" name="calcuType" value="PCTAMTALL" title="按比例收费" v-model="feeSetItem.other_condition.feeActionTyp">
+                        </div>
+                    </div>
+                    <div class="layui-form" lay-filter="feeActionTyp_list" >
+                        <div class="layui-form-item">
+                            <div class="layui-inline" v-show="feeSolidShow && feecalcuTypelistShow">
+                                <label class="layui-form-label">固定金额<i class="required-red">*</i></label>
+                                <div class="layui-input-inline">
+                                    <input id="other_feeFixAmt" type="text" name="" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="feeSetItem.other_condition.feeFixAmt">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" v-show="!feeSolidShow && feecalcuTypelistShow">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">计算比例基础选项<i class="required-red">*</i></label>
+                                <div class="layui-input-inline">
+                                    <select id="other_feePctBase" name="feePctBase" lay-verify=""  lay-filter="other_feePctBase" v-model="feeSetItem.other_condition.feePctBase">
+                                        <option value=""></option>
+                                        <option :value="item.PARAM_CODE" v-for="item in feeouterlist.FEE_PCT_BASE">{{item.PARAM_NAME}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">默认费用比例<i class="required-red">*</i></label>
+                                <div class="layui-input-inline">
+                                    <input id="other_feePct" type="text" name="" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="feeSetItem.other_condition.feePct">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item btns">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <a class="layui-btn layui-btn-normal" lay-submit="" lay-filter="add">保存</a>
+                            <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+        <!--edit-->
+    </div>

@@ -1,0 +1,383 @@
+<div style="height: 100%; width: auto; background: none;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12">
+            <div class="layui-card" style="padding: 10px; text-align: center">
+                <div class="layui-btn-group layuiadmin-btn-group">
+                    <!-- <a href="javascript:;" style="color: #009688;" class="layui-btn layui-btn-primary layui-btn-sm">年累</a>
+                    <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-sm">月累</a> -->
+                </div>
+                <div class="layui-inline">
+                    日期：
+                </div>
+                <div class="layui-inline">
+                    <input type="text" readonly="" class="layui-input layui-btn-sm" style="width: 100px;" id="date">
+                </div>
+                <div class="layui-inline" style="float: right;">
+                    单位：万元
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    贷款余额
+                    <span></span>
+
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <h2 :style="{color: '#009688'}" v-show="part1.completionRate >= 100">{{part1.rTotal == 0 ? '--' : part1.rTotal}}</h2>
+                    <h2 :style="{color: '#FFB800'}" v-show="part1.completionRate < 100 && part1.completionRate >= 80">{{part1.rTotal == 0 ? '--' : part1.rTotal}}</h2>
+                    <h2 :style="{color: '#FF5722'}" v-show="part1.completionRate < 80">{{part1.rTotal == 0 ? '--' : part1.rTotal}}</h2>
+                    <p class="lst">
+                        <span :title="part1.tTotal">目标：{{part1.tTotal == 0 ? '--' : part1.tTotal}}</span>
+                        <span :title="part1.completionRate">完成率：{{part1.completionRate == 0 ? '--' : part1.completionRate}}
+                            <i v-show="part1.completionRate != 0">%</i>
+                        </span>
+                    </p>
+                    <p class="lst">
+                        <span :title="part1.lTotal">同期：{{part1.lTotal == 0 ? '--' : part1.lTotal }}</span>
+                        <span>同比：{{part1.yearToYear == 0 ? '--' : part1.yearToYear}}
+                            <i class="down" v-show="part1.yearToYear < 0">&darr;</i>
+                            <i class="up" v-show="part1.yearToYear > 0">&uarr;</i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    放款额
+                    <span></span>
+
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <h2 :style="{color: '#009688'}" v-show="part2.completionRate >= 100">{{part2.rTotal == 0 ? '--' : part2.rTotal}}</h2>
+                    <h2 :style="{color: '#FFB800'}" v-show="part2.completionRate < 100 && part2.completionRate >= 80">{{part2.rTotal == 0 ? '--' : part2.rTotal}}</h2>
+                    <h2 :style="{color: '#FF5722'}" v-show="part2.completionRate < 80">{{part2.rTotal == 0 ? '--' : part2.rTotal}}</h2>
+                    <p class="lst">
+                        <span :title="part2.tTotal">目标：{{part2.tTotal == 0 ? '--' : part2.tTotal}}</span>
+                        <span :title="part2.completionRate">完成率：{{part2.completionRate == 0 ? '--' : part2.completionRate}}
+                            <i v-show="part2.completionRate != 0">%</i>
+                        </span>
+                    </p>
+                    <p class="lst">
+                        <span :title="part2.lTotal">同期：{{part2.lTotal == 0 ? '--' : part2.lTotal}}</span>
+                        <span>同比：{{part2.yearToYear == 0 ? '--' : part2.yearToYear}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    收入
+                    <span></span>
+
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <h2 :style="{color: '#009688'}" v-show="part3.completionRate >= 100">{{part3.rTotal == 0 ? '--' : part3.rTotal}}</h2>
+                    <h2 :style="{color: '#FFB800'}" v-show="part3.completionRate < 100 && part3.completionRate >= 80">{{part3.rTotal == 0 ? '--' : part3.rTotal}}</h2>
+                    <h2 :style="{color: '#FF5722'}" v-show="part3.completionRate < 80">{{part3.rTotal == 0 ? '--' : part3.rTotal}}</h2>
+                    <p class="lst">
+                        <span :title="part3.tTotal">目标：{{part3.tTotal == 0 ? '--' : part3.tTotal}}</span>
+                        <span :title="part3.completionRate">完成率：{{part3.completionRate == 0 ? '--' : part3.completionRate}}
+                            <i v-show="part3.completionRate != 0">%</i>
+                        </span>
+                    </p>
+                    <p class="lst">
+                        <span :title="part3.lTotal">同期：{{part3.lTotal == 0 ? '--' : part3.lTotal}}</span>
+                        <span>同比：{{part3.yearToYear == 0 ? '--' : part3.yearToYear}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    利润
+                    <span></span>
+
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <h2 :style="{color: '#009688'}" v-show="part4.completionRate >= 100">{{part4.rTotal == 0 ? '--' : part4.rTotal}}</h2>
+                    <h2 :style="{color: '#FFB800'}" v-show="part4.completionRate < 100 && part4.completionRate >= 80">{{part4.rTotal == 0 ? '--' : part4.rTotal}}</h2>
+                    <h2 :style="{color: '#FF5722'}" v-show="part4.completionRate < 80">{{part4.rTotal == 0 ? '--' : part4.rTotal}}</h2>
+                    <p class="lst">
+                        <span :title="part4.tTotal">目标：{{part4.tTotal == 0 ? '--' : part4.tTotal}}</span>
+                        <span :title="part4.completionRate">完成率：{{part4.completionRate == 0 ? '--' : part4.completionRate}}
+                            <i v-show="part4.completionRate != 0">%</i>
+                        </span>
+                    </p>
+                    <p class="lst">
+                        <span :title="part4.lTotal">同期：{{part4.lTotal == 0 ? '--' : part4.lTotal}}</span>
+                        <span>同比：{{part4.yearToYear == 0 ? '--' : part4.yearToYear}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    逾期不良率
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-sm4 layui-col-md4">
+                            <div id="gauge01" style="height: 200px;"></div>
+                            <div id="gauge02" style="height: 200px;"></div>
+                        </div>
+                        <div class="layui-col-sm8 layui-col-md8">
+                            <div id="rightline" style="height: 400px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <!-- <div class="layui-card-header">
+                    逾期不良率
+                </div> -->
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="tabview">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">贷款余额</li>
+                            <li>放款额</li>
+                            <li>收入</li>
+                            <li>利润</li>
+                            <li>固定成本</li>
+                            <li>变动成本</li>
+                        </ul>
+                        <div class="layui-tab-content" style="height: 400px;">
+                            <div class="layui-tab-item layui-show">
+                                <div id="tabview1" style="height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    部门排名
+                </div>
+                <div class="layui-card-body manage btmBox">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr style="background: #24262F; color: #fff;">
+                                <th>部门</th>
+                                <th style="border-right: none;border-left: none;">贷款余额
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="manageRank('dkye','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="manageRank('dkye','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none;">放款额
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="manageRank('fke','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="manageRank('fke','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none;">收入
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="manageRank('sr','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="manageRank('sr','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none;">利润
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="manageRank('lr','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="manageRank('lr','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-left: none;">同比</th>
+                            </tr>
+                            <tr v-for="(item,index) in topTenDept">
+                                <td>{{item.BMM}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYE}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYEWCL}}
+                                    <span v-show="item.DKYEWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYETB ? item.DKYETB : '--'}}
+                                    <span class="down" v-show="item.DKYETB < 0">&darr;</span>
+                                    <span class="up" v-show="item.DKYETB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.FKE}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.FKEWCL}}
+                                    <span v-show="item.FKEWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.FKETB ? item.FKETB : '--'}}
+                                    <span class="down" v-show="item.FKETB < 0">&darr;</span>
+                                    <span class="up" v-show="item.FKETB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.SR}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.SRWCL}}
+                                    <span v-show="item.SRWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.SRTB ? item.SRTB : '--'}}
+                                    <span class="down" v-show="item.SRTB < 0">&darr;</span>
+                                    <span class="up" v-show="item.SRTB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.LR}} </td>
+                                <td style="border-right: none;border-left: none;">{{item.LRWCL}}
+                                    <span v-show="item.LRWCL">%</span>
+                                </td>
+                                <td style="border-left: none;">{{item.LRTB ? item.LRTB : '--'}}
+                                    <span class="down" v-show="item.LRTB < 0">&darr;</span>
+                                    <span class="up" v-show="item.LRTB > 0">&uarr;</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <span id="more">查看更多</span> 产品排名
+                </div>
+                <div class="layui-card-body manage btmBox">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col width="150">
+                            <col>
+                        </colgroup>
+                        <tbody id="show" class="show">
+                            <tr style="background: #24262F; color: #fff;">
+                                <th>产品</th>
+                                <th>收益率</th>
+                                <th style="border-right: none;border-left: none;">贷款余额
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="proRank('dkye','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="proRank('dkye','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none">放款额
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="proRank('fke','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="proRank('fke','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none;">收入
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="proRank('sr','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="proRank('sr','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-right: none;border-left: none;">同比</th>
+                                <th style="border-right: none;">利润
+                                    <span class="layui-table-sort layui-inline">
+                                        <i @click="proRank('lr','asc')" class="layui-edge layui-table-sort-asc"></i>
+                                        <i @click="proRank('lr','desc')" class="layui-edge layui-table-sort-desc"></i>
+                                    </span>
+                                </th>
+                                <th style="border-right: none;border-left: none;">完成率</th>
+                                <th style="border-left: none;">同比</th>
+                            </tr>
+                            <tr v-for="(item,index) in topTenPro">
+                                <td>{{item.CPM}}</td>
+                                <td>{{item.SYL}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYE}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYEWCL}}
+                                    <span v-show="item.DKYEWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.DKYETB ? item.DKYETB : '--'}}
+                                    <span class="down" v-show="item.DKYETB < 0">&darr;</span>
+                                    <span class="up" v-show="item.DKYETB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.FKE}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.FKEWCL}}
+                                    <span v-show="item.FKEWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.FKETB ? item.FKETB : '--'}}
+                                    <span class="down" v-show="item.FKETB < 0">&darr;</span>
+                                    <span class="up" v-show="item.FKETB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.SR}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.SRWCL}}
+                                    <span v-show="item.SRWCL">%</span>
+                                </td>
+                                <td style="border-right: none;border-left: none;">{{item.SRTB ? item.SRTB : '--'}}
+                                    <span class="down" v-show="item.SRTB < 0">&darr;</span>
+                                    <span class="up" v-show="item.SRTB > 0">&uarr;</span>
+                                </td>
+                                <td style="border-right: none;">{{item.LR}}</td>
+                                <td style="border-right: none;border-left: none;">{{item.LRWCL}}
+                                    <span v-show="item.LRWCL">%</span>
+                                </td>
+                                <td style="border-left: none;">{{item.LRTB ? item.LRTB : '--'}}
+                                    <span class="down" v-show="item.LRTB < 0">&darr;</span>
+                                    <span class="up" v-show="item.LRTB > 0">&uarr;</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- <div style="height:100%;width:30%;float: left;">
+        <div id="lefttop" style="height:33%;width:100%;"></div>
+        <div id="leftmiddle" style="height:33%;width:100%;"></div>
+        <div id="leftbottom" style="height:33%;width:100%;"></div>
+    </div>
+
+    <div style="height:100%;width:40%;float: left;">
+        <div id="middletop" style="height:10%;width:100%;text-align: center">海尔-消费金融</div>
+        <div id="middlecenter" style="height:90%;width:100%"></div>
+    </div>
+
+    <div style="height:100%;width:30%;float: left;">
+        <div id="righttop" style="height:50%;width:100%"></div>
+        <div id="rightbottom" style="height:50%;width:100%"></div>
+    </div> -->
+    <div class="load" v-show="load"></div>
+</div>

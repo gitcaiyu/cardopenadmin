@@ -1,5 +1,6 @@
 package cn.leadeon.cardopenadmin.service;
 
+import cn.leadeon.cardopenadmin.common.Common;
 import cn.leadeon.cardopenadmin.common.DateUtil;
 import cn.leadeon.cardopenadmin.common.RandomUtil;
 import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
@@ -47,16 +49,15 @@ public class nmg_channel_infoService {
     @Value("${file.path}")
     private String path;
 
-    public CardResponse channel (nmg_channel_info nmg_channel_info, HttpSession httpSession) {
+    public CardResponse channel (nmg_channel_info nmg_channel_info, HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
+        HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         Map param = new HashMap();
         Map result = new HashMap();
-        List results = new ArrayList();
         //如果是盟市管理员，则仅能查看当前负责盟市的渠道信息
         if (nmg_user_info.getUserRole().equals("2")) {
             param.put("city",nmg_user_info.getCityCode());
-            param.put("channelType",nmg_channel_info.getChannelType());
             param.put("chargeTel",nmg_user_info.getUserTel());
             result.put("city",nmg_city_infoMapper.cityInfo(param));
             result.put("county",nmg_county_infoMapper.countyInfo(param));
@@ -78,29 +79,32 @@ public class nmg_channel_infoService {
             param.put("chargeName",nmg_channel_info.getChargeName());
         }
         if (null != nmg_channel_info.getChargeTel() && !"".equals(nmg_channel_info.getChargeTel())) {
-            param.put("channelTel",nmg_channel_info.getChargeTel());
+            param.put("chargeTel",nmg_channel_info.getChargeTel());
         }
         if (null != nmg_channel_info.getCounty() && !"".equals(nmg_channel_info.getCounty())) {
             param.put("county",nmg_channel_info.getCounty());
         }
-        result.put("channel",nmg_channel_infoMapper.myChannelInfo(param));
-        results.add(result);
-        cardResponse.setResBody(results);
+        if (null != nmg_channel_info.getChannelType() && !"".equals(nmg_channel_info.getChannelType())) {
+            param.put("channelType",nmg_channel_info.getChannelType());
+        }
+        List<Map<String,Object>> myChannelInfo = nmg_channel_infoMapper.myChannelInfo(param);
+        result.put("channel",myChannelInfo);
+        result.put("channelType",new Common().channelType());
+        cardResponse.setResBody(result);
+        cardResponse.setTotalCount(myChannelInfo.size());
         return cardResponse;
     }
 
     @Transactional
     public CardResponse channelAdd(nmg_channel_info nmg_channel_info) {
         CardResponse cardResponse = new CardResponse();
-        nmg_channel_info.setChannelId(new RandomUtil().uuid);
-        nmg_channel_infoMapper.insert(nmg_channel_info);
-        return cardResponse;
-    }
-
-    @Transactional
-    public CardResponse channelUpdate(nmg_channel_info nmg_channel_info) {
-        CardResponse cardResponse = new CardResponse();
-        nmg_channel_infoMapper.channelUpdate(nmg_channel_info);
+        if (null == nmg_channel_info.getChannelId()||"".equals(nmg_channel_info.getChannelId().trim())) {
+            nmg_channel_info.setChannelId(new RandomUtil().uuid);
+            nmg_channel_info.setChannelType("1");
+            nmg_channel_infoMapper.insert(nmg_channel_info);
+        } else {
+            nmg_channel_infoMapper.channelUpdate(nmg_channel_info);
+        }
         return cardResponse;
     }
 

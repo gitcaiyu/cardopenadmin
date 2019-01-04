@@ -44,7 +44,9 @@ public class nmg_menu_infoService {
                 results.add(resultMaps);
             }
         }
-        cardResponse.setResBody(results);
+        Map res = new HashMap();
+        res.put("menu",results);
+        cardResponse.setResBody(res);
         return cardResponse;
     }
 

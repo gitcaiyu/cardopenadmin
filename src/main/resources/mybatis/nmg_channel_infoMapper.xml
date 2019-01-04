@@ -114,7 +114,7 @@
       and channel_type = #{channelType,jdbcType=VARCHAR}
     </if>
     <if test="channelName != null" >
-      and channel_name = #{channelName,jdbcType=VARCHAR}String
+      and channel_name = #{channelName,jdbcType=VARCHAR}
     </if>
     <if test="channelCode != null">
       and channel_code = #{channelCode,jdbcType=VARCHAR}
@@ -127,8 +127,7 @@
     </if>
   </select>
 
-    <select id="isExists" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info"
-            resultType="java.lang.Integer">
+  <select id="isExists" parameterType="cn.leadeon.cardopenadmin.entity.nmg_channel_info" resultType="java.lang.Integer">
     select count(*) from nmg_channel_info where charge_tel = #{chargeTel,jdbcType=VARCHAR}
   </select>
 
@@ -140,12 +139,20 @@
     update
       nmg_channel_info
     set
-      channel_name = #{channelName,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
-      county = #{county,jdbcType=VARCHAR},
-      charge_name = #{chargeName,jdbcType=VARCHAR},
-      charge_tel = #{chargeTel,jdbcType=VARCHAR},
-      channel_address = #{channelAddress,jdbcType=VARCHAR}
+      county = #{county,jdbcType=VARCHAR}
+      <if test="channelName != null">
+        ,channel_name = #{channelName,jdbcType=VARCHAR}
+      </if>
+      <if test="chargeName != null">
+        ,charge_name = #{chargeName,jdbcType=VARCHAR}
+      </if>
+      <if test="chargeTel != null">
+        ,charge_tel = #{chargeTel,jdbcType=VARCHAR}
+      </if>
+      <if test="channelAddress != null">
+        ,channel_address = #{channelAddress,jdbcType=VARCHAR}
+      </if>
     where
       channel_id = #{channelId,jdbcType=VARCHAR}
   </update>

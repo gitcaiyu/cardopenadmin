@@ -1,14 +1,14 @@
 package cn.leadeon.cardopenadmin.entity;
 
+import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class nmg_user_info {
+public class nmg_user_info extends BaseEntity {
     private String userId;
 
-    @NotBlank(message = "用户名不能为空")
     private String userName;
 
     @NotBlank(message = "密码不能为空")
@@ -18,6 +18,7 @@ public class nmg_user_info {
 
     private String userType;
 
+    @NotBlank(message = "手机号码不能为空")
     private String userTel;
 
     private String cityCode;

@@ -1,0 +1,74 @@
+<div>
+    <form id="suppleSumBtns" class="layui-form">
+        <div class="layui-input-inline ml10 dates">
+            <input type="text" id="strDate" class="layui-input" readOnly placeholder="开始日期" >
+        </div>
+        <div class="layui-input-inline ml10 dates">
+            <input type="text" id="endDate" class="layui-input" readOnly placeholder="结束日期">
+        </div>
+        <div class="layui-input-inline ml10">
+            <select lay-filter="seleSupplier" name="seleSupplier">
+                <option value="">请选择供应商</option>
+                <option v-for="supplier in supplierList" v-bind:value="supplier.supplier">{{supplier.supplier}}</option>
+            </select>
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off"  placeholder="请输入名称" class="layui-input" v-model="name">
+        </div>
+        <div class="layui-input-inline ml10 opBtns">
+            <a @click="searchSupple()" class="layui-btn layui-btn-normal" >立即查询</a>
+            <a class="layui-btn layui-btn-primary" @click="searchReset()">重置</a>
+        </div>
+        <div class="layui-input-inline rg rgBtns">
+            <a class="layui-btn layui-btn-primary" @click="checkCodes()">筛选</a>
+            <a class="layui-btn layui-btn-normal" :href="exportUrl">导出</a>
+        </div>
+        
+    </form>
+    <form class="layui-form">
+    <div class="layui-form" style="position: relative;">
+        <div style="overflow-x:auto;">
+            <table class="layui-table" style="width: 100%;">
+                <colgroup>
+                    <col width="30">
+                    <col width="100">
+                    <col width="100">
+                    <col>
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>时间</th>
+                        <th>编码</th>
+                        <th>名称</th>
+                        <th>单价</th>
+                        <th>笔数</th>
+                        <th>总金额</th>
+                        <th>供应商</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in codeList" v-bink::key="index">
+                        <td>
+                            <input type="checkbox" :value="item.CODE" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
+                        </td>
+                        <td>{{dateStr}}</td>
+                        <td>{{item.CODE}}</td>
+                        <td>{{item.NAME}}</td>
+                        <td>{{item.PRICE}}</td>
+                        <td>{{item.COUNT}}</td>
+                        <td>{{item.SUM_MONEY}}</td>
+                        <td>{{item.SUPPLIER}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</form>
+    <div class="load" v-show="load"></div>
+</div>

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,15 +48,16 @@ public class nmg_user_infoService {
     @Value("${file.path}")
     private String path;
 
-    public CardResponse userLogin(nmg_user_info nmg_user_info, HttpSession session) {
+    public CardResponse userLogin(nmg_user_info nmg_user_info, HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
         Map param = new HashMap();
-        param.put("userName",nmg_user_info.getUserName());
+        param.put("userTel",nmg_user_info.getUserTel());
         param.put("userPass",nmg_user_info.getUserPass());
         nmg_user_info userInfo = nmg_user_infoMapper.userValid(param);
         try {
             cardResponse = nmg_menu_infoService.menuList(userInfo.getUserRole());
-            session.setAttribute("userInfo",userInfo);
+            HttpSession httpSession = httpServletRequest.getSession();
+            httpSession.setAttribute("userInfo",userInfo);
         } catch (Exception e) {
             cardResponse.setResCode(CodeEnum.loginFaild.getCode());
             cardResponse.setResDesc(CodeEnum.loginFaild.getDesc());
@@ -80,7 +82,9 @@ public class nmg_user_infoService {
                     param.put("userType",jsonObject.get("userType"));
                 }
                 List<Map<String,Object>> allUserInfo = nmg_user_infoMapper.allUserInfo(param);
-                cardResponse.setResBody(allUserInfo);
+                Map result = new HashMap();
+                result.put("user",allUserInfo);
+                cardResponse.setResBody(result);
             } catch (Exception e) {
                 cardResponse.setResDesc(e.getMessage());
                 cardResponse.setResCode(CodeEnum.failed.getCode());
@@ -124,7 +128,9 @@ public class nmg_user_infoService {
                 if (null != jsonObject.get("role_id")) {
                     param.put("role_id",jsonObject.get("role_id"));
                 }
-                cardResponse.setResBody(nmg_user_roleMapper.userRole(param));
+                Map res = new HashMap();
+                res.put("role",nmg_user_roleMapper.userRole(param));
+                cardResponse.setResBody(res);
             } catch (Exception e) {
                 cardResponse.setResDesc(e.getMessage());
                 cardResponse.setResCode(CodeEnum.failed.getCode());

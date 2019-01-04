@@ -32,15 +32,12 @@ public class nmg_meal_infoService {
         try {
             Map param = new HashMap();
             Map results = new HashMap();
-            List result = new ArrayList();
             if (null != nmg_meal_info.getMealId()) {
                 param.put("mealId",nmg_meal_info.getMealId());
                 results.put("city",nmg_city_infoMapper.cityInfo(null));
-                result.add(results);
             }
             results.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
-            result.add(results);
-            cardResponse.setResBody(result);
+            cardResponse.setResBody(results);
         } catch (Exception e) {
             cardResponse.setResDesc(e.getMessage());
             cardResponse.setResCode(CodeEnum.failed.getCode());

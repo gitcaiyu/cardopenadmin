@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -25,8 +26,8 @@ public class nmg_user_infoController {
      * @return
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
-    public CardResponse userLogin(@RequestBody @Valid nmg_user_info nmg_user_info, HttpSession session) {
-        return nmg_user_infoService.userLogin(nmg_user_info,session);
+    public CardResponse userLogin(@RequestBody @Valid nmg_user_info nmg_user_info, HttpServletRequest httpServletRequest) {
+        return nmg_user_infoService.userLogin(nmg_user_info,httpServletRequest);
     }
 
     /**

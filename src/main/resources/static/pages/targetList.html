@@ -1,0 +1,168 @@
+<div>
+    <form class="layui-form">
+        <a class="layui-btn layui-btn-normal" @click="add()">
+            <i class="layui-icon"></i> 添加</a>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" placeholder="请输入名称" class="layui-input" v-model="searchQuery">
+        </div>
+        <div class="layui-input-inline ml10">
+            <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-normal">立即查询</button>
+            <a @click="searchReset()" class="layui-btn layui-btn-primary">重置</a>
+        </div>
+    </form>
+    <div class="layui-form" style="position: relative;">
+        <div style="overflow-x:auto;">
+            <table class="layui-table" style="width: 100%;">
+                <colgroup>
+                    <col width="170">
+                    <col width="170">
+                    <col>
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>编码</th>
+                        <th>名称</th>
+                        <!-- <th>类型</th>
+                        <th>SQL</th> -->
+                        <th>描述</th>
+                        <th>空</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in factorList" v-bink::key="index">
+                        <td>{{item.FACTOR_CODE}}</td>
+                        <td>{{item.FACTOR_NAME}}</td>
+                        <!-- <td>{{showTypeName(item)}}</td>
+                        <td><div :title="item.FACTOR_SQL" class="text-ellipsis">{{item.FACTOR_SQL}}</div></td> -->
+                        <td>{{item.FACTOR_DESC}}</td>
+                        <td>
+                            <span class="layui-btn layui-btn-sm layui-btn-normal">空</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="position: absolute; right: 0; top:0; ">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in factorList" v-bink::key="index">
+                        <td>
+                            <a class="layui-btn layui-btn-sm layui-btn-normal" @click="edit(item)" href="javascript:">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" @click="del(item)" href="javascript:">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+    <!--add-->
+    <form class="layui-form mt20" id="targetAdd" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="FACTOR_NAME" lay-verify="required" maxlength="30" autocomplete="off" placeholder="" class="layui-input" v-model="name">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select name="FACTOR_PARAM_TYPE" id="selectAddType" lay-filter="selectType" v-model="type">
+                            <option value=""></option>
+                            <option v-for="typeItem in typeList" v-bind:value="typeItem.PARAM_CODE">{{typeItem.PARAM_NAME}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">SQL</label>
+                    <div class="layui-input-inline">
+                        <textarea v-model="SQL" name="FACTOR_SQL" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <input name="FACTOR_DESC" lay-verify="" maxlength="100" autocomplete="off" placeholder="" class="layui-input" v-model="desc">
+                        <input type="hidden" name="FACTOR_CODE" v-model="code">
+                        <input type="hidden" name="FACTOR_ID" v-model="id">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="add">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--edit-->
+    <form class="layui-form mt20" id="targetEdit" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="FACTOR_NAME" lay-verify="required" maxlength="30" autocomplete="off" placeholder="" class="layui-input" v-model="name">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        <select id="selectEditType" name="FACTOR_PARAM_TYPE" lay-verify="" v-model="type">
+                            <option value=""></option>
+                            <option v-for="typeItem in typeList" v-bind:value="typeItem.PARAM_CODE">{{typeItem.PARAM_NAME}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">SQL</label>
+                    <div class="layui-input-inline">
+                        <textarea v-model="SQL" name="FACTOR_SQL" placeholder="" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="FACTOR_DESC" lay-verify="" maxlength="100" autocomplete="off" placeholder="" class="layui-input" v-model="desc">
+                        <input type="hidden" name="FACTOR_CODE" v-model="code">
+                        <input type="hidden" name="FACTOR_ID" v-model="id">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="edit">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

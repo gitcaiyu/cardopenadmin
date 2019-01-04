@@ -103,7 +103,7 @@
   </select>
 
   <select id="userValid" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select user_id,user_name,user_pass,user_role,user_type,user_tel,city_code,flag,create_time,update_time,create_people from nmg_user_info where user_name = #{userName,jdbcType=VARCHAR} and user_pass = #{userPass,jdbcType=VARCHAR} and flag = 'Y'
+    select user_id,user_name,user_pass,user_role,user_type,user_tel,city_code,flag,create_time,update_time,create_people from nmg_user_info where user_tel = #{userTel,jdbcType=VARCHAR} and user_pass = #{userPass,jdbcType=VARCHAR} and flag = 'Y'
   </select>
 
   <select id="allUserInfo" parameterType="java.util.Map" resultType="java.util.Map">

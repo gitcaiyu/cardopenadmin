@@ -29,15 +29,12 @@ public class nmg_discount_infoService {
         CardResponse cardResponse = new CardResponse();
         try {
             Map param = new HashMap();
-            Map results = new HashMap();
-            List result = new ArrayList();
+            Map result = new HashMap();
             if (null != nmg_discount_info.getDiscountId()) {
                 param.put("discountId",nmg_discount_info.getDiscountId());
-                results.put("city",nmg_city_infoMapper.cityInfo(null));
-                result.add(results);
+                result.put("city",nmg_city_infoMapper.cityInfo(null));
             }
-            results.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
-            result.add(results);
+            result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
             cardResponse.setResBody(result);
         } catch (Exception e) {
             cardResponse.setResDesc(e.getMessage());
