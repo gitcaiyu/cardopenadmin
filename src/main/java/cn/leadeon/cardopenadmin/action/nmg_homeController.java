@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @CrossOrigin
 public class nmg_homeController {
 
-    @GetMapping(value = "/index")
+    @GetMapping(value = "/login")
     public String index() {
-        return "index.html";
+        return "login.html";
     }
 
 }

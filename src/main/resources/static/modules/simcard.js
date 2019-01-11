@@ -36,6 +36,41 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
         mounted: function () {
             var _this = this;
             _this.ajax_url = _this.$parent.ajax_url;
+            layui.use('laydate', function() {
+                var laydate = layui.laydate;
+                //日期时间选择器
+                laydate.render({
+                    elem: '#subTime'
+                    ,type: 'datetime'
+                    ,done: function(value){
+                        _this.subTime = value;
+                    }
+                });
+                //日期时间选择器
+                laydate.render({
+                    elem: '#subTimeE'
+                    ,type: 'datetime'
+                    ,done: function(value){
+                        _this.subTimeE = value;
+                    }
+                });
+                //日期时间选择器
+                laydate.render({
+                    elem: '#createTime'
+                    ,type: 'datetime'
+                    ,done: function(value){
+                        _this.createTime = value;
+                    }
+                });
+                //日期时间选择器
+                laydate.render({
+                    elem: '#createTimeE'
+                    ,type: 'datetime'
+                    ,done: function(value){
+                        _this.createTimeE = value;
+                    }
+                });
+            })
             form.on("checkbox(check)",function(data){
                 if(data.elem.checked){
                     _this.checkList.push(data.value);
@@ -166,18 +201,18 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                                         url: _this.ajax_url+'/simCard',
                                         type: 'post',
                                         data:JSON.stringify({city:obj.city,
-                                            county:obj.county,
-                                            channelName:obj.channel_name,
-                                            channelType:obj.channel_type,
-                                            orderMeal:obj.mealId,
-                                            orderDiscount:obj.discount,
-                                            orderState:obj.state,
-                                            subTime:obj.subTime,
-                                            subTimeE:obj.subTimeE,
-                                            createTime:obj.createTime,
-                                            createTimeE:obj.createTimeE,
-                                            orderOtherPeople:obj.orderOtherPeople,
-                                            orderOtherPhone:obj.orderOtherPhone,
+                                            county:_this.county,
+                                            channelName:_this.channel_name,
+                                            channelType:_this.channel_type,
+                                            orderMeal:_this.mealId,
+                                            orderDiscount:_this.discount,
+                                            orderState:_this.state,
+                                            subTime:_this.subTime,
+                                            subTimeE:_this.subTimeE,
+                                            createTime:_this.createTime,
+                                            createTimeE:_this.createTimeE,
+                                            orderOtherPeople:_this.orderOtherPeople,
+                                            orderOtherPhone:_this.orderOtherPhone,
                                             curr:obj.curr,
                                             limit:obj.limit}),
                                         headers : {

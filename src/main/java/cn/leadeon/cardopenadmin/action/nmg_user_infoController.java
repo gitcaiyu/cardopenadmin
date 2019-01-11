@@ -31,6 +31,16 @@ public class nmg_user_infoController {
     }
 
     /**
+     * 当前登录用户菜单
+     * @param httpServletRequest
+     * @return
+     */
+    @PostMapping(value = "/menu")
+    public CardResponse menu(HttpServletRequest httpServletRequest) {
+        return nmg_user_infoService.menu(httpServletRequest);
+    }
+
+    /**
      * 用户管理
      * @param data
      * @return

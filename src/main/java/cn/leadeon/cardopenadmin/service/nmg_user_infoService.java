@@ -62,7 +62,13 @@ public class nmg_user_infoService {
             cardResponse.setResCode(CodeEnum.loginFaild.getCode());
             cardResponse.setResDesc(CodeEnum.loginFaild.getDesc());
         }
-        System.out.println(cardResponse.getResBody().toString());
+        return cardResponse;
+    }
+
+    public CardResponse menu(HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession();
+        nmg_user_info userInfo = (nmg_user_info) httpSession.getAttribute("userInfo");
+        CardResponse cardResponse = nmg_menu_infoService.menuList(userInfo.getUserRole());
         return cardResponse;
     }
 

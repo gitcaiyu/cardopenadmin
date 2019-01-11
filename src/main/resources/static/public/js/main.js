@@ -62,7 +62,6 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                 $('.glxl').on('click',function(){
                     var url = $(this).find('a').attr('href').split('#')[1]
                     var obj = {};
-                    obj.name ='产品关系管理';
                     obj.url = $(this).find('a').attr('href');
                     obj.isActive = true;    //单独此元素设置为true
                     var arr = [];
@@ -195,6 +194,15 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                         flag = true;
                     }
                 })
+                $.ajax({
+                    url: window.location.protocol + "//" + window.location.host + '/cardopenadmin/menu',
+                    type: 'post',
+                    async: false,
+                    success: function (result) {
+                        console.log(result)
+                        _this.navList = result.resBody.menu;
+                    }
+                })
                 $(window).resize(function () {
                     //console.log($('#pagetabs ul.tabs').width())
                     var outWidth = $('#pagetabs .tabs').width()
@@ -202,21 +210,6 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     _this.outWidth = outWidth
                 }).trigger('resize')
 
-            })
-            var datas = {"userTel":"15248083188","userPass":"123456"}
-            $.ajax({
-                url: window.location.protocol + "//" + window.location.host + '/cardopenadmin/userLogin',
-                type: 'post',
-                data: JSON.stringify(datas),
-                async: false,
-                headers : {
-                    'Content-Type' : 'application/json;charset=utf-8'
-                },
-                dataType: 'json',
-                success: function (result) {
-                    console.log(result)
-                    _this.navList = result.resBody.menu;
-                }
             })
         },
         updated: function () {
