@@ -50,25 +50,26 @@ public class nmg_channel_infoController {
 
     /**
      * 渠道信息删除
-     * @param nmg_channel_info
+     * @param data
      * @return
      */
     @RequestMapping(value = "/channelDel",method = RequestMethod.POST)
     @ResponseBody
-    public CardResponse channelDel(@RequestBody @Valid nmg_channel_info nmg_channel_info) {
-        return nmg_channel_infoService.channelDel(nmg_channel_info);
+    public CardResponse channelDel(@RequestBody String data) {
+        return nmg_channel_infoService.channelDel(data);
     }
 
     /**
      * 渠道信息导出
-     * @param httpSession
+     * @param nmg_channel_info
+     * @param httpServletRequest
      * @return
      * @throws IOException
      */
     @PostMapping(value = "/channelExport")
     @ResponseBody
-    public CardResponse channelExport(HttpSession httpSession) throws IOException {
-        return nmg_channel_infoService.channelExport(httpSession);
+    public CardResponse channelExport(@RequestBody nmg_channel_info nmg_channel_info,HttpServletRequest httpServletRequest) throws IOException {
+        return nmg_channel_infoService.channelExport(nmg_channel_info,httpServletRequest);
     }
 
     /**

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -21,22 +22,23 @@ public class nmg_order_infoController {
     /**
      * SIM卡回录页面初始化查询
      * @param nmg_order_info
-     * @param httpSession
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/simCard")
-    public CardResponse simCard(@RequestBody nmg_order_info nmg_order_info, HttpSession httpSession) {
-        return nmg_order_infoService.simCard(nmg_order_info,httpSession);
+    public CardResponse simCard(@RequestBody nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
+        return nmg_order_infoService.simCard(nmg_order_info,httpServletRequest);
     }
 
     /**
      * 订单信息导出
+     * @param nmg_order_info
      * @param httpSession
      * @return
      */
     @PostMapping(value = "/orderExport")
-    public CardResponse orderExport(HttpSession httpSession) {
-        return nmg_order_infoService.orderExport(httpSession);
+    public CardResponse orderExport(@RequestBody nmg_order_info nmg_order_info,HttpSession httpSession) {
+        return nmg_order_infoService.orderExport(nmg_order_info,httpSession);
     }
 
     /**

@@ -1,12 +1,11 @@
 package cn.leadeon.cardopenadmin.entity;
 
-import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class nmg_user_info extends BaseEntity {
+public class nmg_user_info {
     private String userId;
 
     private String userName;
@@ -30,4 +29,10 @@ public class nmg_user_info extends BaseEntity {
     private String updateTime;
 
     private String createPeople;
+
+    private int curr;
+
+    private int limit;
+
+    private int totalCount;
 }

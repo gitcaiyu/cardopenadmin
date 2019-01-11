@@ -169,8 +169,8 @@
     SELECT
       noi.order_id,
       noi.batch_id,
-      noi.city,
-      noi.county,
+      city.city_name,
+      county.county_name,
       noi.channel_id,
       noi.channel_name,
       nci.channel_type,
@@ -178,7 +178,17 @@
       nmi.meal_code,
       ndi.discount_name,
       noi.order_count,
-      noi.order_state,
+    CASE
+
+      WHEN noi.order_state = '1' THEN
+      '待审批'
+      WHEN noi.order_state = '2' THEN
+      '已审批'
+      WHEN noi.order_state = '3' THEN
+      '已写卡'
+      WHEN noi.order_state = '4' THEN
+      '已邮寄' ELSE '已取消'
+    END order_state,
       noi.create_time,
       noi.update_time,
       noi.update_people,
@@ -186,12 +196,12 @@
       noi.order_addressee,
     CASE
 
-    WHEN noi.order_other_phone IS NULL THEN
+      WHEN noi.order_other_phone IS NULL or noi.order_other_phone = '' THEN
       noi.order_phone ELSE noi.order_other_phone
-    END order_phone,
+      END order_phone,
     CASE
 
-    WHEN noi.order_other_people IS NULL THEN
+      WHEN noi.order_other_people IS NULL or noi.order_other_people = '' THEN
       noi.order_people ELSE noi.order_other_people
     END order_people
     FROM
@@ -199,7 +209,10 @@
     LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_id
     LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
     LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
-    WHERE 1 = 1
+    LEFT JOIN nmg_city_info city ON noi.city = city.city_code
+    LEFT JOIN nmg_county_info county ON noi.county = county.county_id
+    WHERE
+      1 = 1
     <if test="phone != null">
       and order_other_phone = #{phone,jdbcType=VARCHAR}
     </if>
@@ -207,16 +220,16 @@
       and order_other_people = #{people,jdbcType=VARCHAR}
     </if>
     <if test="city != null">
-      and noi.city = #{city,jdbcType=VARCHAR}
+      and city.city_code = #{city,jdbcType=VARCHAR}
     </if>
     <if test="county != null">
       and noi.county = #{county,jdbcType=VARCHAR}
     </if>
     <if test="meal != null">
-      and noi.order_meal = #{meal,jdbcType=VARCHAR}
+      and nmi.meal_code = #{meal,jdbcType=VARCHAR}
     </if>
     <if test="discount != null">
-      and noi.order_discount = #{discount,jdbcType=VARCHAR}
+      and ndi.discount_id = #{discount,jdbcType=VARCHAR}
     </if>
     <if test="tariff != null">
       and noi.order_tariff = #{tariff,jdbcType=VARCHAR}
@@ -288,6 +301,56 @@
     ORDER BY
         noi.order_phone,
         noi.order_meal
+  </select>
+
+  <select id="totalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+      SELECT
+      COUNT(*)
+      FROM
+      nmg_order_info noi
+      LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_id
+      LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+      LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
+      LEFT JOIN nmg_city_info city ON noi.city = city.city_code
+      LEFT JOIN nmg_county_info county ON noi.county = county.county_id
+      WHERE
+      1 = 1
+      <if test="phone != null">
+          and order_other_phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="people != null">
+          and order_other_people = #{people,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null">
+          and city.city_code = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="county != null">
+          and noi.county = #{county,jdbcType=VARCHAR}
+      </if>
+      <if test="meal != null">
+          and nmi.meal_code = #{meal,jdbcType=VARCHAR}
+      </if>
+      <if test="discount != null">
+          and ndi.discount_id = #{discount,jdbcType=VARCHAR}
+      </if>
+      <if test="tariff != null">
+          and noi.order_tariff = #{tariff,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+          and noi.order_state = #{state,jdbcType=VARCHAR}
+      </if>
+      <if test="channelName != null">
+          and noi.channel_name = #{channelName,jdbcType=VARCHAR}
+      </if>
+      <if test="subtime != null">
+          and noi.sub_time between #{subtime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null">
+          and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
+      </if>
+      <if test="channelType != null">
+          and channel_type = #{channelType,jdbcType=VARCHAR}
+      </if>
   </select>
 
   <update id="updateOrderInfo" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_info">

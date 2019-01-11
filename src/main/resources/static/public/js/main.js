@@ -5,25 +5,8 @@ requirejs.config({  //模块指定（定义）别名
         vue: '../lib/vue/vue.min',
         layui: '../lib/layui/layui.all',
         router: '../lib/vue/vue-router',
-        bigCate: '../../modules/bigCate',
         channel: '../../modules/channel',
-        feeSet: '../../modules/feeSet',
-        calculation: '../../modules/calculation',
-        targetList: '../../modules/targetList',
-        targetManage: '../../modules/targetManage',
-        chargeManage: '../../modules/chargeManage',
-        supplement: '../../modules/supplement',
-        incomeTable_H: '../../modules/incomeTable_H',
-        incomeTable_V: '../../modules/incomeTable_V',
-        home: '../../modules/home',
-        ec: '../../public/js/echarts',
-        targetErr: '../../modules/targetErr',
-        listParam: '../../modules/listParam',
-        interLog:'../../modules/interLog',
-        proGoalMana:'../../modules/proGoalMana',
-        departGoalMana:'../../modules/departGoalMana',
-        apiSuppleSum: '../../modules/apiSuppleSum',
-
+        simcard:'../../modules/simcard'
     },
     shim: {
         'layui': {
@@ -34,14 +17,18 @@ requirejs.config({  //模块指定（定义）别名
     }
 })
 
-var arrList = ['text', 'jquery', 'vue', 'router', 'layui', 'bigCate', 'channel', 'feeSet', 'calculation', 'targetList', 'targetManage', 'chargeManage', 'supplement', 'incomeTable_H', 'home', 'ec','targetErr','listParam','interLog','proGoalMana','departGoalMana','apiSuppleSum','incomeTable_V'];
-require(arrList, function (text, $, Vue, router, layui, bigCate, channel, feeSet, calculation, targetList, targetManage, chargeManage, supplement, incomeTable_H, home, ec,targetErr,listParam,interLog,proGoalMana,departGoalMana,apiSuppleSum,incomeTable_V) {   //引入定义的模块
+var arrList = ['text', 'jquery', 'vue', 'router', 'layui', 'channel','simcard'];
+require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //引入定义的模块
     Vue.use(router)
     var router = new router({
         routes: [
             {
                 path: '/channel',
                 component: channel.channel
+            },
+            {
+                path: '/simcard',
+                component: simcard.simcard
             }
         ]
     })

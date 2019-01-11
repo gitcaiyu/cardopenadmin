@@ -14,5 +14,6 @@ mybatis:
   mapper-locations: classpath:/mybatis/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    call-setters-on-nulls: true
 file:
   path: /home/leadeon/下载/

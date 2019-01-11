@@ -1,10 +1,9 @@
 package cn.leadeon.cardopenadmin.entity;
 
-import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 @Data
-public class nmg_user_role extends BaseEntity {
+public class nmg_user_role {
     private String roleId;
 
     private String roleName;
@@ -14,4 +13,10 @@ public class nmg_user_role extends BaseEntity {
     private String createTime;
 
     private String createPeople;
+
+    private int curr;
+
+    private int limit;
+
+    private int totalCount;
 }

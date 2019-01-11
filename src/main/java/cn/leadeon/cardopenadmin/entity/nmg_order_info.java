@@ -1,10 +1,9 @@
 package cn.leadeon.cardopenadmin.entity;
 
-import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 @Data
-public class nmg_order_info extends BaseEntity {
+public class nmg_order_info {
     private String orderId;
 
     private String batchId;
@@ -50,4 +49,10 @@ public class nmg_order_info extends BaseEntity {
     private String createTimeE;
 
     private String channelType;
+
+    private int curr;
+
+    private int limit;
+
+    private int totalCount;
 }

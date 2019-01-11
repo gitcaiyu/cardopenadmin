@@ -90,7 +90,9 @@
     WHEN channel_type = 1 THEN
     '社会渠道' ELSE '自营渠道'
     END channel_type,
+    city.city_id,
     city.city_name,
+    county.county_id,
     county.county_name,
     charge_name,
     charge_tel,
@@ -116,8 +118,36 @@
     <if test="channelName != null" >
       and channel_name = #{channelName,jdbcType=VARCHAR}
     </if>
-    <if test="channelCode != null">
-      and channel_code = #{channelCode,jdbcType=VARCHAR}
+    <if test="channelId != null">
+      and channel_id = #{channelId,jdbcType=VARCHAR}
+    </if>
+    <if test="chargeName != null" >
+      and charge_name = #{chargeName,jdbcType=VARCHAR}
+    </if>
+    <if test="chargeTel != null" >
+      and charge_tel = #{chargeTel,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="totalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*) from nmg_channel_info where 1 = 1
+    <if test="chargeTel != null">
+      and charge_tel = #{chargeTel,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and city = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and county = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="channelType != null" >
+      and channel_type = #{channelType,jdbcType=VARCHAR}
+    </if>
+    <if test="channelName != null" >
+      and channel_name = #{channelName,jdbcType=VARCHAR}
+    </if>
+    <if test="channelId != null">
+      and channel_id = #{channelId,jdbcType=VARCHAR}
     </if>
     <if test="chargeName != null" >
       and charge_name = #{chargeName,jdbcType=VARCHAR}

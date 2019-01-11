@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -28,12 +29,12 @@ public class nmg_statistical_queryController {
     /**
      * 工单统计
      * @param nmg_order_info
-     * @param httpSession
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/workCount")
-    public CardResponse workCount(@RequestBody nmg_order_info nmg_order_info, HttpSession httpSession) {
-        return nmg_order_infoService.simCard(nmg_order_info,httpSession);
+    public CardResponse workCount(@RequestBody nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
+        return nmg_order_infoService.simCard(nmg_order_info,httpServletRequest);
     }
 
     /**

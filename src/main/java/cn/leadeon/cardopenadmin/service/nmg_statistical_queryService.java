@@ -10,6 +10,7 @@ import cn.leadeon.cardopenadmin.mapper.nmg_county_infoMapper;
 import cn.leadeon.cardopenadmin.mapper.nmg_order_detailMapper;
 import cn.leadeon.cardopenadmin.mapper.nmg_order_infoMapper;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -73,7 +74,7 @@ public class nmg_statistical_queryService {
             if (null != nmg_order_info.getCreateTime()) {
                 param.put("createtime", nmg_order_info.getCreateTime());
             }
-            List<Map<String, Object>> result = nmg_order_infoMapper.detail(param);
+            List<Map<String, Object>> result = nmg_order_infoMapper.detail(param,new RowBounds());
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
             HSSFSheet sheet = hssfWorkbook.createSheet("工单统计");
             HSSFRow row = sheet.createRow(0);

@@ -1,10 +1,9 @@
 package cn.leadeon.cardopenadmin.entity;
 
-import cn.leadeon.cardopenadmin.common.reqBody.BaseEntity;
 import lombok.Data;
 
 @Data
-public class nmg_channel_info extends BaseEntity {
+public class nmg_channel_info {
 
     private String channelId;
 
@@ -23,4 +22,10 @@ public class nmg_channel_info extends BaseEntity {
     private String channelAddress;
 
     private String channelCode;
+
+    private int curr;
+
+    private int limit;
+
+    private int totalCount;
 }
