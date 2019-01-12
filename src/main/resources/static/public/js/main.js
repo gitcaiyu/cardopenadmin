@@ -65,10 +65,8 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     obj.url = $(this).find('a').attr('href');
                     obj.isActive = true;    //单独此元素设置为true
                     var arr = [];
-                    console.log(_this.pagePanle)
                     _this.pagePanle.forEach(function (v, i) {
                         v.isActive = false;     //全部设置为否
-                        //console.log(v.url.split('#')[1])
                         if (url == v.url.split('#')[1]) {
                             v.isActive = true;
                         }
@@ -76,11 +74,9 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     })
                     if (arr.indexOf(obj.name) == -1) {
                         obj.id = ++_this.i;
-                        console.log(_this.i)
                         _this.pagePanle.push(obj);
                         _this.$nextTick(function () {
                             _this.innerWidth = $('#pagetabs .tabs ul').width()
-                            console.log(_this.innerWidth)
                             _this.checkIsOverflow(_this.innerWidth)
                         });
                     }
@@ -102,10 +98,8 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     obj.url = $(this).find('a').attr('href');
                     obj.isActive = true;    //单独此元素设置为true
                     var arr = [];
-                    console.log(_this.pagePanle)
                     _this.pagePanle.forEach(function (v, i) {
                         v.isActive = false;     //全部设置为否
-                        //console.log(v.url.split('#')[1])
                         if (url == v.url.split('#')[1]) {
                             v.isActive = true;
                         }
@@ -113,11 +107,9 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     })
                     if (arr.indexOf(obj.name) == -1) {
                         obj.id = ++_this.i;
-                        console.log(_this.i)
                         _this.pagePanle.push(obj);
                         _this.$nextTick(function () {
                             _this.innerWidth = $('#pagetabs .tabs ul').width()
-                            console.log(_this.innerWidth)
                             _this.checkIsOverflow(_this.innerWidth)
                         });
                     }
@@ -143,7 +135,6 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                 })
                 $('.p-down .othertab').on('click', function () {
                     var url = $('#pagetabs .tabs ul li.active').find('a').attr('href').split('#')[1];
-                    console.log(url)
                     var tmp = [
                         {
                             id: 0,
@@ -199,14 +190,12 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     type: 'post',
                     async: false,
                     success: function (result) {
-                        console.log(result)
-                        _this.navList = result.resBody.menu;
+                        _this.userName = result.resBody.userName
+                        _this.navList = result.resBody.menu.menuList;
                     }
                 })
                 $(window).resize(function () {
-                    //console.log($('#pagetabs ul.tabs').width())
                     var outWidth = $('#pagetabs .tabs').width()
-                    console.log(outWidth)
                     _this.outWidth = outWidth
                 }).trigger('resize')
 
@@ -215,11 +204,20 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
         updated: function () {
             $('.left-nav li').each(function () {
                 var k = $(this).index();
-                console.log(k)
                 $(this).find('p i').addClass('layui-icon-' + k);
             })
         },
         methods: {
+            logout:function() {
+                $.ajax({
+                    url: window.location.protocol + "//" + window.location.host + '/cardopenadmin/userLogout',
+                    type: 'post',
+                    async: false,
+                    success: function (result) {
+                        window.location.href="/cardopenadmin/login"
+                    }
+                })
+            },
             liClick: function(item){
                 var _this = this;
                 _this.pagePanle.forEach(function(i,v){
@@ -232,10 +230,8 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
                     return false;
                 }
                 var _this = this;
-                console.log(item.id);
                 _this.pagePanle.splice($.inArray(item, _this.pagePanle), 1)
                 var changeObj = _this.pagePanle[0]
-                console.log(_this.$router);
                 location.href = changeObj.url;
             },
             checkIsOverflow: function (paramWidth) {

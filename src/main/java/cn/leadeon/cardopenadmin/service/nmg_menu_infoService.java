@@ -18,8 +18,7 @@ public class nmg_menu_infoService {
     @Autowired
     private nmg_menu_infoMapper nmg_menu_infoMapper;
 
-    public CardResponse menuList(String role) {
-        CardResponse cardResponse = new CardResponse();
+    public Map menuList(String role) {
         Map param = new HashMap();
         /**
          * 1：超级管理员
@@ -45,9 +44,8 @@ public class nmg_menu_infoService {
             }
         }
         Map res = new HashMap();
-        res.put("menu",results);
-        cardResponse.setResBody(res);
-        return cardResponse;
+        res.put("menuList",results);
+        return res;
     }
 
 }

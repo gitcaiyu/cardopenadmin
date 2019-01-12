@@ -54,11 +54,10 @@ public class nmg_user_infoService {
         param.put("userTel",nmg_user_info.getUserTel());
         param.put("userPass",nmg_user_info.getUserPass());
         nmg_user_info userInfo = nmg_user_infoMapper.userValid(param);
-        try {
-            cardResponse = nmg_menu_infoService.menuList(userInfo.getUserRole());
+        if (userInfo != null) {
             HttpSession httpSession = httpServletRequest.getSession();
-            httpSession.setAttribute("userInfo",userInfo);
-        } catch (Exception e) {
+            httpSession.setAttribute("userInfo", userInfo);
+        } else {
             cardResponse.setResCode(CodeEnum.loginFaild.getCode());
             cardResponse.setResDesc(CodeEnum.loginFaild.getDesc());
         }
@@ -68,7 +67,11 @@ public class nmg_user_infoService {
     public CardResponse menu(HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info userInfo = (nmg_user_info) httpSession.getAttribute("userInfo");
-        CardResponse cardResponse = nmg_menu_infoService.menuList(userInfo.getUserRole());
+        CardResponse cardResponse = new CardResponse();
+        Map result = new HashMap();
+        result.put("menu",nmg_menu_infoService.menuList(userInfo.getUserRole()));
+        result.put("userName",userInfo.getUserTel());
+        cardResponse.setResBody(result);
         return cardResponse;
     }
 

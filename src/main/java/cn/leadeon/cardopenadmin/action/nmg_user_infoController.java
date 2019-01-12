@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -28,6 +27,18 @@ public class nmg_user_infoController {
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
     public CardResponse userLogin(@RequestBody @Valid nmg_user_info nmg_user_info, HttpServletRequest httpServletRequest) {
         return nmg_user_infoService.userLogin(nmg_user_info,httpServletRequest);
+    }
+
+    /**
+     * 退出销毁session
+     * @param httpServletRequest
+     * @return
+     */
+    @PostMapping(value = "/userLogout")
+    public CardResponse userLogout(HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession();
+        httpSession.removeAttribute("userInfo");
+        return new CardResponse();
     }
 
     /**

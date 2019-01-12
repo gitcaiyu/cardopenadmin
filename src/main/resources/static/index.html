@@ -44,25 +44,11 @@
                 </li>
             </ul>
             <ul class="head-right">
-                <li class="glxl">
-                    <a v-show="isDot" href="#/smallCate" title="有未关联小类">
-                        <div class="tips">
-                            代办
-                            <div class="num">{{isDotNum}}</div>
-                        </div>
-                    </a>
-                </li>
-                 <li>
-                <a v-show="isDot" href="#/smallCate" title="有未关联小类">
-                    <i class="layui-icon layui-icon-notice"></i>
-                    <span style="position: absolute; top: 50%; margin: -8px 10px 0;" class="layui-badge-dot"></span>
-                </a>
-            </li>
                 <li>
                     {{userName}}
                 </li>
                 <li>
-                    <a href="javascript:window.opener=null;window.close();">退出</a>
+                    <a v-on:click="logout()">退出</a>
                 </li>
             </ul>
         </div>
