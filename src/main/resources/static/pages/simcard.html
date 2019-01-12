@@ -28,7 +28,9 @@
         <div class="layui-input-inline ml10">
             <select lay-filter="discount" name="discount">
                 <option value="">优惠促销</option>
-                <option v-for="discount in discountList" v-bind:value="discount.discount_id">{{discount.discount_name}}</option>
+                <option v-for="discount in discountList" v-bind:value="discount.discount_id">
+                    {{discount.discount_name}}
+                </option>
             </select>
         </div>
         <div class="layui-input-inline ml10">
@@ -38,34 +40,40 @@
             </select>
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off"  placeholder="渠道名称" class="layui-input" v-model="channel_name">
+            <input type="text" autocomplete="off" placeholder="渠道名称" class="layui-input" v-model="channel_name">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off" class="layui-input" id="subTime" v-model="subTime" placeholder="请选择申请开卡开始时间">
+            <input type="text" autocomplete="off" class="layui-input" id="subTime" v-model="subTime"
+                   placeholder="请选择申请开卡开始时间">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off" class="layui-input" id="subTimeE" v-model="subTimeE" placeholder="请选择申请开卡结束时间">
+            <input type="text" autocomplete="off" class="layui-input" id="subTimeE" v-model="subTimeE"
+                   placeholder="请选择申请开卡结束时间">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off" class="layui-input" id="createTime" v-model="createTime" placeholder="请选择写卡完成开始时间">
+            <input type="text" autocomplete="off" class="layui-input" id="createTime" v-model="createTime"
+                   placeholder="请选择写卡完成开始时间">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off" class="layui-input" id="createTimeE" v-model="createTimeE" placeholder="请选择写卡完成结束时间">
+            <input type="text" autocomplete="off" class="layui-input" id="createTimeE" v-model="createTimeE"
+                   placeholder="请选择写卡完成结束时间">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off"  placeholder="收件人" class="layui-input" v-model="orderOtherPeople">
+            <input type="text" autocomplete="off" placeholder="收件人" class="layui-input" v-model="orderOtherPeople">
         </div>
         <div class="layui-input-inline ml10">
-            <input type="text" autocomplete="off"  placeholder="收件人号码" class="layui-input" v-model="orderOtherPhone">
+            <input type="text" autocomplete="off" placeholder="收件人号码" class="layui-input" v-model="orderOtherPhone">
         </div>
         <div class="layui-input-inline ml10">
             <select lay-filter="channel_type" name="channel_type">
                 <option value="">渠道类型</option>
-                <option v-for="channel_type in typeList" v-bind:value="channel_type.channelId">{{channel_type.channelName}}</option>
+                <option v-for="channel_type in typeList" v-bind:value="channel_type.channelId">
+                    {{channel_type.channelName}}
+                </option>
             </select>
         </div>
         <div class="layui-input-inline ml10">
-            <a @click="getPage()" class="layui-btn layui-btn-normal" >查询</a>
+            <a @click="getPage()" class="layui-btn layui-btn-normal">查询</a>
             <a class="layui-btn layui-btn-normal" v-on:click="orderExport()">导出</a>
         </div>
     </form>
@@ -121,10 +129,14 @@
                         <td>{{item.order_people}}</td>
                         <td>{{item.order_phone}}</td>
                         <td>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="write" v-on:click="write(item)">处理</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="cancel" v-on:click="cancel(item)">取消</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="update" v-on:click="update(item)">修改</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="print" v-on:click="print(item)">打印</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="write"
+                               v-on:click="write(item.order_id)">处理</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="cancel"
+                               v-on:click="cancel(item.order_id)">取消</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="update"
+                               v-on:click="write(item.order_id)">修改</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="print"
+                               v-on:click="print(item.order_id)">打印</a>
                         </td>
                     </tr>
                     </tbody>
@@ -133,95 +145,170 @@
             <div id="page"></div>
         </div>
     </form>
-    <!--&lt;!&ndash; edit &ndash;&gt;-->
-    <!--<form class="layui-form mt20" id="edit" style="display: none;">-->
-    <!--<div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">渠道编号</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<input type="text" name="channelId" lay-verify="" autocomplete="off" placeholder="" class="layui-input input-disabled" disabled v-model="edit_data.channelId">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">渠道名称</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<input type="text" name="channelName" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit_data.channel_name">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">盟市</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<select name="city" id="city">-->
-    <!--<option v-model="edit_data.city" v-for="city in cityList" v-bind:value="city.cityCode">{{city.cityName}}</option>-->
-    <!--</select>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">县区</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<select name="county" id="county">-->
-    <!--<option v-model="edit_data.county" v-for="county in countyList" v-bind:value="county.county_id">{{county.county_name}}</option>-->
-    <!--</select>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">收件人</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<input type="text" name="chargeName" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit_data.charge_name">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">收件人电话</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<input type="text" name="chargeTel" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit_data.charge_tel">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item">-->
-    <!--<div class="layui-block">-->
-    <!--<label class="layui-form-label">收件人地址</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<input type="text" name="channelAddress" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit_data.channel_address">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item text-center">-->
-    <!--<div class="layui-inline">-->
-    <!--<div class="layui-input-inline">-->
-    <!--<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="edit">保存</button>-->
-    <!--<a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</form>-->
-    <!--&lt;!&ndash; batchImport &ndash;&gt;-->
-    <!--<form class="layui-form mt20" id="batchImport" style="display: none">-->
-    <!--<div class="layui-form-item">-->
-    <!--<label class="layui-form-label">请选择文件</label>-->
-    <!--<div class="layui-input-inline">-->
-    <!--<button type="button" class="layui-btn layui-btn-normal" @click="addFile()">选择文件</button>-->
-    <!--<template v-show="fileNameShow">-->
-    <!--<div>{{filename}}</div>-->
-    <!--</template>-->
-    <!--<input style="display: none" type="file" id='file1' @change="fileChange()">-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="layui-form-item text-center btn-group">-->
-    <!--<a class="layui-btn layui-btn-normal" id="upload" lay-submit="" lay-filter="upload" href="javascript: ">确定</a>-->
-    <!--<a class="layui-btn layui-btn-danger layui-layer-close" href="javascript:">取消</a>-->
-    <!--</div>-->
-    <!--</form>-->
+    <!-- write -->
+    <form class="layui-form mt20" id="writeCard" style="display: none;">
+        <div>
+            <div class="layui-input-inline ml10">
+                <input type="text" autocomplete="off" placeholder="选购号码" class="layui-input" v-model="write_data.cardnum">
+            </div>
+            <div class="layui-input-inline ml10">
+                <input type="text" autocomplete="off" placeholder="SIM卡号" class="layui-input" v-model="write_data.simnum">
+            </div>
+            <div class="layui-input-inline ml10">
+                <select lay-filter="mealName" name="mealName">
+                    <option value="">套餐</option>
+                    <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.mealName">{{meal.meal_name}}</option>
+                </select>
+            </div>
+            <div class="layui-input-inline ml10">
+                <select lay-filter="mealId" name="mealId">
+                    <option value="">资费代码</option>
+                    <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.mealId">{{meal.meal_code}}</option>
+                </select>
+            </div>
+            <div class="layui-input-inline ml10">
+                <select lay-filter="discount" name="discount">
+                    <option value="">优惠促销</option>
+                    <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.discount">
+                        {{discount.discount_name}}
+                    </option>
+                </select>
+            </div>
+            <div class="layui-input-inline ml10">
+                <a @click="getDetail()" class="layui-btn layui-btn-normal">查询</a>
+                <a @click="edit()" class="layui-btn layui-btn-normal">新增</a>
+            </div>
+            <div class="layui-input-inline ml10">
+                <a @click="detailImport()" class="layui-btn layui-btn-normal">导入</a>
+                <a @click="detailExport()" class="layui-btn layui-btn-normal">导出</a>
+                <a @click="detailDel()" class="layui-btn layui-btn-normal">删除</a>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="layui-table" style="width: 100%;">
+                    <colgroup>
+                        <col width="20">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>工单编号</th>
+                        <th>套餐资费</th>
+                        <th>资费代码</th>
+                        <th>优惠促销</th>
+                        <th>选购号码</th>
+                        <th>SIM卡号</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item,index) in detailList" v-bink::key="index">
+                        <td>
+                            <input type="checkbox" :value="item.detail_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
+                        </td>
+                        <td>{{item.order_id}}</td>
+                        <td>{{item.meal_name}}</td>
+                        <td>{{item.meal_code}}</td>
+                        <td>{{item.discount_name}}</td>
+                        <td>{{item.cardNum}}</td>
+                        <td>{{item.SIMNum}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="detailPage"></div>
+        </div>
+    </form>
+    <!-- detailImport -->
+    <form class="layui-form mt20" id="detailImport" style="display: none">
+        <div class="layui-form-item">
+            <label class="layui-form-label">请选择文件</label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn layui-btn-normal" @click="addFile()">选择文件</button>
+                <template v-show="fileNameShow">
+                    <div>{{filename}}</div>
+                </template>
+                <input style="display: none" type="file" id='file1' @change="fileChange()">
+            </div>
+        </div>
+        <div class="layui-form-item text-center btn-group">
+            <a class="layui-btn layui-btn-normal" id="upload" lay-submit="" lay-filter="upload" href="javascript: ">确定</a>
+            <a class="layui-btn layui-btn-danger layui-layer-close" href="javascript:">取消</a>
+        </div>
+    </form>
+    <!-- edit -->
+    <form class="layui-form mt20" id="edit" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">工单编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="orderId" lay-verify="" autocomplete="off" placeholder="" class="layui-input input-disabled" disabled v-model="orderId">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">套餐资费</label>
+                    <div class="layui-input-inline">
+                        <select name="mealName">
+                            <option value=""></option>
+                            <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.edit_data.mealId">{{meal.meal_name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">资费代码</label>
+                    <div class="layui-input-inline">
+                        <select name="mealId">
+                            <option value=""></option>
+                            <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.edit_data.mealId">{{meal.meal_code}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">优惠促销</label>
+                    <div class="layui-input-inline">
+                        <select name="discount">
+                            <option value=""></option>
+                            <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.edit_data.discount">{{discount.discount_name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">选购号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="cardnum" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="write_data.edit_data.cardnum">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">SIM卡号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="simnum" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="write_data.edit_data.simnum">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="edit">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <div class="load" v-show="load"></div>
 </div>

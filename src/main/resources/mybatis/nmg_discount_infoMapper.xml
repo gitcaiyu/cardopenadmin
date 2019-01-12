@@ -57,11 +57,8 @@
     <if test="city != null">
       and city = #{city,jdbcType=VARCHAR} or city = null or city = ""
     </if>
-    <if test="city == null">
-      and city = null or city = ""
-    </if>
-    <if test="flag != null">
-      and flag = #{flag,jdbcType=VARCHAR}
+    <if test="flag != null and flag == T">
+      and flag in ('T','S')
     </if>
     <if test="discountId != null">
       and discount_id = #{discountId,jdbcType=VARCHAR}

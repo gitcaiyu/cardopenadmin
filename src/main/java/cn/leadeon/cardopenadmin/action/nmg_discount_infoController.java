@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -33,12 +33,12 @@ public class nmg_discount_infoController {
 
     /**
      * 盟市个性化页面展示
-     * @param httpSession
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/discountIndividualization")
-    public CardResponse mealIndividualization(HttpSession httpSession, @RequestBody nmg_discount_info nmg_discount_info) {
-        return nmg_discount_infoService.mealIndividualization(httpSession,nmg_discount_info);
+    public CardResponse mealIndividualization(HttpServletRequest httpServletRequest, @RequestBody nmg_discount_info nmg_discount_info) {
+        return nmg_discount_infoService.mealIndividualization(httpServletRequest,nmg_discount_info);
     }
 
     /**

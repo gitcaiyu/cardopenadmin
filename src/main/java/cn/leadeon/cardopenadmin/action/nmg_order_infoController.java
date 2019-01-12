@@ -52,33 +52,35 @@ public class nmg_order_infoController {
     }
 
     /**
-     * 打印面单
-     * @param nmg_order_info
+     * 更新订单状态
+     * @param data
      * @return
      */
-    @PostMapping(value = "/orderPrint")
-    public CardResponse orderPrint(@RequestBody nmg_order_info nmg_order_info) {
-        return nmg_order_infoService.orderPrint(nmg_order_info);
+    @PostMapping(value = "/updateState")
+    public CardResponse updateState(@RequestBody String data) {
+        return nmg_order_infoService.updateState(data);
     }
 
     /**
      * 页面点击修改或者处理页面展示详细信息
      * @param data
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/orderDetail")
-    public CardResponse orderDetail(@RequestBody String data,HttpSession httpSession) {
-        return nmg_order_infoService.orderDetail(data,httpSession);
+    public CardResponse orderDetail(@RequestBody String data,HttpServletRequest httpServletRequest) {
+        return nmg_order_infoService.orderDetail(data,httpServletRequest);
     }
 
     /**
      * 订单信息导出
-     * @param nmg_order_info
+     * @param data
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/orderDetailExport")
-    public CardResponse orderDetailExport(@RequestBody nmg_order_info nmg_order_info) {
-        return nmg_order_infoService.orderDetailExport(nmg_order_info);
+    public CardResponse orderDetailExport(@RequestBody String data,HttpServletRequest httpServletRequest) {
+        return nmg_order_infoService.orderDetailExport(data,httpServletRequest);
     }
 
     /**
@@ -93,16 +95,16 @@ public class nmg_order_infoController {
 
     /**
      * 新增一条订单详细信息
-     * @param nmg_order_detail
+     * @param data
      * @return
      */
     @PostMapping(value = "/orderDetailAdd")
-    public CardResponse orderDetailAdd(@RequestBody nmg_order_detail nmg_order_detail){
-        return nmg_order_infoService.orderDetailAdd(nmg_order_detail);
+    public CardResponse orderDetailAdd(@RequestBody String data){
+        return nmg_order_infoService.orderDetailAdd(data);
     }
 
     /**
-     * 工单详细信息导出
+     * 工单详细信息导入
      * @param file
      * @return
      * @throws IOException

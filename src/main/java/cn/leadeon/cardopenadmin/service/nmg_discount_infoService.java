@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class nmg_discount_infoService {
                 param.put("discountId",nmg_discount_info.getDiscountId());
                 result.put("city",nmg_city_infoMapper.cityInfo(null));
             }
+            param.put("flag","T");
             result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
             cardResponse.setResBody(result);
         } catch (Exception e) {
@@ -43,9 +45,10 @@ public class nmg_discount_infoService {
         return cardResponse;
     }
 
-    public CardResponse mealIndividualization(HttpSession httpSession, nmg_discount_info nmg_discount_info) {
+    public CardResponse mealIndividualization(HttpServletRequest httpServletRequest, nmg_discount_info nmg_discount_info) {
         CardResponse cardResponse = new CardResponse();
         try {
+            HttpSession httpSession = httpServletRequest.getSession();
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
             Map param = new HashMap();
             Map results = new HashMap();

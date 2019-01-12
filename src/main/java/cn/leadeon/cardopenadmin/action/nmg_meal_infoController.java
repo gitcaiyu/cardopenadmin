@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -32,12 +32,12 @@ public class nmg_meal_infoController {
 
     /**
      * 盟市个性化页面展示
-     * @param httpSession
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/mealIndividualization")
-    public CardResponse mealIndividualization(HttpSession httpSession,@RequestBody nmg_meal_info nmg_meal_info) {
-        return nmg_meal_infoService.mealIndividualization(httpSession,nmg_meal_info);
+    public CardResponse mealIndividualization(HttpServletRequest httpServletRequest, @RequestBody nmg_meal_info nmg_meal_info) {
+        return nmg_meal_infoService.mealIndividualization(httpServletRequest,nmg_meal_info);
     }
 
     /**

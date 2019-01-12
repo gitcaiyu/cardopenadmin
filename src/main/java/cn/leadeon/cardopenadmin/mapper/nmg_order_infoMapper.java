@@ -19,11 +19,13 @@ public interface nmg_order_infoMapper {
 
     int orderStateUpdate(Map param);
 
-    List<Map<String,Object>> exportOrder(Map map);
+    List<Map<String,Object>> exportOrder(Map map,RowBounds rowBounds);
 
     int orderDel(String orderId);
 
     int orderDetailDel(String detailId);
 
     int totalCount(Map param);
+
+    int detailTotalCount(Map param);
 }

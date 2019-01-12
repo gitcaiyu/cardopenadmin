@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -44,9 +45,10 @@ public class nmg_statistical_queryService {
     private String path;
 
 
-    public CardResponse workExport(nmg_order_info nmg_order_info, HttpSession httpSession) {
+    public CardResponse workExport(nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
         try {
+            HttpSession httpSession = httpServletRequest.getSession();
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
             String fileName = path;
             Map param = new HashMap();
@@ -213,7 +215,7 @@ public class nmg_statistical_queryService {
             cell.setCellValue("选购号码");
             cell = row.createCell(7);
             cell.setCellValue("SIM卡号");
-            List<Map<String,Object>> result = nmg_order_infoMapper.exportOrder(param);
+            List<Map<String,Object>> result = nmg_order_infoMapper.exportOrder(param,new RowBounds());
             for (int i = 0; i < result.size(); i++) {
                 Map maps = result.get(i);
                 row = sheet.createRow(i+1);

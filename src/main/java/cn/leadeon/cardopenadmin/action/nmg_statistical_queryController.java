@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @CrossOrigin
@@ -39,23 +38,24 @@ public class nmg_statistical_queryController {
 
     /**
      * 工单导出
-     * @param httpSession
+     * @param nmg_order_info
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/workExport")
-    public CardResponse workExport(@RequestBody nmg_order_info nmg_order_info, HttpSession httpSession) {
-        return nmg_statistical_queryService.workExport(nmg_order_info,httpSession);
+    public CardResponse workExport(@RequestBody nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
+        return nmg_statistical_queryService.workExport(nmg_order_info,httpServletRequest);
     }
 
     /**
      * SIM卡统计
      * @param data
-     * @param httpSession
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/simCount")
-    public CardResponse simCount(@RequestBody String data,HttpSession httpSession) {
-        return nmg_order_infoService.orderDetail(data,httpSession);
+    public CardResponse simCount(@RequestBody String data,HttpServletRequest httpServletRequest) {
+        return nmg_order_infoService.orderDetail(data,httpServletRequest);
     }
 
     /**
