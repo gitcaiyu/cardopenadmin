@@ -13,4 +13,6 @@ public class nmg_meal_info {
     private String city;
 
     private String flag = "T";
+
+    private String state;
 }

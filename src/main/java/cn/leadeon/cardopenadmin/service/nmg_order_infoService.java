@@ -78,6 +78,7 @@ public class nmg_order_infoService {
             result.put("county", nmg_county_infoMapper.countyInfo(param));
             param.put("flag","T");
         }
+        param.put("mealState","1");
         result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
         result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
         if (null != nmg_order_info.getOrderOtherPhone() && !"".equals(nmg_order_info.getOrderOtherPhone())) {
@@ -333,6 +334,7 @@ public class nmg_order_infoService {
             param.put("flag", "T");
         }
         result.put("detail",details);
+        param.put("mealState","1");
         result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
         result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
         cardResponse.setResBody(result);

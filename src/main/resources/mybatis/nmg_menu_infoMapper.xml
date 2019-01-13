@@ -108,5 +108,6 @@
     <if test="role == 4">
       and role_id in ('2','3','4')
     </if>
+    order by id
   </select>
 </mapper>

@@ -1,0 +1,82 @@
+<div>
+    <meta charset="UTF-8">
+    <div class="layui-input-inline ml10">
+        <a class="layui-btn layui-btn-normal" v-on:click="discountAdd('')">新增</a>
+        <a class="layui-btn layui-btn-normal" v-on:click="discountDel()">删除</a>
+    </div>
+    <form class="layui-form">
+        <div class="layui-form" style="position: relative;">
+            <div style="overflow-x:auto;">
+                <table class="layui-table" style="width: 100%;">
+                    <colgroup>
+                        <col width="50">
+                        <col width="200">
+                        <col width="200">
+                        <col width="200">
+                        <col width="50">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>优惠促销</th>
+                        <th>盟市</th>
+                        <th>当前状态</th>
+                        <th>管理</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item,index) in codeList" v-bink::key="index">
+                        <td>
+                            <input type="checkbox" :value="item.discount_id" id="item.discount_id" lay-filter="check" lay-skin="primary" >
+                        </td>
+                        <td>{{item.discount_name}}</td>
+                        <td>{{item.city_name}}</td>
+                        <td>{{item.state}}</td>
+                        <td>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-on:click="discountAdd(item)">修改</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-on:click="state(1,item.discount_id)" v-if="item.stateVal=='2'">上线</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-on:click="state(2,item.discount_id)" v-if="item.stateVal=='1'">下线</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+    <!-- 新增 -->
+    <form class="layui-form mt20" id="edit" style="display: none;">
+        <div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">优惠促销</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="discountName" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="edit.discountName">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">盟市</label>
+                    <div class="layui-input-inline">
+                        <select name="city" id="city">
+                            <option value=""></option>
+                            <option v-for="city in cityList" v-bind:value="city.cityCode">{{city.cityName}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <input type="hidden" name="discountId" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="edit.discountId">
+            </div>
+            <div class="layui-form-item text-center">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="edit">保存</button>
+                        <a href="javascript:" class="layui-btn layui-btn-danger layui-layer-close layui-layer-close1">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="load" v-show="load"></div>
+</div>

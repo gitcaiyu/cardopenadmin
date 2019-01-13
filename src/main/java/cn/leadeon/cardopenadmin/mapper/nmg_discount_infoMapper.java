@@ -19,4 +19,8 @@ public interface nmg_discount_infoMapper {
     int cardDiscountDel(String discountId);
 
     int cardDiscountUpdate(nmg_discount_info nmg_discount_info);
+
+    int onoffLine(Map param);
+
+    int checkUse(String mealCode);
 }

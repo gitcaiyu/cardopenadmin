@@ -97,15 +97,6 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     })
                 };
             });
-            form.on("checkbox(check)",function(data){
-                if(data.elem.checked){
-                    _this.checkList.push(data.value);
-                }else{
-                    _this.checkList=_this.checkList.filter(function(v){
-                        return v!=data.value;
-                    })
-                };
-            });
             this.getPage();
         },
         updated:function(){
@@ -242,7 +233,8 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     orderMeal:_this.mealId,
                     orderDiscount:_this.discount,
                     curr:_this.curr,
-                    limit:_this.limit}
+                    limit:_this.limit,
+                    orderId:_this.orderId}
                 $.ajax({
                     url: _this.ajax_url+'/orderDetailExport',
                     type: 'post',
@@ -263,23 +255,29 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
             detailDel:function() {
                 var _this = this;
                 var datas = {detail:_this.checkList}
-                $.ajax({
-                    url: _this.ajax_url+'/orderDetailDel',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.resCode == '000000') {
-                            layer.msg('删除成功',{icon:1});
-                            _this.getDetail();
-                        } else {
-                            layer.msg('删除失败',{icon:7});
+                if (datas.detail.length>0) {
+                    $.ajax({
+                        url: _this.ajax_url + '/orderDetailDel',
+                        type: 'post',
+                        data: JSON.stringify(datas),
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.resCode == '000000') {
+                                layer.msg('删除成功', {icon: 1});
+                                _this.getDetail();
+                            } else {
+                                layer.msg('删除失败', {icon: 7});
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    layer.msg('请选择一条信息',{icon:7});
+                    return;
+                }
+                form.render()
             },
             checkInit: function(item){
                 var _this=this;

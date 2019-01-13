@@ -24,11 +24,12 @@ public class nmg_discount_infoController {
     /**
      * 统一使用
      * @param nmg_discount_info
+     * @param
      * @return
      */
     @PostMapping(value = "/discountUnify")
-    public CardResponse discountUnify(@RequestBody nmg_discount_info nmg_discount_info) {
-        return nmg_discount_infoService.discountUnify(nmg_discount_info);
+    public CardResponse discountUnify(@RequestBody nmg_discount_info nmg_discount_info,HttpServletRequest httpServletRequest) {
+        return nmg_discount_infoService.discountUnify(nmg_discount_info,httpServletRequest);
     }
 
     /**
@@ -53,22 +54,20 @@ public class nmg_discount_infoController {
 
     /**
      * 套餐资费删除
-     * @param nmg_discount_info
+     * @param data
      * @return
      */
     @PostMapping(value = "/cardDiscountDel")
-    public CardResponse cardMealDel(@RequestBody nmg_discount_info nmg_discount_info) {
-        return nmg_discount_infoService.cardMealDel(nmg_discount_info);
+    public CardResponse cardMealDel(@RequestBody String data) {
+        return nmg_discount_infoService.cardMealDel(data);
     }
 
     /**
-     * 套餐资费更新包括上线下更新公用此方法
-     * @param nmg_discount_info
+     * 上下线
+     * @param data
      * @return
      */
-    @PostMapping(value = "/cardDiscountUpdate")
-    public CardResponse cardMealUpdate(@RequestBody nmg_discount_info nmg_discount_info) {
-        return nmg_discount_infoService.cardMealUpdate(nmg_discount_info);
-    }
+    @PostMapping(value = "/discountOnOffLine")
+    public CardResponse onoffLine(@RequestBody String data) { return nmg_discount_infoService.onoffLine(data); }
 
 }

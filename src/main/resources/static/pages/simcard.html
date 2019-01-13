@@ -208,7 +208,7 @@
                     <tbody>
                     <tr v-for="(item,index) in detailList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.detail_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.detail_id" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.order_id}}</td>
                         <td>{{item.meal_name}}</td>

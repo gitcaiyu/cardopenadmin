@@ -6,7 +6,11 @@ requirejs.config({  //模块指定（定义）别名
         layui: '../lib/layui/layui.all',
         router: '../lib/vue/vue-router',
         channel: '../../modules/channel',
-        simcard:'../../modules/simcard'
+        simcard:'../../modules/simcard',
+        mealunify:'../../modules/mealunify',
+        mealIndividualization:'../../modules/mealIndividualization',
+        discountUnify:'../../modules/discountUnify',
+        discountIndividualization:'../../modules/discountIndividualization'
     },
     shim: {
         'layui': {
@@ -17,8 +21,8 @@ requirejs.config({  //模块指定（定义）别名
     }
 })
 
-var arrList = ['text', 'jquery', 'vue', 'router', 'layui', 'channel','simcard'];
-require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //引入定义的模块
+var arrList = ['text', 'jquery', 'vue', 'router', 'layui', 'channel','simcard','mealunify','mealIndividualization','discountUnify','discountIndividualization'];
+require(arrList, function (text, $, Vue, router, layui, channel,simcard,mealunify,mealIndividualization,discountUnify,discountIndividualization) {   //引入定义的模块
     Vue.use(router)
     var router = new router({
         routes: [
@@ -29,6 +33,22 @@ require(arrList, function (text, $, Vue, router, layui, channel,simcard) {   //�
             {
                 path: '/simcard',
                 component: simcard.simcard
+            },
+            {
+                path:'/mealunify',
+                component: mealunify.mealunify
+            },
+            {
+                path:'/mealIndividualization',
+                component: mealIndividualization.mealIndividualization
+            },
+            {
+                path:'/discountUnify',
+                component: discountUnify.discountUnify
+            },
+            {
+                path:'/discountIndividualization',
+                component:discountIndividualization.discountIndividualization
             }
         ]
     })

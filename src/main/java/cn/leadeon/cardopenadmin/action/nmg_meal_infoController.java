@@ -23,11 +23,12 @@ public class nmg_meal_infoController {
 
     /**
      * 统一适配页面展示
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/mealUnify")
-    public CardResponse mealUnify(@RequestBody nmg_meal_info nmg_meal_info) {
-        return nmg_meal_infoService.mealUnify(nmg_meal_info);
+    public CardResponse mealUnify(@RequestBody nmg_meal_info nmg_meal_info,HttpServletRequest httpServletRequest) {
+        return nmg_meal_infoService.mealUnify(nmg_meal_info,httpServletRequest);
     }
 
     /**
@@ -52,22 +53,20 @@ public class nmg_meal_infoController {
 
     /**
      * 套餐资费删除
-     * @param nmg_meal_info
+     * @param data
      * @return
      */
     @PostMapping(value = "/cardMealDel")
-    public CardResponse cardMealDel(@RequestBody nmg_meal_info nmg_meal_info) {
-        return nmg_meal_infoService.cardMealDel(nmg_meal_info);
+    public CardResponse cardMealDel(@RequestBody String data) {
+        return nmg_meal_infoService.cardMealDel(data);
     }
 
     /**
-     * 套餐资费更新包括上线下更新公用此方法
-     * @param nmg_meal_info
+     * 上下线
+     * @param data
      * @return
      */
-    @PostMapping(value = "/cardMealUpdate")
-    public CardResponse cardMealUpdate(@RequestBody nmg_meal_info nmg_meal_info) {
-        return nmg_meal_infoService.cardMealUpdate(nmg_meal_info);
-    }
+    @PostMapping(value = "/mealOnOffLine")
+    public CardResponse onoffLine(@RequestBody String data) { return nmg_meal_infoService.onoffLine(data); }
 
 }

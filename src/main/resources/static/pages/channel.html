@@ -74,7 +74,7 @@
                     <tbody>
                     <tr v-for="(item,index) in codeList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.channel_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.channel_id" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.channel_id}}</td>
                         <td>{{item.channel_name}}</td>
