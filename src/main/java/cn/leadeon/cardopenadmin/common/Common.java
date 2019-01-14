@@ -16,6 +16,10 @@ public class Common {
 
     private String stateName;
 
+    private String roleId;
+
+    private String roleName;
+
     public List<Common> channelType() {
         List<Common> list = new ArrayList<>();
         Common a = new Common();

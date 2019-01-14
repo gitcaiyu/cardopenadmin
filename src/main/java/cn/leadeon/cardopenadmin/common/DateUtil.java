@@ -32,6 +32,12 @@ public class DateUtil {
         return str;
     }
 
+    public static String getDateString(String pattern) {
+        simpleDateFormat.get().applyPattern(pattern);
+        String str = simpleDateFormat.get().format(new Date());
+        return str;
+    }
+
     /**
      * 获取时间字符串
      *

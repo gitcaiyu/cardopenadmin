@@ -15,10 +15,6 @@ public class CardResponse {
 
     private String resDesc;
 
-    private int curr;
-
-    private int limit;
-
     private int totalCount;
 
     //默认返回成功

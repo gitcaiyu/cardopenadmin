@@ -64,21 +64,22 @@ public class nmg_user_infoController {
     /**
      * 新增用户
      * @param nmg_user_info
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/userAdd")
-    public CardResponse userAdd(@RequestBody nmg_user_info nmg_user_info) {
-        return nmg_user_infoService.userAdd(nmg_user_info);
+    public CardResponse userAdd(@RequestBody nmg_user_info nmg_user_info,HttpServletRequest httpServletRequest) {
+        return nmg_user_infoService.userAdd(nmg_user_info,httpServletRequest);
     }
 
     /**
      * 用户删除
-     * @param nmg_user_info
+     * @param data
      * @return
      */
     @PostMapping(value = "/userDel")
-    public CardResponse userDel(@RequestBody nmg_user_info nmg_user_info) {
-        return nmg_user_infoService.userDel(nmg_user_info);
+    public CardResponse userDel(@RequestBody String data) {
+        return nmg_user_infoService.userDel(data);
     }
 
     /**
@@ -94,11 +95,12 @@ public class nmg_user_infoController {
     /**
      * 用户导出
      * @param data
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/userExport")
-    public CardResponse userExport(@RequestBody String data) {
-        return nmg_user_infoService.userExport(data);
+    public CardResponse userExport(@RequestBody String data,HttpServletRequest httpServletRequest) {
+        return nmg_user_infoService.userExport(data,httpServletRequest);
     }
 
     /**
@@ -114,30 +116,21 @@ public class nmg_user_infoController {
     /**
      * 角色新增
      * @param nmg_user_role
+     * @param httpServletRequest
      * @return
      */
     @PostMapping(value = "/roleAdd")
-    public CardResponse roleAdd(@RequestBody nmg_user_role nmg_user_role) {
-        return nmg_user_infoService.roleAdd(nmg_user_role);
+    public CardResponse roleAdd(@RequestBody nmg_user_role nmg_user_role,HttpServletRequest httpServletRequest) {
+        return nmg_user_infoService.roleAdd(nmg_user_role,httpServletRequest);
     }
 
     /**
      * 角色删除
-     * @param nmg_user_role
+     * @param data
      * @return
      */
     @PostMapping(value = "/roleDel")
-    public CardResponse roleDel(@RequestBody nmg_user_role nmg_user_role){
-        return nmg_user_infoService.roleDel(nmg_user_role);
-    }
-
-    /**
-     * 更新角色信息
-     * @param nmg_user_role
-     * @return
-     */
-    @PostMapping(value = "/roleUpdate")
-    public CardResponse roleUpdate(@RequestBody nmg_user_role nmg_user_role) {
-        return nmg_user_infoService.roleUpdate(nmg_user_role);
+    public CardResponse roleDel(@RequestBody String data){
+        return nmg_user_infoService.roleDel(data);
     }
 }

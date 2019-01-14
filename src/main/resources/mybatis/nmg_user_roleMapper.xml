@@ -54,8 +54,21 @@
 
   <select id="userRole" resultType="java.util.Map" parameterType="java.util.Map">
     select role_id,role_name,role_type,create_time,create_people from nmg_user_role where 1=1
-    <if test="role_id != null">
-      and role_id = #{role_id,jdbcType=VARCHAR}
+    <if test="roleType != null">
+      and role_type = #{roleType,jdbcType=VARCHAR}
+    </if>
+    <if test="role_name != null">
+      and role_name = #{role_name,jdbcType=VARCHAR}
+    </if>
+    <if test="createPeople != null">
+      and create_people = #{createPeople,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="userRoleTotal" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*) from nmg_user_role where 1=1
+    <if test="roleType != null">
+      and role_type = #{roleType,jdbcType=VARCHAR}
     </if>
     <if test="role_name != null">
       and role_name = #{role_name,jdbcType=VARCHAR}
