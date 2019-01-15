@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_order_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_order_info" >
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="batch_id" property="batchId" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="order_meal" property="orderMeal" jdbcType="VARCHAR" />
+    <result column="order_tariff" property="orderTariff" jdbcType="VARCHAR" />
+    <result column="order_discount" property="orderDiscount" jdbcType="VARCHAR" />
+    <result column="order_count" property="orderCount" jdbcType="VARCHAR" />
+    <result column="order_state" property="orderState" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="update_people" property="updatePeople" jdbcType="VARCHAR" />
+    <result column="sub_time" property="subTime" jdbcType="VARCHAR" />
+    <result column="order_addressee" property="orderAddressee" jdbcType="VARCHAR" />
+    <result column="order_phone" property="orderPhone" jdbcType="VARCHAR" />
+    <result column="order_people" property="orderPeople" jdbcType="VARCHAR" />
+    <result column="order_other_phone" property="orderOtherPhone" jdbcType="VARCHAR" />
+    <result column="order_other_people" property="orderOtherPeople" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_info" >
+    insert into nmg_order_info (order_id, batch_id, city, county,
+      channel_id, channel_name, order_meal,
+      order_tariff, order_discount, order_count,
+      order_state, create_time, update_time, update_people, sub_time,
+      order_addressee, order_phone, order_people,order_other_phone,order_other_people)
+    values (#{orderId,jdbcType=VARCHAR}, #{batchId,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR},
+      #{channelId,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, #{orderMeal,jdbcType=VARCHAR},
+      #{orderTariff,jdbcType=VARCHAR}, #{orderDiscount,jdbcType=VARCHAR}, #{orderCount,jdbcType=VARCHAR},
+      #{orderState,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR},
+      #{updatePeople,jdbcType=VARCHAR}, #{subTime,jdbcType=VARCHAR},
+      #{orderAddressee,jdbcType=VARCHAR}, #{orderPhone,jdbcType=VARCHAR}, #{orderPeople,jdbcType=VARCHAR},
+      #{orderOtherPhone,jdbcType=VARCHAR},#{orderOtherPeople,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_info" >
+    insert into nmg_order_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="batchId != null" >
+        batch_id,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="orderMeal != null" >
+        order_meal,
+      </if>
+      <if test="orderTariff != null" >
+        order_tariff,
+      </if>
+      <if test="orderDiscount != null" >
+        order_discount,
+      </if>
+      <if test="orderCount != null" >
+        order_count,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updatePeople != null" >
+        update_people,
+      </if>
+      <if test="subTime != null" >
+        sub_time,
+      </if>
+      <if test="orderAddressee != null" >
+        order_addressee,
+      </if>
+      <if test="orderPhone != null" >
+        order_phone,
+      </if>
+      <if test="orderPeople != null" >
+        order_people,
+      </if>
+      <if test="orderOtherPhone != null" >
+        order_other_phone,
+      </if>
+      <if test="orderOtherPeople != null" >
+        order_other_people,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="batchId != null" >
+        #{batchId,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMeal != null" >
+        #{orderMeal,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTariff != null" >
+        #{orderTariff,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDiscount != null" >
+        #{orderDiscount,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCount != null" >
+        #{orderCount,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePeople != null" >
+        #{updatePeople,jdbcType=VARCHAR},
+      </if>
+      <if test="subTime != null" >
+        #{subTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddressee != null" >
+        #{orderAddressee,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPhone != null" >
+        #{orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPeople != null" >
+        #{orderPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="orderOtherPhone != null" >
+        #{orderOtherPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderOtherPeople != null" >
+        #{orderOtherPeople,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="detail" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+      noi.order_id,
+      noi.batch_id,
+      city.city_name,
+      county.county_name,
+      noi.channel_id,
+      noi.channel_name,
+      nci.channel_type,
+      nmi.meal_name,
+      nmi.meal_code,
+      ndi.discount_name,
+      noi.order_count,
+      noi.order_state as state,
+    CASE
+
+      WHEN noi.order_state = '1' THEN
+      '待审批'
+      WHEN noi.order_state = '2' THEN
+      '已审批'
+      WHEN noi.order_state = '3' THEN
+      '已写卡'
+      WHEN noi.order_state = '4' THEN
+      '已邮寄' ELSE '已取消'
+    END order_state,
+      noi.create_time,
+      noi.update_time,
+      noi.update_people,
+      noi.sub_time,
+      noi.order_addressee,
+    CASE
+
+      WHEN noi.order_other_phone IS NULL or noi.order_other_phone = '' THEN
+      noi.order_phone ELSE noi.order_other_phone
+      END order_phone,
+    CASE
+
+      WHEN noi.order_other_people IS NULL or noi.order_other_people = '' THEN
+      noi.order_people ELSE noi.order_other_people
+    END order_people
+    FROM
+      nmg_order_info noi
+    LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_id
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+    LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
+    LEFT JOIN nmg_city_info city ON noi.city = city.city_code
+    LEFT JOIN nmg_county_info county ON noi.county = county.county_id
+    WHERE
+      1 = 1
+    <if test="phone != null">
+      and order_other_phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="people != null">
+      and order_other_people = #{people,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and city.city_code = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and noi.county = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="meal != null">
+      and nmi.meal_code = #{meal,jdbcType=VARCHAR}
+    </if>
+    <if test="discount != null">
+      and ndi.discount_id = #{discount,jdbcType=VARCHAR}
+    </if>
+    <if test="tariff != null">
+      and noi.order_tariff = #{tariff,jdbcType=VARCHAR}
+    </if>
+    <if test="state != null">
+      and noi.order_state = #{state,jdbcType=VARCHAR}
+    </if>
+    <if test="channelName != null">
+      and noi.channel_name = #{channelName,jdbcType=VARCHAR}
+    </if>
+    <if test="subtime != null">
+      and noi.sub_time between #{subtime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="createtime != null">
+      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="channelType != null">
+      and channel_type = #{channelType,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="detailTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    nmg_order_detail nod
+    LEFT JOIN nmg_order_info noi ON nod.order_id = noi.order_id
+    LEFT JOIN nmg_meal_info nmi ON nmi.meal_id = noi.order_meal
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+    WHERE 1=1
+    <if test="orderId != null">
+      and noi.order_id = #{orderId,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and noi.city = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="cardnum != null">
+      and nod.cardnum = #{cardnum,jdbcType=VARCHAR}
+    </if>
+    <if test="simnum != null">
+      and nod.simnum = #{simnum,jdbcType=VARCHAR}
+    </if>
+    <if test="orderMeal != null">
+      and nmi.meal_code = #{orderMeal,jdbcType=VARCHAR}
+    </if>
+    <if test="orderTariff != null">
+      and nod.order_tariff = #{orderTariff,jdbcType=VARCHAR}
+    </if>
+    <if test="orderDiscount != null">
+      and nod.order_discount = #{orderDiscount,jdbcType=VARCHAR}
+    </if>
+    <if test="orderState != null">
+      and noi.order_state = #{orderState,jdbcType=VARCHAR}
+    </if>
+    <if test="subTime != null">
+      and noi.sub_time between #{subTime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
+    </if>
+    ORDER BY
+    noi.order_phone,
+    noi.order_meal
+  </select>
+
+  <select id="exportOrder" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+    nod.detail_id,
+    noi.order_id,
+    noi.sub_time,
+    noi.create_time,
+    nmi.meal_name,
+    nod.order_meal as meal_code,
+    ndi.discount_name,
+    nod.cardNum,
+    nod.SIMNum
+    FROM
+    nmg_order_detail nod
+    LEFT JOIN nmg_order_info noi ON nod.order_id = noi.order_id
+    LEFT JOIN nmg_meal_info nmi ON nmi.meal_code = nod.order_meal
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
+    WHERE 1=1
+    <if test="orderId != null">
+      and noi.order_id = #{orderId,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and noi.city = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="cardnum != null">
+      and nod.cardnum = #{cardnum,jdbcType=VARCHAR}
+    </if>
+    <if test="simnum != null">
+      and nod.simnum = #{simnum,jdbcType=VARCHAR}
+    </if>
+    <if test="orderMeal != null">
+      and nmi.meal_code = #{orderMeal,jdbcType=VARCHAR}
+    </if>
+    <if test="orderTariff != null">
+      and nod.order_tariff = #{orderTariff,jdbcType=VARCHAR}
+    </if>
+    <if test="orderDiscount != null">
+      and nod.order_discount = #{orderDiscount,jdbcType=VARCHAR}
+    </if>
+    <if test="orderState != null">
+      and noi.order_state = #{orderState,jdbcType=VARCHAR}
+    </if>
+    <if test="subTime != null">
+      and noi.sub_time between #{subTime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
+    </if>
+    ORDER BY
+        noi.order_phone,
+        noi.order_meal
+  </select>
+
+  <select id="totalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+      SELECT
+      COUNT(*)
+      FROM
+      nmg_order_info noi
+      LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_id
+      LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+      LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
+      LEFT JOIN nmg_city_info city ON noi.city = city.city_code
+      LEFT JOIN nmg_county_info county ON noi.county = county.county_id
+      WHERE
+      1 = 1
+    <if test="phone != null">
+      and order_other_phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="people != null">
+      and order_other_people = #{people,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null">
+      and city.city_code = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and noi.county = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="meal != null">
+      and nmi.meal_code = #{meal,jdbcType=VARCHAR}
+    </if>
+    <if test="discount != null">
+      and ndi.discount_id = #{discount,jdbcType=VARCHAR}
+    </if>
+    <if test="tariff != null">
+      and noi.order_tariff = #{tariff,jdbcType=VARCHAR}
+    </if>
+    <if test="state != null">
+      and noi.order_state = #{state,jdbcType=VARCHAR}
+    </if>
+    <if test="channelName != null">
+      and noi.channel_name = #{channelName,jdbcType=VARCHAR}
+    </if>
+    <if test="subtime != null">
+      and noi.sub_time between #{subtime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="createtime != null">
+      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="channelType != null">
+      and channel_type = #{channelType,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <update id="updateOrderInfo" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_info">
+    update
+      nmg_order_info
+    set
+      order_meal = #{orderMeal,jdbcType=VARCHAR},
+      order_tariff = #{orderTariff,jdbcType=VARCHAR},
+      order_discount = #{orderDiscount,jdbcType=VARCHAR},
+      order_count = #{orderCount,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      update_people = #{updatePeople,jdbcType=VARCHAR}
+    where
+      batch_id = #{batchId,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="orderInfoDel" parameterType="java.lang.String">
+    delete from nmg_order_info where batch_id = #{batchId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="orderDel" parameterType="java.lang.String">
+    delete from nmg_order_info where order_id = #{order_id,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="orderStateUpdate" parameterType="java.util.Map">
+    update nmg_order_info set order_state = #{orderState,jdbcType=VARCHAR} where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="orderDetailDel" parameterType="java.lang.String">
+    delete from nmg_order_detail where detail_id = #{detailId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

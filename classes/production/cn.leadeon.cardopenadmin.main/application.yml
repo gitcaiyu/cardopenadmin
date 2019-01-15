@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cardopenadmin
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/card?autoReconnect=true&useUnicode=true&createDatabaseIfNotExist=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+    username: leadeon
+    password: leadeon
+  session:
+    timeout: 1800
+server:
+  servlet:
+    context-path: /cardopenadmin
+  port: 8002
+mybatis:
+  mapper-locations: classpath:/mybatis/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    call-setters-on-nulls: true
+file:
+  path: /home/leadeon/下载/

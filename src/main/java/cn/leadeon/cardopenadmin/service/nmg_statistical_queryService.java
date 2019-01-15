@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,30 +51,30 @@ public class nmg_statistical_queryService {
         try {
             HttpSession httpSession = httpServletRequest.getSession();
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
-            String fileName = path;
+            String fileName = path + nmg_user_info.getUserName() + "的工单统计信息" + DateUtil.getDateString()+".xls";;
             Map param = new HashMap();
-            if (null != nmg_order_info.getCity()) {
+            if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
                 param.put("city", nmg_order_info.getCity());
             }
-            if (null != nmg_order_info.getCounty()) {
+            if (null != nmg_order_info.getCounty() && !"".equals(nmg_order_info.getCounty())) {
                 param.put("county", nmg_order_info.getCounty());
             }
-            if (null != nmg_order_info.getOrderMeal()) {
+            if (null != nmg_order_info.getOrderMeal() && !"".equals(nmg_order_info.getOrderMeal())) {
                 param.put("meal", nmg_order_info.getOrderMeal());
             }
-            if (null != nmg_order_info.getOrderDiscount()) {
+            if (null != nmg_order_info.getOrderDiscount() && !"".equals(nmg_order_info.getOrderDiscount())) {
                 param.put("discount", nmg_order_info.getOrderDiscount());
             }
-            if (null != nmg_order_info.getOrderTariff()) {
+            if (null != nmg_order_info.getOrderTariff() && !"".equals(nmg_order_info.getOrderTariff())) {
                 param.put("tariff", nmg_order_info.getOrderTariff());
             }
-            if (null != nmg_order_info.getOrderState()) {
+            if (null != nmg_order_info.getOrderState() && !"".equals(nmg_order_info.getOrderState())) {
                 param.put("state", nmg_order_info.getOrderState());
             }
-            if (null != nmg_order_info.getSubTime()) {
+            if (null != nmg_order_info.getSubTime() && !"".equals(nmg_order_info.getSubTime())) {
                 param.put("subtime", nmg_order_info.getSubTime());
             }
-            if (null != nmg_order_info.getCreateTime()) {
+            if (null != nmg_order_info.getCreateTime() && !"".equals(nmg_order_info.getCreateTime())) {
                 param.put("createtime", nmg_order_info.getCreateTime());
             }
             List<Map<String, Object>> result = nmg_order_infoMapper.detail(param,new RowBounds());
@@ -105,9 +106,6 @@ public class nmg_statistical_queryService {
             for (int i = 0; i < result.size(); i++) {
                 Map maps = result.get(i);
                 row = sheet.createRow(i+1);
-                if (i == 0) {
-                    fileName = fileName + nmg_user_info.getUserName() + DateUtil.getDateString() + "的工单统计信息.xls";
-                }
                 if (maps.get("order_id") != null) {
                     row.createCell(0).setCellValue((String) maps.get("order_id"));
                 }
@@ -164,35 +162,37 @@ public class nmg_statistical_queryService {
      * @param data
      * @return
      */
-    public CardResponse simExport(String data) {
+    public CardResponse simExport(String data,HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
-        String fileName = path;
+        HttpSession httpSession = httpServletRequest.getSession();
+        nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
+        String fileName = path + nmg_user_info.getUserName() + "的SIM卡计信息" + DateUtil.getDateString()+".xls";;
         Map param = new HashMap();
         try {
             JSONObject jsonObject = JSONObject.parseObject(data);
-            if (null != jsonObject.get("orderMeal")) {
+            if (null != jsonObject.get("orderMeal") && !"".equals(jsonObject.get("orderMeal"))) {
                 param.put("orderMeal",jsonObject.get("orderMeal"));
             }
-            if (null != jsonObject.get("orderTariff")) {
+            if (null != jsonObject.get("orderTariff") && !"".equals(jsonObject.get("orderTariff"))) {
                 param.put("orderTariff",jsonObject.get("orderTariff"));
             }
-            if (null != jsonObject.get("orderDiscount")) {
+            if (null != jsonObject.get("orderDiscount") && !"".equals(jsonObject.get("orderDiscount"))) {
                 param.put("orderDiscount",jsonObject.get("orderDiscount"));
             }
-            if (null != jsonObject.get("orderState")) {
+            if (null != jsonObject.get("orderState") && !"".equals(jsonObject.get("orderState"))) {
                 param.put("orderState",jsonObject.get("orderState"));
             }
-            if (null != jsonObject.get("cardnum")) {
+            if (null != jsonObject.get("cardnum") && !"".equals(jsonObject.get("cardnum"))) {
                 param.put("cardnum",jsonObject.get("cardnum"));
             }
-            if (null != jsonObject.get("simnum")) {
+            if (null != jsonObject.get("simnum") && !"".equals(jsonObject.get("simnum"))) {
                 param.put("simnum",jsonObject.get("simnum"));
             }
-            if (null != jsonObject.get("subTime")) {
+            if (null != jsonObject.get("subTime") && !"".equals(jsonObject.get("subTime"))) {
                 param.put("subTime",jsonObject.get("subTime"));
                 param.put("subTimeE",jsonObject.get("subTimeE"));
             }
-            if (null != jsonObject.get("createTime")) {
+            if (null != jsonObject.get("createTime") && !"".equals(jsonObject.get("createTime"))) {
                 param.put("createTime",jsonObject.get("createTime"));
                 param.put("createTimeE",jsonObject.get("createTimeE"));
             }
@@ -221,9 +221,6 @@ public class nmg_statistical_queryService {
                 row = sheet.createRow(i+1);
                 if (maps.get("order_id") != null) {
                     row.createCell(0).setCellValue((String) maps.get("order_id"));
-                    if (i == 0) {
-                        fileName = fileName + maps.get("order_id").toString()+"SIM卡统计.xls";
-                    }
                 }
                 if (maps.get("sub_time") != null) {
                     row.createCell(1).setCellValue((String) maps.get("sub_time"));

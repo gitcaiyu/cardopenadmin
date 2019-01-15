@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./public/css/main.css">
+    <link rel="stylesheet" href="./public/lib/layui/css/layui.css">
+    <title>批量开卡运营管理平台</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="logo">
+            <span class="tg01">
+                <img src="./public/images/whiteBlog_03.png" width="150px" alt="">
+            </span>
+            <span class="tg02" style="display: none;">
+                <img src="./public/images/whiteBlog_04.png" alt="">
+            </span>
+        </div>
+        <div id="left">
+            <ul class="left-nav">
+                <li v-for="item in navList">
+                    <p>
+                        <i class="layui-icon"></i>
+                        <span>{{item.fatherName}}</span>
+                        <span class="icon"></span>
+                    </p>
+                    <dl>
+                        <dd v-for="child in item.child">
+                            <a :href="child.url">{{child.menu_name}}</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+
+        <div id="top">
+            <ul class="head-left">
+                <li>
+                    <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                </li>
+            </ul>
+            <ul class="head-right">
+                <li>
+                    {{userName}}
+                </li>
+                <li>
+                    <a v-on:click="logout()">退出</a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="pagetabs">
+            <div class="p-left">
+                <i class="layui-icon layui-icon-prev"></i>
+            </div>
+            <div class="tabs clearfix">
+                <ul>
+                    <li v-for="item in pagePanle" :data-main="item.id" v-bind:class="{active: item.isActive}">
+                        <a @click="liClick(item)" :href="item.url"><i v-show="item.name == ''" class="layui-icon layui-icon-home"></i>{{item.name}}</a>
+                        <i class="close" @click="remove(item)">x</i>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-right">
+                <i class="layui-icon layui-icon-next"></i>
+            </div>
+            <div class="p-down">
+                <i class="layui-icon layui-icon-down"></i>
+                <ol>
+                    <li class="othertab">关闭其他标签页</li>
+                    <li class="alltab">关闭全部标签页</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="main">
+            <router-view></router-view>
+        </div>
+
+
+    </div>
+    <script src="./public/js/require.js" data-main="./public/js/main.js" defer async="true"></script>
+</body>
+
+</html>

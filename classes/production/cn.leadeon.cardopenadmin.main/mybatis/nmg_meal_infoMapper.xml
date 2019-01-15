@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_meal_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_meal_info" >
+    <result column="meal_id" property="mealId" jdbcType="VARCHAR" />
+    <result column="meal_code" property="mealCode" jdbcType="VARCHAR" />
+    <result column="meal_name" property="mealName" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info" >
+    insert into nmg_meal_info (meal_id, meal_code, meal_name, 
+      city,flag,state)
+    values (#{mealId,jdbcType=VARCHAR}, #{mealCode,jdbcType=VARCHAR}, #{mealName,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR},#{flag,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info" >
+    insert into nmg_meal_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mealId != null" >
+        meal_id,
+      </if>
+      <if test="mealCode != null" >
+        meal_code,
+      </if>
+      <if test="mealName != null" >
+        meal_name,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mealId != null" >
+        #{mealId,jdbcType=VARCHAR},
+      </if>
+      <if test="mealCode != null" >
+        #{mealCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mealName != null" >
+        #{mealName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="applyCardMeal" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT
+    meal_id,
+    meal_code,
+    meal_name,
+    city,
+    CASE
+
+    WHEN city is null THEN
+    '全省通用' ELSE nci.city_name
+    END city_name,
+    flag,
+    case when state = '1' then '已上线' else '已下线' end state,
+    state as stateVal
+    FROM
+    nmg_meal_info nmi
+    LEFT JOIN nmg_city_info nci ON nmi.city = nci.city_code
+    WHERE
+    1 = 1
+    <if test="city != null">
+      and city = #{city,jdbcType=VARCHAR} or city = null or city = ""
+    </if>
+    <if test="flag != null and flag == T">
+      and flag in ('T','S')
+    </if>
+    <if test="flag == null">
+      and flag = 'S'
+    </if>
+    <if test="mealId != null">
+      and meal_id = #{mealId,jdbcType=VARCHAR}
+    </if>
+    <if test="unify != null">
+      and city is null
+    </if>
+    <if test="mealState != null">
+      and state = '1'
+    </if>
+  </select>
+
+  <delete id="cardMealDel" parameterType="java.lang.String">
+    delete from nmg_meal_info where meal_code = #{mealCode,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="cardMealUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info">
+    update nmg_meal_info set meal_code = #{mealCode,jdbcType=VARCHAR} ,meal_name = #{mealName,jdbcType=VARCHAR} ,city=#{city,jdbcType=VARCHAR} where meal_id = #{mealId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="checkUse" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from nmg_order_detail where order_meal = #{mealCode,jdbcType=VARCHAR}
+  </select>
+
+  <update id="onoffLine" parameterType="java.util.Map">
+    update nmg_meal_info set state = #{state} where meal_id = #{mealId}
+  </update>
+
+</mapper>

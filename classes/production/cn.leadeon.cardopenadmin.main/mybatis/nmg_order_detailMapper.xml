@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_order_detailMapper">
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_order_detail">
+    <result column="detail_id" jdbcType="VARCHAR" property="detailId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="batch_id" jdbcType="VARCHAR" property="batchId" />
+    <result column="cardNum" jdbcType="VARCHAR" property="cardnum" />
+    <result column="SIMNum" jdbcType="VARCHAR" property="simnum" />
+    <result column="order_meal" jdbcType="VARCHAR" property="orderMeal" />
+    <result column="order_tariff" jdbcType="VARCHAR" property="orderTariff" />
+    <result column="order_discount" jdbcType="VARCHAR" property="orderDiscount" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_detail">
+    insert into nmg_order_detail (detail_id, order_id, batch_id, 
+      cardNum, SIMNum, order_meal, 
+      order_tariff, order_discount)
+    values (#{detailId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{batchId,jdbcType=VARCHAR}, 
+      #{cardnum,jdbcType=VARCHAR}, #{simnum,jdbcType=VARCHAR}, #{orderMeal,jdbcType=VARCHAR}, 
+      #{orderTariff,jdbcType=VARCHAR}, #{orderDiscount,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_detail">
+    insert into nmg_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        detail_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="batchId != null">
+        batch_id,
+      </if>
+      <if test="cardnum != null">
+        cardNum,
+      </if>
+      <if test="simnum != null">
+        SIMNum,
+      </if>
+      <if test="orderMeal != null">
+        order_meal,
+      </if>
+      <if test="orderTariff != null">
+        order_tariff,
+      </if>
+      <if test="orderDiscount != null">
+        order_discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        #{detailId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="batchId != null">
+        #{batchId,jdbcType=VARCHAR},
+      </if>
+      <if test="cardnum != null">
+        #{cardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="simnum != null">
+        #{simnum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMeal != null">
+        #{orderMeal,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTariff != null">
+        #{orderTariff,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDiscount != null">
+        #{orderDiscount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateDetail" parameterType="cn.leadeon.cardopenadmin.entity.nmg_order_detail">
+    update nmg_order_detail set cardNum = #{cardnum,jdbcType=VARCHAR} ,simnum = #{simnum,jdbcType=VARCHAR}, #{orderMeal,jdbcType=VARCHAR},order_tariff = #{orderTariff,jdbcType=VARCHAR},order_discount = #{orderDiscount,jdbcType=VARCHAR} where detail_id = #{detailId,jdbcType=VARCHAR}
+  </update>
+</mapper>

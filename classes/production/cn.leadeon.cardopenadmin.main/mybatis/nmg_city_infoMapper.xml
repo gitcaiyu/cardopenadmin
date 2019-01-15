@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_city_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_city_info" >
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_people" property="createPeople" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="update_people" property="updatePeople" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_city_info" >
+    insert into nmg_city_info (city_id, city_name, city_code, 
+      create_time, create_people, update_time, 
+      update_people)
+    values (#{cityId,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{createPeople,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, 
+      #{updatePeople,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_city_info" >
+    insert into nmg_city_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createPeople != null" >
+        create_people,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updatePeople != null" >
+        update_people,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createPeople != null" >
+        #{createPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePeople != null" >
+        #{updatePeople,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="cityInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select city_id,city_name,city_code,create_time,create_people,update_time,update_people from nmg_city_info where 1=1
+    <if test="city != null">
+      and city_code = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="cityName != null">
+      and city_name = #{cityName,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+</mapper>

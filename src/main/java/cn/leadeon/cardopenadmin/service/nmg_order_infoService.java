@@ -130,6 +130,68 @@ public class nmg_order_infoService {
         return cardResponse;
     }
 
+    public JSONObject workCount(nmg_order_info nmg_order_info) {
+        Map param = new HashMap();
+        JSONObject result = new JSONObject();
+        //如果是盟市管理员，则仅能操作当前盟市的SIM卡信息
+        if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
+            param.put("city",nmg_order_info.getCity());
+        }
+        List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+        result.put("city",city);
+        result.put("county", nmg_county_infoMapper.countyInfo(param));
+        param.put("flag","T");
+        param.put("mealState","1");
+        result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
+        result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
+        if (null != nmg_order_info.getOrderOtherPhone() && !"".equals(nmg_order_info.getOrderOtherPhone())) {
+            param.put("phone",nmg_order_info.getOrderOtherPhone());
+        }
+        if (null != nmg_order_info.getOrderOtherPeople() && !"".equals(nmg_order_info.getOrderOtherPeople())) {
+            param.put("people",nmg_order_info.getOrderOtherPeople());
+        }
+        if (null != nmg_order_info.getCounty() && !"".equals(nmg_order_info.getCounty())) {
+            param.put("county",nmg_order_info.getCounty());
+        }
+        if (null != nmg_order_info.getOrderMeal() && !"".equals(nmg_order_info.getOrderMeal())) {
+            param.put("meal",nmg_order_info.getOrderMeal());
+        }
+        if (null != nmg_order_info.getOrderDiscount() && !"".equals(nmg_order_info.getOrderDiscount())) {
+            param.put("discount",nmg_order_info.getOrderDiscount());
+        }
+        if (null != nmg_order_info.getOrderTariff() && !"".equals(nmg_order_info.getOrderTariff())) {
+            param.put("tariff",nmg_order_info.getOrderTariff());
+        }
+        if (null != nmg_order_info.getOrderState() && !"".equals(nmg_order_info.getOrderState())) {
+            param.put("state",nmg_order_info.getOrderState());
+        }
+        if (null != nmg_order_info.getChannelName() && !"".equals(nmg_order_info.getChannelName())) {
+            param.put("channelName",nmg_order_info.getChannelName());
+        }
+        if (null != nmg_order_info.getChannelName() && !"".equals(nmg_order_info.getChannelName())) {
+            param.put("channelName",nmg_order_info.getChannelName());
+        }
+        if (null != nmg_order_info.getSubTime() && !"".equals(nmg_order_info.getSubTime())) {
+            param.put("subtime",nmg_order_info.getSubTime());
+            param.put("subtimeE",nmg_order_info.getSubTimeE());
+        }
+        if (null != nmg_order_info.getCreateTime() && !"".equals(nmg_order_info.getCreateTime())) {
+            param.put("createtime",nmg_order_info.getCreateTime());
+            param.put("createtimeE",nmg_order_info.getCreateTimeE());
+        }
+        //1：社会渠道，2：自营渠道
+        if (null != nmg_order_info.getChannelType() && !"".equals(nmg_order_info.getChannelType())) {
+            param.put("channelType",nmg_order_info.getChannelType());
+        }
+        RowBounds rowBounds = new RowBounds((nmg_order_info.getCurr() - 1) * nmg_order_info.getLimit(),nmg_order_info.getLimit());
+        List orderList = nmg_order_infoMapper.detail(param,rowBounds);
+        result.put("data",orderList);
+        result.put("orderState",new Common().orderState());
+        result.put("code",0);
+        result.put("count",nmg_order_infoMapper.totalCount(param));
+        return result;
+    }
+
     public CardResponse orderExport(nmg_order_info nmg_order_info, HttpSession httpSession) {
         CardResponse cardResponse = new CardResponse();
         try {
@@ -217,10 +279,10 @@ public class nmg_order_infoService {
                 if (maps.get("order_id") != null) {
                     row.createCell(1).setCellValue((String) maps.get("order_id"));
                 }
-                if (maps.get("city") != null) {
+                if (maps.get("city_name") != null) {
                     row.createCell(2).setCellValue((String) maps.get("city_name"));
                 }
-                if (maps.get("county") != null) {
+                if (maps.get("county_name") != null) {
                     row.createCell(3).setCellValue((String) maps.get("county_name"));
                 }
                 if (maps.get("channel_id") != null) {
@@ -342,6 +404,54 @@ public class nmg_order_infoService {
         return cardResponse;
     }
 
+    public JSONObject simCount(String data) {
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        Map param = new HashMap();
+        if (!"".equals(jsonObject.getString("cardnum"))) {
+            param.put("cardnum",jsonObject.getString("cardnum"));
+        }
+        if (!"".equals(jsonObject.getString("simnum"))) {
+            param.put("simnum",jsonObject.getString("simnum"));
+        }
+        if (!"".equals(jsonObject.getString("orderMeal"))) {
+            param.put("orderMeal",jsonObject.getString("orderMeal"));
+        }
+        if (!"".equals(jsonObject.getString("orderTariff"))) {
+            param.put("orderTariff",jsonObject.getString("orderTariff"));
+        }
+        if (!"".equals(jsonObject.getString("orderState"))) {
+            param.put("orderState",jsonObject.getString("orderState"));
+        }
+        if (!"".equals(jsonObject.getString("orderDiscount"))) {
+            param.put("orderDiscount",jsonObject.getString("orderDiscount"));
+        }
+        if (!"".equals(jsonObject.get("orderId"))) {
+            param.put("orderId",jsonObject.get("orderId"));
+        }
+        if (!"".equals(jsonObject.get("subtime"))) {
+            param.put("subtime",jsonObject.get("subtime"));
+            param.put("subtimeE",jsonObject.get("subtimeE"));
+        }
+        if (!"".equals(jsonObject.get("createtime"))) {
+            param.put("createtime",jsonObject.get("createtime"));
+            param.put("createtimeE",jsonObject.get("createtimeE"));
+        }
+        int curr = jsonObject.getInteger("curr");
+        int limit = jsonObject.getInteger("limit");
+        RowBounds rowBounds = new RowBounds((curr - 1) * limit,limit);
+        List<Map<String,Object>> details = nmg_order_infoMapper.exportOrder(param,rowBounds);
+        JSONObject result = new JSONObject();
+        param.put("flag", "T");
+        param.put("mealState","1");
+        result.put("meal",nmg_meal_infoMapper.applyCardMeal(param));
+        result.put("discount",nmg_discount_infoMapper.applyCardDisc(param));
+        result.put("data",details);
+        result.put("state",new Common().orderState());
+        result.put("code",0);
+        result.put("count",nmg_order_infoMapper.detailTotalCount(param));
+        return result;
+    }
+
     /**
      *工单明细导出
      * @param data
@@ -390,6 +500,14 @@ public class nmg_order_infoService {
             }
             if (!"".equals(jsonObject.get("orderId"))) {
                 param.put("orderId",jsonObject.get("orderId"));
+            }
+            if (!"".equals(jsonObject.get("subtime"))) {
+                param.put("subtime",jsonObject.get("subtime"));
+                param.put("subtimeE",jsonObject.get("subtimeE"));
+            }
+            if (!"".equals(jsonObject.get("createtime"))) {
+                param.put("createtime",jsonObject.get("createtime"));
+                param.put("createtimeE",jsonObject.get("createtimeE"));
             }
             List<Map<String,Object>> result = nmg_order_infoMapper.exportOrder(param,new RowBounds());
             for (int i = 0; i < result.size(); i++) {

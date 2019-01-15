@@ -1,0 +1,65 @@
+<div>
+    <meta charset="UTF-8">
+    <form id="total" class="layui-form">
+        <div class="layui-input-inline ml10">
+            <select lay-filter="mealName" name="mealName">
+                <option value="">套餐资费</option>
+                <option v-for="meal in mealList" v-bind:value="meal.meal_code">{{meal.meal_name}}</option>
+            </select>
+        </div>
+        <div class="layui-input-inline ml10">
+            <select lay-filter="mealId" name="mealId">
+                <option value="">资费代码</option>
+                <option v-for="meal in mealList" v-bind:value="meal.meal_code">{{meal.meal_code}}</option>
+            </select>
+        </div>
+        <div class="layui-input-inline ml10">
+            <select lay-filter="discount" name="discount">
+                <option value="">优惠促销</option>
+                <option v-for="discount in discountList" v-bind:value="discount.discount_id">
+                    {{discount.discount_name}}
+                </option>
+            </select>
+        </div>
+        <div class="layui-input-inline ml10">
+            <select lay-filter="state" name="state">
+                <option value="">工单状态</option>
+                <option v-for="state in stateList" v-bind:value="state.stateId">{{state.stateName}}</option>
+            </select>
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" placeholder="选购号码" class="layui-input" v-model="cardnum">
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" placeholder="SIM卡号" class="layui-input" v-model="simnum">
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" class="layui-input" id="subTime" v-model="subTime"
+                   placeholder="请选择申请开卡开始时间">
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" class="layui-input" id="subTimeE" v-model="subTimeE"
+                   placeholder="请选择申请开卡结束时间">
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" class="layui-input" id="createTime" v-model="createTime"
+                   placeholder="请选择写卡完成开始时间">
+        </div>
+        <div class="layui-input-inline ml10">
+            <input type="text" autocomplete="off" class="layui-input" id="createTimeE" v-model="createTimeE"
+                   placeholder="请选择写卡完成结束时间">
+        </div>
+        <div class="layui-input-inline ml10">
+            <a @click="getPage()" class="layui-btn layui-btn-normal">查询</a>
+            <a class="layui-btn layui-btn-normal" v-on:click="orderExport()">导出</a>
+        </div>
+    </form>
+    <form class="layui-form">
+        <div class="layui-form" style="position: relative;">
+            <div style="overflow-x:auto;">
+                <table class="layui-hide" id="data"></table>
+            </div>
+        </div>
+    </form>
+    <div class="load" v-show="load"></div>
+</div>

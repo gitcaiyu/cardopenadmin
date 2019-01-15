@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.leadeon.cardopenadmin.mapper.nmg_county_infoMapper" >
+  <resultMap id="BaseResultMap" type="cn.leadeon.cardopenadmin.entity.nmg_county_info" >
+    <result column="county_id" property="countyId" jdbcType="VARCHAR" />
+    <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.leadeon.cardopenadmin.entity.nmg_county_info" >
+    insert into nmg_county_info (county_id, county_name, city_code
+      )
+    values (#{countyId,jdbcType=VARCHAR}, #{countyName,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.leadeon.cardopenadmin.entity.nmg_county_info" >
+    insert into nmg_county_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="countyId != null" >
+        county_id,
+      </if>
+      <if test="countyName != null" >
+        county_name,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="countyId != null" >
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyName != null" >
+        #{countyName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countyInfo" parameterType="java.util.Map" resultType="java.util.Map">
+    select county_id,county_name,city_code from nmg_county_info where 1=1
+    <if test="city != null">
+      and city_code = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      and county_id = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="cityName != null">
+      and city_code = (select city_code from nmg_city_info where city_name = #{cityName,jdbcType=VARCHAR})
+    </if>
+  </select>
+</mapper>
