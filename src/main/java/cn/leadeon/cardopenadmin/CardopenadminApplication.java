@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @MapperScan("cn.leadeon.cardopenadmin.mapper")
 @ServletComponentScan
 @EnableWebSecurity
-@EnableScheduling
 public class CardopenadminApplication {
 
     public static void main(String[] args) {
