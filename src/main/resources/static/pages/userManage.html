@@ -10,7 +10,7 @@
         <div class="layui-input-inline ml10">
             <select lay-filter="userRole" name="userRole">
                 <option value="">角色名称</option>
-                <option v-for="role in roleList" v-bind:value="role.roleId">{{role.roleName}}</option>
+                <option v-for="role in roleList" v-bind:value="role.role_type">{{role.role_name}}</option>
             </select>
         </div>
         <div class="layui-input-inline ml10">
@@ -103,7 +103,7 @@
                     <div class="layui-input-inline">
                         <select name="userRole" id="userRole">
                             <option value="">请选择</option>
-                            <option v-for="role in roleList" v-bind:value="role.roleId">{{role.roleName}}</option>
+                            <option v-for="role in roleList" v-bind:value="role.role_type">{{role.role_name}}</option>
                         </select>
                     </div>
                 </div>

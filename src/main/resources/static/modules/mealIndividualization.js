@@ -116,7 +116,7 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                 var _this=this;
                 var datas={"state":state,"mealId":id}
                 $.ajax({
-                    url: _this.ajax_url+'/onoffLine',
+                    url: _this.ajax_url+'/mealOnOffLine',
                     type: 'post',
                     data:JSON.stringify(datas),
                     headers : {

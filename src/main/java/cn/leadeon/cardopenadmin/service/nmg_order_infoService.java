@@ -55,6 +55,9 @@ public class nmg_order_infoService {
     @Autowired
     private nmg_discount_infoMapper nmg_discount_infoMapper;
 
+    @Autowired
+    private nmg_city_infoService nmg_city_infoService;
+
     @Value("${file.path}")
     private String path;
 
@@ -73,7 +76,7 @@ public class nmg_order_infoService {
             if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
                 param.put("city",nmg_order_info.getCity());
             }
-            List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+            List<nmg_city_info> city = nmg_city_infoService.city();
             result.put("city",city);
             result.put("county", nmg_county_infoMapper.countyInfo(param));
             param.put("flag","T");

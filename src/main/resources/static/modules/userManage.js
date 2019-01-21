@@ -74,7 +74,7 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
                 var index = layer.open({
                     type: 1,
                     skin: 'layui-layer-demo', //加上边框
-                    area: ['600px', '500'], //宽高
+                    area: ['600px', '1800'], //宽高
                     content: $('#edit'),
                     cancel: function () {
                         $('#edit').hide();

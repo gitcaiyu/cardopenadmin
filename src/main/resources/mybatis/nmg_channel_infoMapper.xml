@@ -92,6 +92,7 @@
     END channel_type,
     city.city_id,
     city.city_name,
+    city.city_code,
     county.county_id,
     county.county_name,
     charge_name,

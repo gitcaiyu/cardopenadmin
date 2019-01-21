@@ -33,6 +33,9 @@ public class nmg_meal_infoService {
     @Autowired
     private nmg_city_infoMapper nmg_city_infoMapper;
 
+    @Autowired
+    private nmg_city_infoService nmg_city_infoService;
+
     public CardResponse mealUnify(nmg_meal_info nmg_meal_info,HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
         try {
@@ -48,7 +51,7 @@ public class nmg_meal_infoService {
                 param.put("city",nmg_user_info.getCityCode());
                 results.put("city",nmg_city_infoMapper.cityInfo(param));
             } else {
-                List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+                List<nmg_city_info> city = nmg_city_infoService.city();
                 results.put("city",city);
             }
             param.put("flag",'T');
@@ -73,7 +76,7 @@ public class nmg_meal_infoService {
                 param.put("city",nmg_user_info.getCityCode());
                 results.put("city",nmg_city_infoMapper.cityInfo(param));
             } else {
-                List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+                List<nmg_city_info> city = nmg_city_infoService.city();
                 results.put("city",city);
             }
             if (null != nmg_meal_info.getMealId() && !"".equals(nmg_meal_info.getMealId())) {

@@ -22,7 +22,8 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                     charge_name:'',
                     charge_tel:'',
                     channel_address:'',
-                    channelType:''
+                    channelType:'',
+                    countyList:[]
                 },
                 city:'',
                 county:'',
@@ -64,6 +65,7 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
             },
             edit: function (item) {
                 var _this=this;
+                $form = $('form');
                 this.edit_data.channelId=item.channel_id;
                 this.edit_data.channel_name=item.channel_name;
                 this.edit_data.city=item.city_name;
@@ -71,20 +73,6 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                 this.edit_data.charge_name=item.charge_name;
                 this.edit_data.charge_tel=item.charge_tel;
                 this.edit_data.channel_address=item.channel_address;
-                var selCity = document.getElementById("city");
-                for(var i=0; i<selCity.options.length; i++){
-                    if(selCity.options[i].innerHTML == item.city_name){
-                        selCity.options[i].selected = true;
-                        break;
-                    }
-                }
-                var selCounty = document.getElementById("county");
-                for(var i=0; i<selCounty.options.length; i++){
-                    if(selCounty.options[i].innerHTML == item.county_name){
-                        selCounty.options[i].selected = true;
-                        break;
-                    }
-                }
                 var index = layer.open({
                     type: 1,
                     skin: 'layui-layer-demo', //加上边框
@@ -94,9 +82,38 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                         $('#edit').hide();
                     }
                 });
-
+                var selCity = document.getElementById("city");
+                var selCounty = document.getElementById("county");
+                selCounty.length=0;
+                for(var i=0; i<selCity.options.length; i++){
+                    if(selCity.options[i].innerHTML == item.city_name){
+                        selCity.options[i].selected = true;
+                        var datas={city:item.city_code};
+                        $.ajax({
+                            url: _this.ajax_url+'/countyInfo',
+                            type: 'post',
+                            data:JSON.stringify(datas),
+                            headers : {
+                                'Content-Type' : 'application/json;charset=utf-8'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                var arr = result.resBody.county;
+                                var option = null;
+                                for(var j=0; j<arr.length; j++){
+                                    if(arr[j].county_id == item.county_id){
+                                        option = new Option(arr[j].county_name,arr[j].county_id,true,true);
+                                    } else {
+                                        option = new Option(arr[j].county_name,arr[j].county_id,false);
+                                    }
+                                    selCounty.options.add(option)
+                                    form.render('select')
+                                }
+                            }
+                        })
+                    }
+                }
                 form.on('submit(edit)', function (data) {
-                    console.log(data)
                     var formData=data.field;
                     _this.saveInfo(formData);
                     $('#edit').hide();
@@ -268,6 +285,29 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                             _this.channel_type=data.value;
                             _this.getPage();
                         })
+                        form.on('select(selCity)', function(data){
+                            var datas={city:data.value};
+                            $.ajax({
+                                url: _this.ajax_url+'/countyInfo',
+                                type: 'post',
+                                data:JSON.stringify(datas),
+                                headers : {
+                                    'Content-Type' : 'application/json;charset=utf-8'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    var arr = result.resBody.county;
+                                    var option = null;
+                                    var selCounty = document.getElementById("county");
+                                    selCounty.length=0;
+                                    for(var j=0; j<arr.length; j++){
+                                        option = new Option(arr[j].county_name,arr[j].county_id,false);
+                                        selCounty.options.add(option)
+                                        form.render('select')
+                                    }
+                                }
+                            })
+                        });
                         laypage.render({
                             elem: 'page'
                             , count: _this.totalCount

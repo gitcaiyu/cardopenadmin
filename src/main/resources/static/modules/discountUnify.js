@@ -108,7 +108,7 @@ define(['layui', 'text!../../pages/discountUnify.html'], function (layui, discou
                 var _this=this;
                 var datas={"state":state,"discountId":id}
                 $.ajax({
-                    url: _this.ajax_url+'/discountOnOffLine',
+                    url: _this.ajax_url+'/discountdiscountOnOffLine',
                     type: 'post',
                     data:JSON.stringify(datas),
                     headers : {

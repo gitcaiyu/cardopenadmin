@@ -43,6 +43,9 @@ public class nmg_channel_infoService {
     @Autowired
     private nmg_county_infoMapper nmg_county_infoMapper;
 
+    @Autowired
+    private nmg_city_infoService nmg_city_infoService;
+
     @Value("${file.path}")
     private String path;
 
@@ -62,7 +65,7 @@ public class nmg_channel_infoService {
             if (null != nmg_channel_info.getCity() && !"".equals(nmg_channel_info.getCity())) {
                 param.put("city",nmg_channel_info.getCity());
             }
-            List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+            List<nmg_city_info> city = nmg_city_infoService.city();
             result.put("city",city);
             result.put("county", nmg_county_infoMapper.countyInfo(param));
         }

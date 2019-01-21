@@ -31,6 +31,9 @@ public class nmg_discount_infoService {
     @Autowired
     private nmg_city_infoMapper nmg_city_infoMapper;
 
+    @Autowired
+    private nmg_city_infoService nmg_city_infoService;
+
     public CardResponse discountUnify(nmg_discount_info nmg_discount_info,HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
         try {
@@ -46,7 +49,7 @@ public class nmg_discount_infoService {
                 param.put("city",nmg_user_info.getCityCode());
                 result.put("city",nmg_city_infoMapper.cityInfo(param));
             } else {
-                List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+                List<nmg_city_info> city = nmg_city_infoService.city();
                 result.put("city",city);
             }
             param.put("flag","T");
@@ -71,7 +74,7 @@ public class nmg_discount_infoService {
                 param.put("city",nmg_user_info.getCityCode());
                 results.put("city",nmg_city_infoMapper.cityInfo(param));
             } else {
-                List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
+                List<nmg_city_info> city = nmg_city_infoService.city();
                 results.put("city",city);
             }
             if (null != nmg_discount_info.getDiscountId() && !"".equals(nmg_discount_info.getDiscountId())) {
