@@ -79,7 +79,7 @@
     WHERE
     1 = 1
     <if test="city != null">
-      and city = #{city,jdbcType=VARCHAR} or city = null or city = ""
+      and city = #{city,jdbcType=VARCHAR} or city is null or city = ""
     </if>
     <if test="flag != null and flag == T">
       and flag in ('T','S')
