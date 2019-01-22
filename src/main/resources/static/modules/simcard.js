@@ -160,6 +160,32 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                         form.render()
                     }
                 });
+                form.on('select(emealId)', function (data) {
+                    var selMealName = document.getElementById("emealName");
+                    if(data.value!='') {
+                        for(var i=0; i<selMealName.options.length; i++){
+                            if (selMealName.options[i].value == data.value) {
+                                selMealName.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealName.options[0].selected = true;
+                    }
+                    _this.write_data.mealId = data.value;
+                });
+                form.on('select(emealName)', function (data) {
+                    var selMealId = document.getElementById("emealId");
+                    if(data.value!='') {
+                        for (var i = 0; i < selMealId.options.length; i++) {
+                            if (selMealId.options[i].innerHTML == data.value) {
+                                selMealId.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealId.options[0].selected = true;
+                    }
+                    _this.write_data.mealId = data.value;
+                });
                 form.on('submit(edit)', function (data) {
                     var formData=data.field;
                     $.ajax({
@@ -333,10 +359,30 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                         _this.mealList=result.resBody.meal;
                         _this.discountList=result.resBody.discount;
                         form.on('select(wmealId)', function (data) {
+                            var selMealName = document.getElementById("wmealName");
+                            if(data.value!='') {
+                                for(var i=0; i<selMealName.options.length; i++){
+                                    if (selMealName.options[i].value == data.value) {
+                                        selMealName.options[i].selected = true;
+                                    }
+                                }
+                            } else {
+                                selMealName.options[0].selected = true;
+                            }
                             _this.write_data.mealId = data.value;
                             _this.getDetail();
                         });
                         form.on('select(wmealName)', function (data) {
+                            var selMealId = document.getElementById("wmealId");
+                            if(data.value!='') {
+                                for (var i = 0; i < selMealId.options.length; i++) {
+                                    if (selMealId.options[i].innerHTML == data.value) {
+                                        selMealId.options[i].selected = true;
+                                    }
+                                }
+                            } else {
+                                selMealId.options[0].selected = true;
+                            }
                             _this.write_data.mealId = data.value;
                             _this.getDetail();
                         });
@@ -471,10 +517,30 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     _this.getPage();
                 });
                 form.on('select(mealId)', function (data) {
+                    var selMealName = document.getElementById("mealName");
+                    if(data.value!='') {
+                        for(var i=0; i<selMealName.options.length; i++){
+                            if (selMealName.options[i].value == data.value) {
+                                selMealName.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealName.options[0].selected = true;
+                    }
                     _this.mealId = data.value;
                     _this.getPage();
                 });
                 form.on('select(mealName)', function (data) {
+                    var selMealId = document.getElementById("mealId");
+                    if(data.value!='') {
+                        for (var i = 0; i < selMealId.options.length; i++) {
+                            if (selMealId.options[i].innerHTML == data.value) {
+                                selMealId.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealId.options[0].selected = true;
+                    }
                     _this.mealId = data.value;
                     _this.getPage();
                 });
