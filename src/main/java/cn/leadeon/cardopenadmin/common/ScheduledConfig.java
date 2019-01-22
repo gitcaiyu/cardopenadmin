@@ -13,7 +13,7 @@ public class ScheduledConfig {
     @Autowired
     private nmg_order_infoMapper nmg_order_infoMapper;
 
-    @Scheduled(cron = "0 10 * * * ? ")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void updateState() {
         nmg_order_infoMapper.updateState();
     }

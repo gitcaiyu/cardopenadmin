@@ -4,6 +4,7 @@ import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
 import cn.leadeon.cardopenadmin.entity.nmg_order_detail;
 import cn.leadeon.cardopenadmin.entity.nmg_order_info;
 import cn.leadeon.cardopenadmin.service.nmg_order_infoService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,12 +22,27 @@ public class nmg_order_infoController {
 
     /**
      * SIM卡回录页面初始化查询
-     * @param nmg_order_info
      * @param httpServletRequest
      * @return
      */
-    @PostMapping(value = "/simCard")
-    public CardResponse simCard(@RequestBody nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
+    @RequestMapping(value = "/simCard")
+    public JSONObject simCard(HttpServletRequest httpServletRequest) {
+        nmg_order_info nmg_order_info = new nmg_order_info();
+        nmg_order_info.setCurr(Integer.valueOf(httpServletRequest.getParameter("page")));
+        nmg_order_info.setLimit(Integer.valueOf(httpServletRequest.getParameter("limit")));
+        nmg_order_info.setCity(httpServletRequest.getParameter("city"));
+        nmg_order_info.setCounty(httpServletRequest.getParameter("county"));
+        nmg_order_info.setChannelName(httpServletRequest.getParameter("channelName"));
+        nmg_order_info.setChannelType(httpServletRequest.getParameter("channelType"));
+        nmg_order_info.setOrderMeal(httpServletRequest.getParameter("orderMeal"));
+        nmg_order_info.setOrderDiscount(httpServletRequest.getParameter("orderDiscount"));
+        nmg_order_info.setOrderState(httpServletRequest.getParameter("orderState"));
+        nmg_order_info.setSubTime(httpServletRequest.getParameter("subTime"));
+        nmg_order_info.setSubTimeE(httpServletRequest.getParameter("subTimeE"));
+        nmg_order_info.setCreateTime(httpServletRequest.getParameter("createTime"));
+        nmg_order_info.setCreateTimeE(httpServletRequest.getParameter("createTimeE"));
+        nmg_order_info.setOrderOtherPeople(httpServletRequest.getParameter("orderOtherPeople"));
+        nmg_order_info.setOrderOtherPhone(httpServletRequest.getParameter("orderOtherPhone"));
         return nmg_order_infoService.simCard(nmg_order_info,httpServletRequest);
     }
 

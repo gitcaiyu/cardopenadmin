@@ -127,9 +127,7 @@ public class nmg_channel_infoService {
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         Map param = new HashMap();
         String fileName = path + nmg_user_info.getUserName() + "的渠道信息" + DateUtil.getDateString() + ".xls";
-        if (!nmg_user_info.getUserRole().equals("2")) {
-            param.put("chargeTel",nmg_user_info.getUserTel());
-        } else {
+        if (nmg_user_info.getUserRole().equals("2")) {
             param.put("city",nmg_channel_info.getCity());
         }
         if (null != nmg_channel_info.getChannelName() && !"".equals(nmg_channel_info.getChannelName())) {

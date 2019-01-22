@@ -61,12 +61,12 @@ public class nmg_order_infoService {
     @Value("${file.path}")
     private String path;
 
-    public CardResponse simCard(nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
+    public JSONObject simCard(nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
         CardResponse cardResponse = new CardResponse();
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         Map param = new HashMap();
-        Map result = new HashMap();
+        JSONObject result = new JSONObject();
         //如果是盟市管理员，则仅能操作当前盟市的SIM卡信息
         if (nmg_user_info.getUserRole().equals("2")) {
             param.put("city",nmg_user_info.getCityCode());
@@ -123,14 +123,19 @@ public class nmg_order_infoService {
         if (null != nmg_order_info.getChannelType() && !"".equals(nmg_order_info.getChannelType())) {
             param.put("channelType",nmg_order_info.getChannelType());
         }
-        RowBounds rowBounds = new RowBounds((nmg_order_info.getCurr() - 1) * nmg_order_info.getLimit(),nmg_order_info.getLimit());
-        List orderList = nmg_order_infoMapper.detail(param,rowBounds);
-        result.put("order",orderList);
+//        RowBounds rowBounds = new RowBounds((nmg_order_info.getCurr() - 1) * nmg_order_info.getLimit(),nmg_order_info.getLimit());
+        List orderList = nmg_order_infoMapper.detail(param,new RowBounds());
+//        result.put("order",orderList);
+//        result.put("channelType",new Common().channelType());
+//        result.put("orderState",new Common().orderState());
+//        cardResponse.setResBody(result);
+//        cardResponse.setTotalCount(nmg_order_infoMapper.totalCount(param));
+        result.put("data",orderList);
         result.put("channelType",new Common().channelType());
         result.put("orderState",new Common().orderState());
-        cardResponse.setResBody(result);
-        cardResponse.setTotalCount(nmg_order_infoMapper.totalCount(param));
-        return cardResponse;
+        result.put("code",0);
+        result.put("count",nmg_order_infoMapper.totalCount(param));
+        return result;
     }
 
     public JSONObject workCount(nmg_order_info nmg_order_info) {
@@ -201,7 +206,9 @@ public class nmg_order_infoService {
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
             String fileName = path + nmg_user_info.getUserName() + "的工单信息" + DateUtil.getDateString() + ".xls";
             Map param = new HashMap();
-            param.put("city",nmg_order_info.getCity());
+            if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
+                param.put("city", nmg_order_info.getCity());
+            }
             if (null != nmg_order_info.getOrderOtherPhone() && !"".equals(nmg_order_info.getOrderOtherPhone())) {
                 param.put("phone",nmg_order_info.getOrderOtherPhone());
             }
@@ -470,6 +477,7 @@ public class nmg_order_infoService {
             JSONObject jsonObject = JSONObject.parseObject(data);
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
             HSSFSheet sheet= hssfWorkbook.createSheet("工单信息");
+            sheet.setColumnHidden(6,true);
             HSSFRow row = sheet.createRow(0);
             HSSFCell cell = row.createCell(0);
             cell.setCellValue("工单编号");
@@ -483,6 +491,8 @@ public class nmg_order_infoService {
             cell.setCellValue("选购号码");
             cell = row.createCell(5);
             cell.setCellValue("SIM卡号");
+            cell = row.createCell(5);
+            cell.setCellValue("优惠代码");
             if (!"".equals(jsonObject.getString("cardnum"))) {
                 param.put("cardnum",jsonObject.getString("cardnum"));
             }
@@ -533,6 +543,9 @@ public class nmg_order_infoService {
                 }
                 if (maps.get("SIMNum") != null) {
                     row.createCell(5).setCellValue((String) maps.get("SIMNum"));
+                }
+                if (maps.get("order_discount") != null) {
+                    row.createCell(6).setCellValue((String) maps.get("order_discount"));
                 }
             }
             FileOutputStream fileOutputStream = new FileOutputStream(fileName);
@@ -598,9 +611,9 @@ public class nmg_order_infoService {
                 HSSFRow row = sheetAt.getRow(j);
                 nmg_order_detail.setDetailId(new RandomUtil().uuid);
                 nmg_order_detail.setOrderId(row.getCell(0).getStringCellValue());
-                nmg_order_detail.setOrderMeal(row.getCell(1).getStringCellValue());
-                nmg_order_detail.setOrderTariff(row.getCell(2).getStringCellValue());
-                nmg_order_detail.setOrderDiscount(row.getCell(3).getStringCellValue());
+                nmg_order_detail.setOrderTariff(row.getCell(1).getStringCellValue());
+                nmg_order_detail.setOrderMeal(row.getCell(2).getStringCellValue());
+                nmg_order_detail.setOrderDiscount(row.getCell(6).getStringCellValue());
                 nmg_order_detail.setCardnum(row.getCell(4).getStringCellValue());
                 nmg_order_detail.setSimnum(row.getCell(5).getStringCellValue());
                 nmg_order_detailMapper.insert(nmg_order_detail);

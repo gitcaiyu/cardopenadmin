@@ -66,22 +66,13 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
             edit: function (item) {
                 var _this=this;
                 $form = $('form');
-                this.edit_data.channelId=item.channel_id;
-                this.edit_data.channel_name=item.channel_name;
-                this.edit_data.city=item.city_name;
-                this.edit_data.county=item.county_name;
-                this.edit_data.charge_name=item.charge_name;
-                this.edit_data.charge_tel=item.charge_tel;
-                this.edit_data.channel_address=item.channel_address;
-                var index = layer.open({
-                    type: 1,
-                    skin: 'layui-layer-demo', //加上边框
-                    area: ['600px', ''], //宽高
-                    content: $('#edit'),
-                    cancel: function () {
-                        $('#edit').hide();
-                    }
-                });
+                _this.edit_data.channelId=item.channel_id;
+                _this.edit_data.channel_name=item.channel_name;
+                _this.edit_data.city=item.city_name;
+                _this.edit_data.county=item.county_name;
+                _this.edit_data.charge_name=item.charge_name;
+                _this.edit_data.charge_tel=item.charge_tel;
+                _this.edit_data.channel_address=item.channel_address;
                 var selCity = document.getElementById("city");
                 var selCounty = document.getElementById("county");
                 selCounty.length=0;
@@ -111,8 +102,19 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                                 }
                             }
                         })
+                    } else {
+                        selCity.options[i].selected = false;
                     }
                 }
+                var index = layer.open({
+                    type: 1,
+                    skin: 'layui-layer-demo', //加上边框
+                    area: ['600px', ''], //宽高
+                    content: $('#edit'),
+                    cancel: function () {
+                        $('#edit').hide();
+                    }
+                });
                 form.on('submit(edit)', function (data) {
                     var formData=data.field;
                     _this.saveInfo(formData);

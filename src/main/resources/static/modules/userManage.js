@@ -162,7 +162,6 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
             channelDel:function() {
                 var _this = this;
                 var datas = {detail:_this.checkList}
-                console.log(JSON.stringify(datas))
                 if (datas.detail.length > 0) {
                     $.ajax({
                         url: _this.ajax_url+'/userDel',

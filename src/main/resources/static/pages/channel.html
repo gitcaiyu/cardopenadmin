@@ -118,6 +118,7 @@
                     <label class="layui-form-label">盟市</label>
                     <div class="layui-input-inline">
                         <select name="city" id="city" lay-filter="selCity">
+                            <option value="">请选择</option>
                             <option v-model="edit_data.city" v-for="city in cityList" v-bind:value="city.cityCode">{{city.cityName}}</option>
                         </select>
                     </div>
@@ -128,6 +129,7 @@
                     <label class="layui-form-label">县区</label>
                     <div class="layui-input-inline">
                         <select name="county" id="county">
+                            <option value="">请选择</option>
                                 <option v-model="edit_data.county" v-for="county in edit_data.countyList" v-bind:value="county.county_id">{{county.county_name}}</option>
                         </select>
                     </div>

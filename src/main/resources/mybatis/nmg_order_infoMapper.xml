@@ -178,17 +178,17 @@
       nmi.meal_code,
       ndi.discount_name,
       noi.order_count,
-      noi.order_state as state,
+      noi.order_state AS state,
     CASE
 
-      WHEN noi.order_state = '1' THEN
-      '待审批'
-      WHEN noi.order_state = '2' THEN
-      '已审批'
-      WHEN noi.order_state = '3' THEN
-      '已写卡'
-      WHEN noi.order_state = '4' THEN
-      '已邮寄' ELSE '已取消'
+    WHEN noi.order_state = '1' THEN
+    '待审批'
+    WHEN noi.order_state = '2' THEN
+    '已审批'
+    WHEN noi.order_state = '3' THEN
+    '已写卡'
+    WHEN noi.order_state = '4' THEN
+    '已邮寄' ELSE '已取消'
     END order_state,
       noi.create_time,
       noi.update_time,
@@ -197,23 +197,26 @@
       noi.order_addressee,
     CASE
 
-      WHEN noi.order_other_phone IS NULL or noi.order_other_phone = '' THEN
-      noi.order_phone ELSE noi.order_other_phone
-      END order_phone,
+    WHEN noi.order_other_phone IS NULL
+    OR noi.order_other_phone = '' THEN
+    noi.order_phone ELSE noi.order_other_phone
+    END order_phone,
     CASE
 
-      WHEN noi.order_other_people IS NULL or noi.order_other_people = '' THEN
-      noi.order_people ELSE noi.order_other_people
+    WHEN noi.order_other_people IS NULL
+    OR noi.order_other_people = '' THEN
+    noi.order_people ELSE noi.order_other_people
     END order_people
     FROM
-      nmg_order_info noi
-    LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_id
-    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+    nmg_order_info noi
+    LEFT JOIN nmg_order_detail nod ON nod.order_id = noi.order_id
+    LEFT JOIN nmg_meal_info nmi ON nod.order_meal = nmi.meal_code
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
     LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
     LEFT JOIN nmg_city_info city ON noi.city = city.city_code
     LEFT JOIN nmg_county_info county ON noi.county = county.county_id
     WHERE
-      1 = 1
+    1 = 1
     <if test="phone != null">
       and order_other_phone = #{phone,jdbcType=VARCHAR}
     </if>
@@ -305,6 +308,7 @@
     nmi.meal_name,
     nod.order_meal as meal_code,
     ndi.discount_name,
+    nod.order_discount,
     nod.cardNum,
     nod.SIMNum
     FROM

@@ -157,6 +157,7 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                         $('#edit').hide();
                     },
                     success: function(){
+                        form.render()
                     }
                 });
                 form.on('submit(edit)', function (data) {
@@ -307,8 +308,8 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                 var laypage = layui.laypage;
                 var datas = {cardnum:_this.write_data.cardnum,
                     simnum:_this.write_data.simnum,
-                    orderMeal:_this.mealId,
-                    orderDiscount:_this.discount,
+                    orderMeal:_this.write_data.mealId,
+                    orderDiscount:_this.write_data.discount,
                     curr:_this.curr,
                     limit:_this.limit,
                     orderId:_this.orderId}
@@ -331,18 +332,18 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                         _this.totalCount = result.totalCount ? result.totalCount : 0;
                         _this.mealList=result.resBody.meal;
                         _this.discountList=result.resBody.discount;
-                        form.on('select(mealId)',function(data){
-                            _this.mealId=data.value;
+                        form.on('select(wmealId)', function (data) {
+                            _this.write_data.mealId = data.value;
                             _this.getDetail();
-                        })
-                        form.on('select(mealName)',function(data){
-                            _this.mealId =data.value;
+                        });
+                        form.on('select(wmealName)', function (data) {
+                            _this.write_data.mealId = data.value;
                             _this.getDetail();
-                        })
-                        form.on('select(discount)',function(data){
-                            _this.discount =data.value;
+                        });
+                        form.on('select(wdiscount)', function (data) {
+                            _this.write_data.discount = data.value;
                             _this.getDetail();
-                        })
+                        });
                         laypage.render({
                             elem: 'detailPage'
                             , count: _this.totalCount
@@ -410,8 +411,36 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     }
                 })
             },
+            merge: function (res) {
+                var data = res.data;
+                var mergeIndex = 0;//定位需要添加合并属性的行数
+                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+                var columsName = ['order_id'];//需要合并的列名称
+                var columsIndex = [0];//需要合并的列索引值
+                for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+                    var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+                    for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+                        var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+
+                        if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+                            mark += 1;
+                            tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+                                $(this).attr("rowspan", mark);
+                            });
+                            tdCurArr.each(function () {//当前行隐藏
+                                $(this).css("display", "none");
+                            });
+                        }else {
+                            mergeIndex = i;
+                            mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+                        }
+                    }
+                    mergeIndex = 0;
+                    mark = 1;
+                }
+            },
             getPage: function () {
-                var laypage = layui.laypage;
                 var _this = this;
                 var datas = {city:_this.city,
                     county:_this.county,
@@ -429,102 +458,98 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     curr:_this.curr,
                     limit:_this.limit,
                     state:_this.state}
-                $.ajax({
-                    url: _this.ajax_url+'/simCard',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    dataType: 'json',
-                    beforeSend: function(){
-                        _this.load = true;
-                    },
-                    success: function (result) {
-                        _this.load = false;
-                        _this.codeList=result.resBody.order;
-                        _this.totalCount = result.totalCount ? result.totalCount : 0;
-                        _this.cityList=result.resBody.city;
-                        _this.countyList=result.resBody.county;
-                        _this.typeList=result.resBody.channelType;
-                        _this.stateList=result.resBody.orderState;
-                        _this.mealList=result.resBody.meal;
-                        _this.discountList=result.resBody.discount;
-                        form.on('select(city)',function(data){
-                            _this.city=data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(county)',function(data){
-                            _this.county=data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(channel_type)',function(data){
-                            _this.channel_type=data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(mealId)',function(data){
-                            _this.mealId=data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(mealName)',function(data){
-                            _this.mealId =data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(discount)',function(data){
-                            _this.discount =data.value;
-                            _this.getPage();
-                        })
-                        form.on('select(state)',function(data){
-                            _this.state =data.value;
-                            _this.getPage();
-                        })
-                        laypage.render({
-                            elem: 'page'
-                            , count: _this.totalCount
-                            , theme: '#1E9FFF'
-                            , limit: _this.limit
-                            , curr: _this.curr
-                            , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
-                            , limits: [20, 50, 100]
-                            , jump: function (obj, first) {
-                                if (!first) {
-                                    $.ajax({
-                                        url: _this.ajax_url+'/simCard',
-                                        type: 'post',
-                                        data:JSON.stringify({city:obj.city,
-                                            county:_this.county,
-                                            channelName:_this.channel_name,
-                                            channelType:_this.channel_type,
-                                            orderMeal:_this.mealId,
-                                            orderDiscount:_this.discount,
-                                            orderState:_this.state,
-                                            subTime:_this.subTime,
-                                            subTimeE:_this.subTimeE,
-                                            createTime:_this.createTime,
-                                            createTimeE:_this.createTimeE,
-                                            orderOtherPeople:_this.orderOtherPeople,
-                                            orderOtherPhone:_this.orderOtherPhone,
-                                            curr:obj.curr,
-                                            limit:obj.limit,
-                                            state:_this.state}),
-                                        headers : {
-                                            'Content-Type' : 'application/json;charset=utf-8'
-                                        },
-                                        dataType: 'json',
-                                        success: function (result) {
-                                            _this.curr = obj.curr;
-                                            _this.codeList=result.resBody.order;
-                                        }
-                                    })
+                form.on('select(city)', function (data) {
+                    _this.city = data.value;
+                    _this.getPage();
+                });
+                form.on('select(county)', function (data) {
+                    _this.county = data.value;
+                    _this.getPage();
+                });
+                form.on('select(channel_type)', function (data) {
+                    _this.channel_type = data.value;
+                    _this.getPage();
+                });
+                form.on('select(mealId)', function (data) {
+                    _this.mealId = data.value;
+                    _this.getPage();
+                });
+                form.on('select(mealName)', function (data) {
+                    _this.mealId = data.value;
+                    _this.getPage();
+                });
+                form.on('select(discount)', function (data) {
+                    _this.discount = data.value;
+                    _this.getPage();
+                });
+                form.on('select(state)', function (data) {
+                    _this.state = data.value;
+                    _this.getPage();
+                });
+                layui.use('table', function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: '#data'
+                        , url: _this.ajax_url + '/simCard'
+                        , method: 'post'
+                        , where: datas
+                        , cols: [[
+                            {field: 'order_id', title: '工单编号'}
+                            , {field: 'sub_time', title: '申请时间'}
+                            , {field: 'city_name', title: '盟市'}
+                            , {field: 'county_name', title: '县区'}
+                            , {field: 'channel_id', title: '渠道编码'}
+                            , {field: 'channel_name', title: '渠道名称'}
+                            , {field: 'meal_name', title: '套餐资费'}
+                            , {field: 'meal_code', title: '资费代码'}
+                            , {field: 'discount_name', title: '优惠促销'}
+                            , {field: 'order_count', title: '开卡数量'}
+                            , {field: 'order_state', title: '工单状态'}
+                            , {field: 'create_time', title: '写卡完成时间'}
+                            , {field: 'order_people', title: '收件人'}
+                            , {field: 'order_phone', title: '收件人号码'}
+                            , {fixed: 'right', align:'center',title: '操作', rowspan:"2", width:120,
+                                templet: function(d){
+                                    if (d.state == 2) {
+                                        return '<a class="layui-btn layui-btn-normal layui-btn-sm" id="write" lay-event="write">处理</a>' +
+                                            '<a class="layui-btn layui-btn-normal layui-btn-sm" id="cancel" lay-event="cancel">取消</a>'
+                                    } else if (d.state == 3) {
+                                        return '<a class="layui-btn layui-btn-normal layui-btn-sm" id="update" lay-event="write">修改</a>' +
+                                            '<a class="layui-btn layui-btn-normal layui-btn-sm" id="print" lay-event="print">打印</a>'
+                                    } else {
+                                        return ''
+                                    }
                                 }
                             }
-                        });
-                    },
-                    error: function (e) {
-                        console.log(laypage)
-                        console.log(e)
-                    }
-                })
+                        ]]
+                        , page: true
+                        , curr: 1
+                        , limits: [20, 50, 100, 1]
+                        , limit: 20
+                        , done: function (result) {
+                            _this.cityList = result.city;
+                            _this.countyList = result.county;
+                            _this.typeList = result.channelType;
+                            _this.stateList = result.orderState;
+                            _this.mealList = result.meal;
+                            _this.discountList = result.discount;
+                            _this.merge(result);
+                        }
+                    });
+                    //监听工具条
+                    table.on('tool(demo)', function(obj){
+                        var data = obj.data;
+                        if(obj.event === 'write'){
+                            _this.write(data.order_id)
+                        }
+                        if(obj.event == 'cancel') {
+                            _this.cancel(data.order_id)
+                        }
+                        if(obj.event == 'print') {
+                            _this.print(data.order_id)
+                        }
+                    });
+                });
             },
         }
     }

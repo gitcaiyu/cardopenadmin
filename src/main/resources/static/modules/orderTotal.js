@@ -126,7 +126,7 @@ define(['layui', 'text!../../pages/orderTotal.html'], function (layui, orderTota
                             _this.countyList = res.county;
                             _this.mealList = res.meal;
                             _this.discountList = res.discount;
-                            _this.stateList = res.state;
+                            _this.stateList = res.orderState;
                         }
                     });
                 });

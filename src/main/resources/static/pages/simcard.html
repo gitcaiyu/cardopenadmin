@@ -28,9 +28,7 @@
         <div class="layui-input-inline ml10">
             <select lay-filter="discount" name="discount">
                 <option value="">优惠促销</option>
-                <option v-for="discount in discountList" v-bind:value="discount.discount_id">
-                    {{discount.discount_name}}
-                </option>
+                <option v-for="discount in discountList" v-bind:value="discount.discount_id">{{discount.discount_name}}</option>
             </select>
         </div>
         <div class="layui-input-inline ml10">
@@ -80,69 +78,8 @@
     <form class="layui-form">
         <div class="layui-form" style="position: relative;">
             <div style="overflow-x:auto;">
-                <table class="layui-table" style="width: 100%;">
-                    <colgroup>
-                        <col width="50">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="170">
-                        <col width="70">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>申请时间</th>
-                        <th>工单编号</th>
-                        <th>盟市</th>
-                        <th>县区</th>
-                        <th>社渠编码</th>
-                        <th>社渠名称</th>
-                        <th>套餐</th>
-                        <th>资费代码</th>
-                        <th>优惠促销</th>
-                        <th>数量</th>
-                        <th>工单状态</th>
-                        <th>写卡完成时间</th>
-                        <th>收件人</th>
-                        <th>收件人号码</th>
-                        <th align="center">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(item,index) in codeList" v-bink::key="index">
-                        <td>{{item.sub_time}}</td>
-                        <td>{{item.order_id}}</td>
-                        <td>{{item.city_name}}</td>
-                        <td>{{item.county_name}}</td>
-                        <td>{{item.channel_id}}</td>
-                        <td>{{item.channel_name}}</td>
-                        <td>{{item.meal_name}}</td>
-                        <td>{{item.meal_code}}</td>
-                        <td>{{item.discount_name}}</td>
-                        <td>{{item.order_count}}</td>
-                        <td>{{item.order_state}}</td>
-                        <td>{{item.create_time}}</td>
-                        <td>{{item.order_people}}</td>
-                        <td>{{item.order_phone}}</td>
-                        <td>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="write"
-                               v-on:click="write(item.order_id)">处理</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==2" id="cancel"
-                               v-on:click="cancel(item.order_id)">取消</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="update"
-                               v-on:click="write(item.order_id)">修改</a>
-                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-if="item.state==3" id="print"
-                               v-on:click="print(item.order_id)">打印</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <table class="layui-hide" id="data" lay-filter="demo"></table>
             </div>
-            <div id="page"></div>
         </div>
     </form>
     <!-- write -->
@@ -155,23 +92,21 @@
                 <input type="text" autocomplete="off" placeholder="SIM卡号" class="layui-input" v-model="write_data.simnum">
             </div>
             <div class="layui-input-inline ml10">
-                <select lay-filter="mealName" name="mealName">
+                <select lay-filter="wmealName" name="mealName">
                     <option value="">套餐</option>
                     <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.mealName">{{meal.meal_name}}</option>
                 </select>
             </div>
             <div class="layui-input-inline ml10">
-                <select lay-filter="mealId" name="mealId">
+                <select lay-filter="wmealId" name="mealId">
                     <option value="">资费代码</option>
                     <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.mealId">{{meal.meal_code}}</option>
                 </select>
             </div>
             <div class="layui-input-inline ml10">
-                <select lay-filter="discount" name="discount">
+                <select lay-filter="wdiscount" name="discount">
                     <option value="">优惠促销</option>
-                    <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.discount">
-                        {{discount.discount_name}}
-                    </option>
+                    <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.discount">{{discount.discount_name}}</option>
                 </select>
             </div>
             <div class="layui-input-inline ml10">
