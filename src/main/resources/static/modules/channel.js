@@ -54,6 +54,10 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
             form.render();
         },
         methods: {
+            template:function() {
+                var _this=this;
+                window.location.href = _this.ajax_url+'/channelTemplate'
+            },
             checkInit: function(item){
                 var _this=this;
                 var checkListStr=this.checkList.join(',');

@@ -113,7 +113,8 @@
                 <a @click="getDetail()" class="layui-btn layui-btn-normal">查询</a>
                 <a @click="edit()" class="layui-btn layui-btn-normal">新增</a>
             </div>
-            <div class="layui-input-inline ml10">
+            <div>
+                <a class="layui-btn layui-btn-normal" v-on:click="template()">模板</a>
                 <a @click="detailImport()" class="layui-btn layui-btn-normal">导入</a>
                 <a @click="detailExport()" class="layui-btn layui-btn-normal">导出</a>
                 <a @click="detailDel()" class="layui-btn layui-btn-normal">删除</a>

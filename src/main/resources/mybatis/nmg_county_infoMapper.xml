@@ -46,8 +46,8 @@
     <if test="county != null">
       and county_id = #{county,jdbcType=VARCHAR}
     </if>
-    <if test="cityName != null">
-      and city_code = (select city_code from nmg_city_info where city_name = #{cityName,jdbcType=VARCHAR})
+    <if test="countyName != null">
+      and county_name = #{countyName,jdbcType=VARCHAR}
     </if>
   </select>
 </mapper>

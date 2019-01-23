@@ -103,6 +103,10 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
             form.render();
         },
         methods: {
+            template:function() {
+                var _this = this;
+                window.location.href = _this.ajax_url+'/orderTemplate'
+            },
             cancel:function(orderId) {
                 var _this = this;
                 var datas = JSON.stringify({orderState:'5',orderId:orderId})

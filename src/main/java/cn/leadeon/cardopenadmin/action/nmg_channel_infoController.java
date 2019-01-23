@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Controller
 @CrossOrigin
@@ -81,6 +83,17 @@ public class nmg_channel_infoController {
     @ResponseBody
     public CardResponse batchImport(@RequestParam MultipartFile file) throws IOException {
         return nmg_channel_infoService.batchImport(file);
+    }
+
+    /**
+     * 导入信息之前需要先下载模板
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/channelTemplate")
+    @ResponseBody
+    public CardResponse channelTemplate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        return nmg_channel_infoService.channelTemplate(httpServletRequest,httpServletResponse);
     }
 
 }

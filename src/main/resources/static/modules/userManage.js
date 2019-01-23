@@ -43,6 +43,10 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
             form.render();
         },
         methods: {
+            template:function() {
+                var _this = this;
+                window.location.href = _this.ajax_url+'/userTemplate'
+            },
             checkInit: function(item){
                 var _this=this;
                 var checkListStr=this.checkList.join(',');

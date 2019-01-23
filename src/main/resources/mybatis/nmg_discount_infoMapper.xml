@@ -94,6 +94,9 @@
     <if test="mealState != null">
       and state = '1'
     </if>
+    <if test="discountName != null">
+      and discount_name = #{discountName,jdbcType=VARCHAR}
+    </if>
   </select>
 
   <delete id="cardDiscountDel" parameterType="java.lang.String">

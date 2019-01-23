@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -128,6 +129,17 @@ public class nmg_order_infoController {
     @PostMapping(value = "/detailBatchImport")
     public CardResponse detailBatchImport(@RequestBody MultipartFile file) throws IOException {
         return nmg_order_infoService.detailBatchImport(file);
+    }
+
+    /**
+     * SIM卡回录模板
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @return
+     */
+    @RequestMapping(value = "/orderTemplate")
+    public CardResponse orderTemplate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        return nmg_order_infoService.orderTemplate(httpServletRequest,httpServletResponse);
     }
 
 }

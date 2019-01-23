@@ -1,10 +1,8 @@
 package cn.leadeon.cardopenadmin.service;
 
-import cn.leadeon.cardopenadmin.common.CodeEnum;
-import cn.leadeon.cardopenadmin.common.Common;
-import cn.leadeon.cardopenadmin.common.DateUtil;
-import cn.leadeon.cardopenadmin.common.RandomUtil;
+import cn.leadeon.cardopenadmin.common.*;
 import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
+import cn.leadeon.cardopenadmin.entity.nmg_city_info;
 import cn.leadeon.cardopenadmin.entity.nmg_user_info;
 import cn.leadeon.cardopenadmin.entity.nmg_user_role;
 import cn.leadeon.cardopenadmin.mapper.nmg_city_infoMapper;
@@ -14,10 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,39 +166,38 @@ public class nmg_user_infoService {
 
 
     @Transactional
-    public CardResponse userImport(MultipartFile file) {
+    public CardResponse userImport(MultipartFile file,HttpServletRequest httpServletRequest) throws IOException {
         CardResponse cardResponse = new CardResponse();
         if (file != null) {
-            try {
-                InputStream inputStream = file.getInputStream();
-                HSSFWorkbook xssfWorkbook = new HSSFWorkbook(inputStream);
-                int numberOfSheets = xssfWorkbook.getNumberOfSheets();
-                Map param = new HashMap();
-                for (int i = 0; i < numberOfSheets; i++) {
-                    HSSFSheet sheetAt = xssfWorkbook.getSheetAt(i);
-                    int lastRowNum = sheetAt.getLastRowNum();
-                    for (int j = 1; j <= lastRowNum; j++) {
-                        nmg_user_info nmg_user_info = new nmg_user_info();
-                        HSSFRow row = sheetAt.getRow(j);
-                        nmg_user_info.setUserId(new RandomUtil().uuid);
-                        nmg_user_info.setUserTel(row.getCell(0).getStringCellValue());
-                        nmg_user_info.setUserPass(row.getCell(1).getStringCellValue());
-                        nmg_user_info.setUserName(row.getCell(2).getStringCellValue());
-                        param.put("cityName",row.getCell(3).getStringCellValue());
-                        nmg_user_info.setCityCode(nmg_city_infoMapper.cityInfo(param).get(0).getCityCode());
-                        param.put("role_name",row.getCell(4).getStringCellValue());
-                        String role = nmg_user_roleMapper.userRole(param,new RowBounds()).get(0).get("role_id").toString();
-                        nmg_user_info.setUserRole(role);
-                        nmg_user_info.setUserType(role);
-                        nmg_user_info.setCreateTime(DateUtil.getDateString());
-                        row.getCell(6).setCellType(Cell.CELL_TYPE_STRING);
-                        nmg_user_info.setCreatePeople(row.getCell(6).getStringCellValue());
-                        nmg_user_infoMapper.insert(nmg_user_info);
-                    }
+            InputStream inputStream = file.getInputStream();
+            HSSFWorkbook xssfWorkbook = new HSSFWorkbook(inputStream);
+            HttpSession httpSession = httpServletRequest.getSession();
+            nmg_user_info userInfo = (nmg_user_info) httpSession.getAttribute("userInfo");
+            int numberOfSheets = xssfWorkbook.getNumberOfSheets();
+            Map param = new HashMap();
+            for (int i = 0; i < numberOfSheets; i++) {
+                HSSFSheet sheetAt = xssfWorkbook.getSheetAt(i);
+                int lastRowNum = sheetAt.getLastRowNum();
+                for (int j = 1; j <= lastRowNum; j++) {
+                    nmg_user_info nmg_user_info = new nmg_user_info();
+                    HSSFRow row = sheetAt.getRow(j);
+                    nmg_user_info.setUserId(new RandomUtil().uuid);
+                    row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+                    nmg_user_info.setUserTel(row.getCell(0).getStringCellValue());
+                    row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+                    nmg_user_info.setUserPass(row.getCell(1).getStringCellValue());
+                    row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+                    nmg_user_info.setUserName(row.getCell(2).getStringCellValue());
+                    param.put("cityName",row.getCell(3).getStringCellValue());
+                    nmg_user_info.setCityCode(nmg_city_infoMapper.cityInfo(param).get(0).getCityCode());
+                    param.put("role_name",row.getCell(4).getStringCellValue());
+                    String role = nmg_user_roleMapper.userRole(param,new RowBounds()).get(0).get("role_id").toString();
+                    nmg_user_info.setUserRole(role);
+                    nmg_user_info.setUserType(role);
+                    nmg_user_info.setCreateTime(DateUtil.getDateString());
+                    nmg_user_info.setCreatePeople(userInfo.getUserTel());
+                    nmg_user_infoMapper.insert(nmg_user_info);
                 }
-            } catch (Exception e) {
-                cardResponse.setResDesc(e.getMessage());
-                cardResponse.setResCode(CodeEnum.failed.getCode());
             }
         } else {
             cardResponse.setResCode(CodeEnum.nullValue.getCode());
@@ -314,6 +310,58 @@ public class nmg_user_infoService {
         for (int i = 0; i < jsonArray.size(); i++) {
             nmg_user_roleMapper.roleDel(jsonArray.getString(i));
         }
+        return cardResponse;
+    }
+
+    public CardResponse userTemplate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        CardResponse cardResponse = new CardResponse();
+        HttpSession httpSession = httpServletRequest.getSession();
+        nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
+        Map param = new HashMap();
+        String fileName = "用户信息模板.xls";
+        if (nmg_user_info.getUserRole().equals("2")) {
+            param.put("city",nmg_user_info.getCityCode());
+        } else {
+            param.put("flag","T");
+        }
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet sheet= hssfWorkbook.createSheet("用户信息");
+        HSSFCellStyle textStyle = hssfWorkbook.createCellStyle();
+        HSSFDataFormat format = hssfWorkbook.createDataFormat();
+        textStyle.setDataFormat(format.getFormat("@"));
+        HSSFRow row = sheet.createRow(0);
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue("账号");
+        cell = row.createCell(1);
+        cell.setCellValue("密码");
+        cell = row.createCell(2);
+        cell.setCellValue("姓名");
+        cell = row.createCell(3);
+        cell.setCellValue("盟市");
+        cell = row.createCell(4);
+        cell.setCellValue("角色名称");
+        List<nmg_city_info> user = nmg_city_infoMapper.cityInfo(param);
+        String[] cityArr = new String[user.size()];
+        for (int i = 0; i < user.size(); i++) {
+            cityArr[i] = user.get(i).getCityName();
+        }
+        List<Map<String,Object>> role = nmg_user_roleMapper.userRole(param,new RowBounds());
+        String[] roleArr = new String[role.size()];
+        for (int i = 0; i < role.size(); i++) {
+            Map map = role.get(i);
+            roleArr[i] = map.get("role_name").toString();
+        }
+        sheet.addValidationData(POIUtil.createDataValidation(sheet, cityArr, 3));
+        sheet.addValidationData(POIUtil.createDataValidation(sheet, roleArr, 4));
+        httpServletRequest.setCharacterEncoding("UTF-8");
+        httpServletRequest.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/x-download");
+        fileName = new String(fileName.getBytes("gb2312"), "ISO8859-1");
+        httpServletResponse.setHeader("Content-Disposition", "attachment;filename="+ fileName);
+        OutputStream outputStream = httpServletResponse.getOutputStream();
+        hssfWorkbook.write(outputStream);
+        hssfWorkbook.close();
+        cardResponse.setResDesc(fileName);
         return cardResponse;
     }
 }

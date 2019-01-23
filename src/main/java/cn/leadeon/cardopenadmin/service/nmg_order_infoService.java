@@ -1,9 +1,6 @@
 package cn.leadeon.cardopenadmin.service;
 
-import cn.leadeon.cardopenadmin.common.CodeEnum;
-import cn.leadeon.cardopenadmin.common.Common;
-import cn.leadeon.cardopenadmin.common.DateUtil;
-import cn.leadeon.cardopenadmin.common.RandomUtil;
+import cn.leadeon.cardopenadmin.common.*;
 import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
 import cn.leadeon.cardopenadmin.entity.nmg_city_info;
 import cn.leadeon.cardopenadmin.entity.nmg_order_detail;
@@ -14,10 +11,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,10 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -491,8 +488,6 @@ public class nmg_order_infoService {
             cell.setCellValue("选购号码");
             cell = row.createCell(5);
             cell.setCellValue("SIM卡号");
-            cell = row.createCell(5);
-            cell.setCellValue("优惠代码");
             if (!"".equals(jsonObject.getString("cardnum"))) {
                 param.put("cardnum",jsonObject.getString("cardnum"));
             }
@@ -608,17 +603,85 @@ public class nmg_order_infoService {
             int lastRowNum = sheetAt.getLastRowNum();
             for (int j = 1; j <= lastRowNum; j++) {
                 nmg_order_detail nmg_order_detail = new nmg_order_detail();
+                Map param = new HashMap();
                 HSSFRow row = sheetAt.getRow(j);
                 nmg_order_detail.setDetailId(new RandomUtil().uuid);
+                row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
                 nmg_order_detail.setOrderId(row.getCell(0).getStringCellValue());
                 nmg_order_detail.setOrderTariff(row.getCell(1).getStringCellValue());
                 nmg_order_detail.setOrderMeal(row.getCell(2).getStringCellValue());
-                nmg_order_detail.setOrderDiscount(row.getCell(6).getStringCellValue());
+                param.put("discountName",row.getCell(3).getStringCellValue());
+                param.put("flag","T");
+                List<Map<String,String>> discount = nmg_discount_infoMapper.applyCardDisc(param);
+                nmg_order_detail.setOrderDiscount(discount.get(0).get("discount_id"));
+                row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
                 nmg_order_detail.setCardnum(row.getCell(4).getStringCellValue());
+                row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
                 nmg_order_detail.setSimnum(row.getCell(5).getStringCellValue());
                 nmg_order_detailMapper.insert(nmg_order_detail);
             }
         }
+        return cardResponse;
+    }
+
+    public CardResponse orderTemplate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        CardResponse cardResponse = new CardResponse();
+        HttpSession httpSession = httpServletRequest.getSession();
+        nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
+        Map param = new HashMap();
+        String fileName = "SIM卡回录模板.xls";
+        if (nmg_user_info.getUserRole().equals("2")) {
+            param.put("city",nmg_user_info.getCityCode());
+        } else {
+            param.put("flag","T");
+        }
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet sheet= hssfWorkbook.createSheet("渠道信息");
+        HSSFCellStyle textStyle = hssfWorkbook.createCellStyle();
+        HSSFDataFormat format = hssfWorkbook.createDataFormat();
+        textStyle.setDataFormat(format.getFormat("@"));
+        HSSFRow row = sheet.createRow(0);
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue("工单编号");
+        cell = row.createCell(1);
+        cell.setCellValue("套餐资费");
+        cell = row.createCell(2);
+        cell.setCellValue("资费代码");
+        cell = row.createCell(3);
+        cell.setCellValue("优惠促销");
+        cell = row.createCell(4);
+        cell.setCellValue("选购号码");
+        cell = row.createCell(5);
+        cell.setCellValue("SIM卡号");
+        cell.setCellStyle(textStyle);
+        cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+        List<Map<String,String>> meal = nmg_meal_infoMapper.applyCardMeal(param);
+        String[] mealId = new String[meal.size()];
+        for (int i = 0; i < meal.size(); i++) {
+            mealId[i] = meal.get(i).get("meal_code");
+        }
+        String[] mealName = new String[meal.size()];
+        for (int i = 0; i < meal.size(); i++) {
+            mealName[i] = meal.get(i).get("meal_name");
+        }
+        List<Map<String,String>> discount = nmg_discount_infoMapper.applyCardDisc(param);
+        String[] discountArr = new String[discount.size()];
+        for (int i = 0; i < discount.size(); i++) {
+            Map map = discount.get(i);
+            discountArr[i] = map.get("discount_name").toString();
+        }
+        sheet.addValidationData(POIUtil.createDataValidation(sheet, mealName, 1));
+        sheet.addValidationData(POIUtil.createDataValidation(sheet, mealId, 2));
+        sheet.addValidationData(POIUtil.createDataValidation(sheet, discountArr, 3));
+        httpServletRequest.setCharacterEncoding("UTF-8");
+        httpServletRequest.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/x-download");
+        fileName = new String(fileName.getBytes("gb2312"), "ISO8859-1");
+        httpServletResponse.setHeader("Content-Disposition", "attachment;filename="+ fileName);
+        OutputStream outputStream = httpServletResponse.getOutputStream();
+        hssfWorkbook.write(outputStream);
+        hssfWorkbook.close();
+        cardResponse.setResDesc(fileName);
         return cardResponse;
     }
 }

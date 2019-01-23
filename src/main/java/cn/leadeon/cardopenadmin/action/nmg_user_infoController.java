@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -88,8 +90,8 @@ public class nmg_user_infoController {
      * @return
      */
     @PostMapping(value = "/userImport")
-    public CardResponse userImport(@RequestParam MultipartFile file) {
-        return nmg_user_infoService.userImport(file);
+    public CardResponse userImport(@RequestParam MultipartFile file,HttpServletRequest httpServletRequest) throws IOException {
+        return nmg_user_infoService.userImport(file,httpServletRequest);
     }
 
     /**
@@ -132,5 +134,13 @@ public class nmg_user_infoController {
     @PostMapping(value = "/roleDel")
     public CardResponse roleDel(@RequestBody String data){
         return nmg_user_infoService.roleDel(data);
+    }
+
+    /**
+     * 用户信息导入模板
+     */
+    @RequestMapping(value = "/userTemplate")
+    public CardResponse userTemplate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        return nmg_user_infoService.userTemplate(httpServletRequest,httpServletResponse);
     }
 }
