@@ -209,9 +209,10 @@
     END order_people
     FROM
     nmg_order_info noi
-    LEFT JOIN nmg_order_detail nod ON nod.order_id = noi.order_id
-    LEFT JOIN nmg_meal_info nmi ON nod.order_meal = nmi.meal_code
-    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
+    LEFT JOIN nmg_meal_info nmi ON noi.order_meal = nmi.meal_code
+    OR noi.order_meal = nmi.meal_code
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+    OR noi.order_discount = ndi.discount_code
     LEFT JOIN nmg_channel_info nci ON noi.channel_id = nci.channel_id
     LEFT JOIN nmg_city_info city ON noi.city = city.city_code
     LEFT JOIN nmg_county_info county ON noi.county = county.county_id
@@ -260,16 +261,9 @@
       COUNT(*)
     FROM
     nmg_order_detail nod
-    LEFT JOIN nmg_order_info noi ON nod.order_id = noi.order_id
-    LEFT JOIN nmg_meal_info nmi ON nmi.meal_id = noi.order_meal
-    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = noi.order_discount
+    LEFT JOIN nmg_meal_info nmi ON nmi.meal_code = nod.order_meal
+    LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
     WHERE 1=1
-    <if test="orderId != null">
-      and noi.order_id = #{orderId,jdbcType=VARCHAR}
-    </if>
-    <if test="city != null">
-      and noi.city = #{city,jdbcType=VARCHAR}
-    </if>
     <if test="cardnum != null">
       and nod.cardnum = #{cardnum,jdbcType=VARCHAR}
     </if>
@@ -285,26 +279,12 @@
     <if test="orderDiscount != null">
       and nod.order_discount = #{orderDiscount,jdbcType=VARCHAR}
     </if>
-    <if test="orderState != null">
-      and noi.order_state = #{orderState,jdbcType=VARCHAR}
-    </if>
-    <if test="subTime != null">
-      and noi.sub_time between #{subTime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
-    </if>
-    <if test="createTime != null">
-      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
-    </if>
-    ORDER BY
-    noi.order_phone,
-    noi.order_meal
   </select>
 
   <select id="exportOrder" parameterType="java.util.Map" resultType="java.util.Map">
     SELECT
+    nod.order_id,
     nod.detail_id,
-    noi.order_id,
-    noi.sub_time,
-    noi.create_time,
     nmi.meal_name,
     nod.order_meal as meal_code,
     ndi.discount_name,
@@ -313,16 +293,9 @@
     nod.SIMNum
     FROM
     nmg_order_detail nod
-    LEFT JOIN nmg_order_info noi ON nod.order_id = noi.order_id
     LEFT JOIN nmg_meal_info nmi ON nmi.meal_code = nod.order_meal
     LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
     WHERE 1=1
-    <if test="orderId != null">
-      and noi.order_id = #{orderId,jdbcType=VARCHAR}
-    </if>
-    <if test="city != null">
-      and noi.city = #{city,jdbcType=VARCHAR}
-    </if>
     <if test="cardnum != null">
       and nod.cardnum = #{cardnum,jdbcType=VARCHAR}
     </if>
@@ -338,18 +311,6 @@
     <if test="orderDiscount != null">
       and nod.order_discount = #{orderDiscount,jdbcType=VARCHAR}
     </if>
-    <if test="orderState != null">
-      and noi.order_state = #{orderState,jdbcType=VARCHAR}
-    </if>
-    <if test="subTime != null">
-      and noi.sub_time between #{subTime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
-    </if>
-    <if test="createTime != null">
-      and noi.create_time between #{createtime,jdbcType=VARCHAR} and #{createtimeE,jdbcType=VARCHAR}
-    </if>
-    ORDER BY
-        noi.order_phone,
-        noi.order_meal
   </select>
 
   <select id="totalCount" parameterType="java.util.Map" resultType="java.lang.Integer">

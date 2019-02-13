@@ -213,7 +213,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">优惠促销</label>
                     <div class="layui-input-inline">
-                        <select name="discount">
+                        <select name="discount" id="ediscount">
                             <option value=""></option>
                             <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.edit_data.discount">{{discount.discount_name}}</option>
                         </select>

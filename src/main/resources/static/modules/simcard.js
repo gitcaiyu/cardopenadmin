@@ -161,6 +161,11 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                         $('#edit').hide();
                     },
                     success: function(){
+                        _this.write_data.edit_data.simnum='';
+                        _this.write_data.edit_data.cardnum='';
+                        document.getElementById("emealName").options[0].selected = true;
+                        document.getElementById("emealId").options[0].selected = true;
+                        document.getElementById("ediscount").options[0].selected = true;
                         form.render()
                     }
                 });
@@ -175,7 +180,7 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     } else {
                         selMealName.options[0].selected = true;
                     }
-                    _this.write_data.mealId = data.value;
+                    _this.write_data.edit_data.mealId = data.value;
                 });
                 form.on('select(emealName)', function (data) {
                     var selMealId = document.getElementById("emealId");
@@ -188,7 +193,7 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                     } else {
                         selMealId.options[0].selected = true;
                     }
-                    _this.write_data.mealId = data.value;
+                    _this.write_data.edit_data.mealId = data.value;
                 });
                 form.on('submit(edit)', function (data) {
                     var formData=data.field;
@@ -373,7 +378,7 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                             } else {
                                 selMealName.options[0].selected = true;
                             }
-                            _this.write_data.mealId = data.value;
+                            // _this.write_data.mealId = data.value;
                             _this.getDetail();
                         });
                         form.on('select(wmealName)', function (data) {
@@ -387,7 +392,7 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                             } else {
                                 selMealId.options[0].selected = true;
                             }
-                            _this.write_data.mealId = data.value;
+                            // _this.write_data.mealId = data.value;
                             _this.getDetail();
                         });
                         form.on('select(wdiscount)', function (data) {
