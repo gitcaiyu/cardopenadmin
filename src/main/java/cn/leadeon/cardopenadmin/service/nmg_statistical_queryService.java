@@ -112,15 +112,11 @@ public class nmg_statistical_queryService {
                 if (maps.get("sub_time") != null) {
                     row.createCell(1).setCellValue((String) maps.get("sub_time"));
                 }
-                if (maps.get("city") != null) {
-                    param.put("city",maps.get("city"));
-                    row.createCell(2).setCellValue(nmg_city_infoMapper.cityInfo(param).get(0).getCityName());
+                if (maps.get("city_name") != null) {
+                    row.createCell(2).setCellValue((String) maps.get("city_name"));
                 }
-                if (maps.get("county") != null) {
-                    param = new HashMap();
-                    param.put("county",maps.get("county"));
-                    Map county = nmg_county_infoMapper.countyInfo(param).get(0);
-                    row.createCell(3).setCellValue((String) county.get("county_name"));
+                if (maps.get("county_name") != null) {
+                    row.createCell(3).setCellValue((String) maps.get("county_name"));
                 }
                 if (maps.get("channel_name") != null) {
                     row.createCell(4).setCellValue((String) maps.get("channel_name"));

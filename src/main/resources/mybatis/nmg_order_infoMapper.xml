@@ -254,6 +254,7 @@
     <if test="channelType != null">
       and channel_type = #{channelType,jdbcType=VARCHAR}
     </if>
+    order by noi.order_id,noi.sub_time desc
   </select>
 
   <select id="detailTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">

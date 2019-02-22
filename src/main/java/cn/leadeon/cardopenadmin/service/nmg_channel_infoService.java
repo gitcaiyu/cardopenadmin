@@ -216,9 +216,9 @@ public class nmg_channel_infoService {
                 //渠道ID
                 nmg_channel_info.setChannelId(new RandomUtil().uuid);
                 //渠道名称
-                nmg_channel_info.setChannelName(row.getCell(1).getStringCellValue());
+                nmg_channel_info.setChannelName(row.getCell(0).getStringCellValue());
                 //渠道类型
-                if ("社会渠道".equals(row.getCell(2).getStringCellValue())) {
+                if ("社会渠道".equals(row.getCell(1).getStringCellValue())) {
                     nmg_channel_info.setChannelType("1");
                 } else {
                     nmg_channel_info.setChannelType("2");

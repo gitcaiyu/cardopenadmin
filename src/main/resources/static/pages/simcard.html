@@ -104,7 +104,7 @@
                 </select>
             </div>
             <div class="layui-input-inline ml10">
-                <select lay-filter="wdiscount" name="discount">
+                <select lay-filter="wdiscount" name="discount" id="wdiscount">
                     <option value="">优惠促销</option>
                     <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.discount">{{discount.discount_name}}</option>
                 </select>
