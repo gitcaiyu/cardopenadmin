@@ -123,10 +123,16 @@ public class nmg_meal_infoService {
         CardResponse cardResponse = new CardResponse();
         Object jsonObject = JSON.parse(data);
         JSONObject object = (JSONObject) jsonObject;
-        Map param = new HashMap();
-        param.put("state",object.get("state"));
-        param.put("mealId",object.get("mealId"));
-        nmg_meal_infoMapper.onoffLine(param);
+        Map check = nmg_meal_infoMapper.checkUse(object.get("mealId").toString());
+        if (null != check && check.size()>0) {
+            cardResponse.setResCode(CodeEnum.mealIsUsing.getCode());
+            cardResponse.setResDesc("["+check.get("meal_name")+"]"+CodeEnum.mealIsUsing.getDesc());
+        } else {
+            Map param = new HashMap();
+            param.put("state",object.get("state"));
+            param.put("mealId",object.get("mealId"));
+            nmg_meal_infoMapper.onoffLine(param);
+        }
         return cardResponse;
     }
 
@@ -140,9 +146,10 @@ public class nmg_meal_infoService {
             nmg_meal_info nmg_meal_info = new nmg_meal_info();
             String mealCode = jsonArray.getString(i);
             nmg_meal_info.setMealCode(mealCode);
-            if (nmg_meal_infoMapper.checkUse(mealCode)>0) {
+            Map check = nmg_meal_infoMapper.checkUse(mealCode);
+            if (null != check && check.size() > 0) {
                 cardResponse.setResCode(CodeEnum.mealIsUsing.getCode());
-                cardResponse.setResDesc(CodeEnum.mealIsUsing.getDesc());
+                cardResponse.setResDesc("["+check.get("meal_name")+"]"+CodeEnum.mealIsUsing.getDesc());
             } else {
                 nmg_meal_infoMapper.cardMealDel(nmg_meal_info.getMealCode());
             }

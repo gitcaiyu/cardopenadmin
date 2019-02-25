@@ -207,22 +207,31 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                 var _this = this;
                 var datas = {channelId:_this.checkList}
                 if (datas.channelId.length > 0) {
-                    $.ajax({
-                        url: _this.ajax_url+'/channelDel',
-                        type: 'post',
-                        data: JSON.stringify(datas),
-                        contentType: false,
-                        processData: false,
-                        success: function () {
-                            layer.msg('删除成功！',{icon:1});
-                            _this.getPage();
+                    layer.confirm('确认删除', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if (datas.channelId.length > 0) {
+                            $.ajax({
+                                url: _this.ajax_url+'/channelDel',
+                                type: 'post',
+                                data: JSON.stringify(datas),
+                                contentType: false,
+                                processData: false,
+                                success: function () {
+                                    layer.msg('删除成功！',{icon:1});
+                                    _this.getPage();
+                                }
+                            })
+                        } else {
+                            layer.msg('请选择渠道编号',{icon:7});
+                            return;
                         }
-                    })
+                        form.render();
+                    });
                 } else {
                     layer.msg('请选择渠道编号',{icon:7});
                     return;
                 }
-                form.render();
             },
             searchChannel:function(){
                 var _this=this;
@@ -370,16 +379,6 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
                         _this.getPage();
                     }
                 });
-            },
-            /**校验是否编辑**/
-            checkEdit:function(item){
-                var _this=this;
-                if(item.FLAG=='true'){
-                    return false;
-                }else if(item.FLAG=='false'){
-                    return true;
-                }
-
             }
         }
     }

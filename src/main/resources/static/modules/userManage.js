@@ -31,6 +31,7 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
             form.on("checkbox(check)",function(data){
                 if(data.elem.checked){
                     _this.checkList.push(data.value);
+                    return true;
                 }else{
                     _this.checkList=_this.checkList.filter(function(v){
                         return v!=data.value;
@@ -49,7 +50,7 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
             },
             checkInit: function(item){
                 var _this=this;
-                var checkListStr=this.checkList.join(',');
+                var checkListStr=_this.checkList.join(',');
                 if(checkListStr.indexOf(item.user_id)!=-1){
                     return true;
                 }else{
@@ -167,22 +168,31 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
                 var _this = this;
                 var datas = {detail:_this.checkList}
                 if (datas.detail.length > 0) {
-                    $.ajax({
-                        url: _this.ajax_url+'/userDel',
-                        type: 'post',
-                        data: JSON.stringify(datas),
-                        contentType: false,
-                        processData: false,
-                        success: function () {
-                            layer.msg('删除成功！',{icon:1});
-                            _this.getPage();
+                    layer.confirm('确认删除', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if (datas.detail.length > 0) {
+                            $.ajax({
+                                url: _this.ajax_url+'/userDel',
+                                type: 'post',
+                                data: JSON.stringify(datas),
+                                contentType: false,
+                                processData: false,
+                                success: function () {
+                                    layer.msg('删除成功！',{icon:1});
+                                    _this.getPage();
+                                }
+                            })
+                        } else {
+                            layer.msg('请选择一条用户信息',{icon:7});
+                            return;
                         }
-                    })
+                        form.render();
+                    });
                 } else {
-                    layer.msg('请选择一条用户信息',{icon:7});
+                    layer.msg('请选择渠道编号',{icon:7});
                     return;
                 }
-                form.render();
             },
             searchChannel:function(){
                 var _this=this;
@@ -287,7 +297,7 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
                         'Content-Type' : 'application/json;charset=utf-8'
                     },
                     dataType: 'json',
-                    success: function (result) {
+                    success: function () {
                         _this.getPage();
                     }
                 });

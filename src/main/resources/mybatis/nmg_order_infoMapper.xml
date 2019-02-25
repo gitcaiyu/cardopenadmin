@@ -283,17 +283,20 @@
   </select>
 
   <select id="exportOrder" parameterType="java.util.Map" resultType="java.util.Map">
-    SELECT
+    SELECT DISTINCT
     nod.order_id,
     nod.detail_id,
     nmi.meal_name,
-    nod.order_meal as meal_code,
+    nod.order_meal AS meal_code,
     ndi.discount_name,
     nod.order_discount,
     nod.cardNum,
-    nod.SIMNum
+    nod.SIMNum,
+    noi.sub_time,
+    noi.create_time
     FROM
     nmg_order_detail nod
+    LEFT JOIN nmg_order_info noi ON noi.order_id = nod.order_id
     LEFT JOIN nmg_meal_info nmi ON nmi.meal_code = nod.order_meal
     LEFT JOIN nmg_discount_info ndi ON ndi.discount_id = nod.order_discount
     WHERE 1=1
@@ -311,6 +314,18 @@
     </if>
     <if test="orderDiscount != null">
       and nod.order_discount = #{orderDiscount,jdbcType=VARCHAR}
+    </if>
+    <if test="orderState != null">
+      and (select DISTINCT order_state from nmg_order_info noi where noi.order_id = nod.order_id) = #{orderState,jdbcType=VARCHAR}
+    </if>
+    <if test="subTime != null">
+      and noi.sub_time between #{subTime,jdbcType=VARCHAR} and #{subtimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+      and noi.create_time between #{createTime,jdbcType=VARCHAR} and #{createTimeE,jdbcType=VARCHAR}
+    </if>
+    <if test="orderId != null">
+      and noi.order_id = #{orderId,jdbcType=VARCHAR}
     </if>
   </select>
 
@@ -339,7 +354,7 @@
       and noi.county = #{county,jdbcType=VARCHAR}
     </if>
     <if test="meal != null">
-      and nmi.meal_code = #{meal,jdbcType=VARCHAR}
+      and noi.order_meal = #{meal,jdbcType=VARCHAR}
     </if>
     <if test="discount != null">
       and ndi.discount_id = #{discount,jdbcType=VARCHAR}

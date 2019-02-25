@@ -82,28 +82,38 @@ define(['layui', 'text!../../pages/mealunify.html'], function (layui, mealunify)
                 var _this = this;
                 var datas = {meal:_this.checkList}
                 if (datas.meal.length>0) {
-                    $.ajax({
-                        url: _this.ajax_url + '/cardMealDel',
-                        type: 'post',
-                        data: JSON.stringify(datas),
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        },
-                        dataType: 'json',
-                        success: function (result) {
-                            if (result.resCode == '000000') {
-                                layer.msg('删除成功', {icon: 1})
-                                _this.getPage()
-                            } else {
-                                layer.msg(result.resDesc, {icon: 7})
-                            }
+                    layer.confirm('确认删除', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if (datas.meal.length>0) {
+                            $.ajax({
+                                url: _this.ajax_url + '/cardMealDel',
+                                type: 'post',
+                                data: JSON.stringify(datas),
+                                headers: {
+                                    'Content-Type': 'application/json;charset=utf-8'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    if (result.resCode == '000000') {
+                                        layer.msg('删除成功', {icon: 1})
+                                        _this.getPage()
+                                    } else {
+                                        layer.msg(result.resDesc, {icon: 7})
+                                        _this.getPage()
+                                    }
+                                }
+                            })
+                        } else {
+                            layer.msg('请选择一条信息',{icon:7});
+                            return;
                         }
-                    })
+                        form.render();
+                    });
                 } else {
                     layer.msg('请选择一条信息',{icon:7});
                     return;
                 }
-                form.render()
             },
             state:function (state,id) {
                 var _this=this;
@@ -116,8 +126,11 @@ define(['layui', 'text!../../pages/mealunify.html'], function (layui, mealunify)
                         'Content-Type' : 'application/json;charset=utf-8'
                     },
                     dataType: 'json',
-                    success: function () {
-                       _this.getPage()
+                    success: function (result) {
+                        if (result.resCode != '000000') {
+                            layer.msg(result.resDesc, {icon: 7})
+                        }
+                        _this.getPage()
                     }
                 })
             },
@@ -141,7 +154,7 @@ define(['layui', 'text!../../pages/mealunify.html'], function (layui, mealunify)
             checkInit: function(item) {
                 var _this = this;
                 var checkListStr = this.checkList.join(',');
-                if (checkListStr.indexOf(item.meal_code) != -1) {
+                if (checkListStr.indexOf(item.meal_id) != -1) {
                     return true;
                 } else {
                     return false;

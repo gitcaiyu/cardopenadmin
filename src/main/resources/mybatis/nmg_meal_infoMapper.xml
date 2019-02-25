@@ -99,15 +99,25 @@
   </select>
 
   <delete id="cardMealDel" parameterType="java.lang.String">
-    delete from nmg_meal_info where meal_code = #{mealCode,jdbcType=VARCHAR}
+    delete from nmg_meal_info where meal_id = #{mealCode,jdbcType=VARCHAR}
   </delete>
 
   <update id="cardMealUpdate" parameterType="cn.leadeon.cardopenadmin.entity.nmg_meal_info">
     update nmg_meal_info set meal_code = #{mealCode,jdbcType=VARCHAR} ,meal_name = #{mealName,jdbcType=VARCHAR} ,city=#{city,jdbcType=VARCHAR} where meal_id = #{mealId,jdbcType=VARCHAR}
   </update>
 
-  <select id="checkUse" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select count(*) from nmg_order_detail where order_meal = #{mealCode,jdbcType=VARCHAR}
+  <select id="checkUse" parameterType="java.lang.String" resultType="java.util.Map">
+      SELECT
+          nmi.meal_name
+      FROM
+          nmg_meal_info nmi
+          LEFT JOIN nmg_order_info noi ON noi.order_meal = nmi.meal_code
+      WHERE
+          nmi.meal_id = #{mealCode,jdbcType=VARCHAR}
+          AND state = '1'
+          AND noi.order_state NOT IN ( '4', '5' )
+      GROUP BY
+          nmi.meal_code
   </select>
 
   <update id="onoffLine" parameterType="java.util.Map">

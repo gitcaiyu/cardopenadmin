@@ -144,7 +144,7 @@
                     <tbody>
                     <tr v-for="(item,index) in detailList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.detail_id" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.detail_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.order_id}}</td>
                         <td>{{item.meal_name}}</td>
@@ -191,7 +191,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">套餐资费</label>
                     <div class="layui-input-inline">
-                        <select name="mealName" id="emealName" lay-filter="emealName">
+                        <select name="mealName" id="emealName" lay-filter="emealName" lay-verify="required">
                             <option value=""></option>
                             <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.edit_data.mealId">{{meal.meal_name}}</option>
                         </select>
@@ -202,7 +202,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">资费代码</label>
                     <div class="layui-input-inline">
-                        <select name="mealId" id="emealId" lay-filter="emealId">
+                        <select name="mealId" id="emealId" lay-filter="emealId" lay-verify="required">
                             <option value=""></option>
                             <option v-for="meal in mealList" v-bind:value="meal.meal_code" v-model="write_data.edit_data.mealId">{{meal.meal_code}}</option>
                         </select>
@@ -213,7 +213,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">优惠促销</label>
                     <div class="layui-input-inline">
-                        <select name="discount" id="ediscount">
+                        <select name="discount" id="ediscount" lay-verify="required">
                             <option value=""></option>
                             <option v-for="discount in discountList" v-bind:value="discount.discount_id" v-model="write_data.edit_data.discount">{{discount.discount_name}}</option>
                         </select>

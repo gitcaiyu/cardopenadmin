@@ -215,8 +215,12 @@ public class nmg_channel_infoService {
                 HSSFRow row = sheetAt.getRow(j);
                 //渠道ID
                 nmg_channel_info.setChannelId(new RandomUtil().uuid);
+                Cell numCell0 = row.getCell(0);
+                if(numCell0 != null){
+                    numCell0.setCellType(Cell.CELL_TYPE_STRING);
+                }
                 //渠道名称
-                nmg_channel_info.setChannelName(row.getCell(0).getStringCellValue());
+                nmg_channel_info.setChannelName(numCell0.getStringCellValue());
                 //渠道类型
                 if ("社会渠道".equals(row.getCell(1).getStringCellValue())) {
                     nmg_channel_info.setChannelType("1");
@@ -228,12 +232,21 @@ public class nmg_channel_infoService {
                 Map county = nmg_county_infoMapper.countyInfo(param).get(0);
                 nmg_channel_info.setCity(county.get("city_code").toString());
                 nmg_channel_info.setCounty(county.get("county_id").toString());
-                row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
-                nmg_channel_info.setChargeName(row.getCell(4).getStringCellValue());
-                row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
-                nmg_channel_info.setChargeTel(row.getCell(5).getStringCellValue());
-                row.getCell(6).setCellType(Cell.CELL_TYPE_STRING);
-                nmg_channel_info.setChannelAddress(row.getCell(6).getStringCellValue());
+                Cell numCell4 = row.getCell(4);
+                if(numCell4 != null){
+                    numCell4.setCellType(Cell.CELL_TYPE_STRING);
+                }
+                nmg_channel_info.setChargeName(numCell4.getStringCellValue());
+                Cell numCell5 = row.getCell(5);
+                if(numCell5 != null){
+                    numCell5.setCellType(Cell.CELL_TYPE_STRING);
+                }
+                nmg_channel_info.setChargeTel(numCell5.getStringCellValue());
+                Cell numCell6 = row.getCell(6);
+                if(numCell6 != null){
+                    numCell6.setCellType(Cell.CELL_TYPE_STRING);
+                }
+                nmg_channel_info.setChannelAddress(numCell6.getStringCellValue());
                 if (nmg_channel_infoMapper.isExists(nmg_channel_info) == 0) {
                     nmg_channel_infoMapper.insert(nmg_channel_info);
                 } else {

@@ -75,7 +75,7 @@
                     <tbody>
                     <tr v-for="(item,index) in codeList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.channel_id" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.channel_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.channel_id}}</td>
                         <td>{{item.channel_name}}</td>
@@ -86,7 +86,7 @@
                         <td>{{item.charge_tel}}</td>
                         <td>{{item.channel_address}}</td>
                         <td>
-                            <a v-bind:class="{'layui-btn-disabled':checkEdit(item)}" class="layui-btn layui-btn-normal layui-btn-sm" v-on:click="edit(item)">编辑</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" v-on:click="edit(item)">编辑</a>
                         </td>
                     </tr>
                     </tbody>
@@ -118,7 +118,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">盟市</label>
                     <div class="layui-input-inline">
-                        <select name="city" id="city" lay-filter="selCity">
+                        <select name="city" id="city" lay-filter="selCity" lay-verify="required">
                             <option value="">请选择</option>
                             <option v-model="edit_data.city" v-for="city in cityList" v-bind:value="city.cityCode">{{city.cityName}}</option>
                         </select>
@@ -129,7 +129,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">县区</label>
                     <div class="layui-input-inline">
-                        <select name="county" id="county">
+                        <select name="county" id="county" lay-verify="required">
                             <option value="">请选择</option>
                                 <option v-model="edit_data.county" v-for="county in edit_data.countyList" v-bind:value="county.county_id">{{county.county_name}}</option>
                         </select>

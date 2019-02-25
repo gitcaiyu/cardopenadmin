@@ -83,14 +83,34 @@ define(['layui', 'text!../../pages/simCount.html'], function (layui, simCount) {
                     _this.county=data.value;
                     _this.getPage();
                 })
-                form.on('select(mealName)',function(data){
-                    _this.mealId=data.value;
+                form.on('select(mealId)', function (data) {
+                    var selMealName = document.getElementById("mealName");
+                    if(data.value!='') {
+                        for(var i=0; i<selMealName.options.length; i++){
+                            if (selMealName.options[i].value == data.value) {
+                                selMealName.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealName.options[0].selected = true;
+                    }
+                    _this.mealId = data.value;
                     _this.getPage();
-                })
-                form.on('select(mealId)',function(data){
-                    _this.mealId=data.value;
+                });
+                form.on('select(mealName)', function (data) {
+                    var selMealId = document.getElementById("mealId");
+                    if(data.value!='') {
+                        for (var i = 0; i < selMealId.options.length; i++) {
+                            if (selMealId.options[i].innerHTML == data.value) {
+                                selMealId.options[i].selected = true;
+                            }
+                        }
+                    } else {
+                        selMealId.options[0].selected = true;
+                    }
+                    _this.mealId = data.value;
                     _this.getPage();
-                })
+                });
                 form.on('select(discount)',function(data){
                     _this.discount=data.value;
                     _this.getPage();
@@ -107,9 +127,9 @@ define(['layui', 'text!../../pages/simCount.html'], function (layui, simCount) {
                         ,method:'post'
                         ,where:{orderMeal:_this.mealId,orderDiscount:_this.discount,orderState:_this.state,subTime:_this.subTime,subTimeE:_this.subTimeE,createTime:_this.createTime,createTimeE:_this.createTimeE,cardnum:_this.cardnum,simnum:_this.simnum}
                         ,cols: [[
-                            {field:'order_id', title: '工单编号', sort: true}
+                            {field:'order_id', title: '工单编号'}
                             ,{field:'sub_time', title: '申请时间',sort: true}
-                            ,{field:'city_name', title: '完成时间', sort: true}
+                            ,{field:'create_time', title: '完成时间', sort: true}
                             ,{field:'meal_name', title: '套餐资费',sort: true}
                             ,{field:'meal_code', title: '资费代码', sort: true}
                             ,{field:'discount_name', title: '优惠促销', sort: true}
@@ -126,9 +146,39 @@ define(['layui', 'text!../../pages/simCount.html'], function (layui, simCount) {
                             _this.mealList = res.meal;
                             _this.discountList = res.discount;
                             _this.stateList = res.state;
+                            _this.merge(res);
                         }
                     });
                 });
+            },
+            merge: function (res) {
+                var data = res.data;
+                var mergeIndex = 0;//定位需要添加合并属性的行数
+                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+                var columsName = ['order_id'];//需要合并的列名称
+                var columsIndex = [0];//需要合并的列索引值
+                for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+                    var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+                    for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+                        var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+
+                        if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+                            mark += 1;
+                            tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+                                $(this).attr("rowspan", mark);
+                            });
+                            tdCurArr.each(function () {//当前行隐藏
+                                $(this).css("display", "none");
+                            });
+                        }else {
+                            mergeIndex = i;
+                            mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+                        }
+                    }
+                    mergeIndex = 0;
+                    mark = 1;
+                }
             },
             orderExport:function () {
                 var _this = this;

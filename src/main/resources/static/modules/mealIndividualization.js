@@ -46,9 +46,8 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                 _this.edit.mealCode = item.meal_code;
                 var selCity = document.getElementById("city");
                 for(var i=0; i<selCity.options.length; i++){
-                    if(selCity.options[i].innerHTML == item.city_name){
+                    if (selCity.options[i].value==item.city) {
                         selCity.options[i].selected = true;
-                        break;
                     }
                 }
                 var index = layer.open({
@@ -59,6 +58,7 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                     title: "新增资费套餐",
                     cancel: function () {
                         $('#edit').hide();
+                        selCity.options[0].selected = true;
                     },
                     success: function(){
                     }
@@ -75,6 +75,7 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                         contentType: false,
                         processData: false,
                         success: function () {
+                            selCity.options[0].selected = true;
                             _this.getPage();
                         }
                     })
@@ -89,23 +90,34 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                 var _this = this;
                 var datas = {meal:_this.checkList}
                 if (datas.meal.length>0) {
-                    $.ajax({
-                        url: _this.ajax_url + '/cardMealDel',
-                        type: 'post',
-                        data: JSON.stringify(datas),
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        },
-                        dataType: 'json',
-                        success: function (result) {
-                            if (result.resCode == '000000') {
-                                layer.msg('删除成功', {icon: 1})
-                                _this.getPage()
-                            } else {
-                                layer.msg(result.resDesc, {icon: 7})
-                            }
+                    layer.confirm('确认删除', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if (datas.meal.length>0) {
+                            $.ajax({
+                                url: _this.ajax_url + '/cardMealDel',
+                                type: 'post',
+                                data: JSON.stringify(datas),
+                                headers: {
+                                    'Content-Type': 'application/json;charset=utf-8'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    if (result.resCode == '000000') {
+                                        layer.msg('删除成功', {icon: 1})
+                                        _this.getPage()
+                                    } else {
+                                        layer.msg(result.resDesc, {icon: 7})
+                                        _this.getPage()
+                                    }
+                                }
+                            })
+                        } else {
+                            layer.msg('请选择一条信息',{icon:7});
+                            return;
                         }
-                    })
+                        form.render();
+                    });
                 } else {
                     layer.msg('请选择一条信息',{icon:7});
                     return;
@@ -123,8 +135,11 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
                         'Content-Type' : 'application/json;charset=utf-8'
                     },
                     dataType: 'json',
-                    success: function () {
-                       _this.getPage()
+                    success: function (result) {
+                        if (result.resCode != '000000') {
+                            layer.msg(result.resDesc, {icon: 7})
+                        }
+                        _this.getPage()
                     }
                 })
             },
@@ -148,7 +163,7 @@ define(['layui', 'text!../../pages/mealIndividualization.html'], function (layui
             checkInit: function(item) {
                 var _this = this;
                 var checkListStr = this.checkList.join(',');
-                if (checkListStr.indexOf(item.meal_code) != -1) {
+                if (checkListStr.indexOf(item.meal_id) != -1) {
                     return true;
                 } else {
                     return false;

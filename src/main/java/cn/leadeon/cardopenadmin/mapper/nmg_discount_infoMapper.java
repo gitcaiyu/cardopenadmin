@@ -22,5 +22,5 @@ public interface nmg_discount_infoMapper {
 
     int onoffLine(Map param);
 
-    int checkUse(String mealCode);
+    Map checkUse(String mealCode);
 }

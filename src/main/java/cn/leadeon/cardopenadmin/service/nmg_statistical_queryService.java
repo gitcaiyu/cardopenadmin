@@ -73,9 +73,11 @@ public class nmg_statistical_queryService {
             }
             if (null != nmg_order_info.getSubTime() && !"".equals(nmg_order_info.getSubTime())) {
                 param.put("subtime", nmg_order_info.getSubTime());
+                param.put("subtimeE",nmg_order_info.getSubTimeE());
             }
             if (null != nmg_order_info.getCreateTime() && !"".equals(nmg_order_info.getCreateTime())) {
                 param.put("createtime", nmg_order_info.getCreateTime());
+                param.put("createtimeE", nmg_order_info.getCreateTimeE());
             }
             List<Map<String, Object>> result = nmg_order_infoMapper.detail(param,new RowBounds());
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();

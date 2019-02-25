@@ -73,8 +73,7 @@ public class nmg_order_infoService {
             if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
                 param.put("city",nmg_order_info.getCity());
             }
-            List<nmg_city_info> city = nmg_city_infoService.city();
-            result.put("city",city);
+            result.put("city",nmg_city_infoService.city());
             result.put("county", nmg_county_infoMapper.countyInfo(param));
             param.put("flag","T");
         }
@@ -142,8 +141,7 @@ public class nmg_order_infoService {
         if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
             param.put("city",nmg_order_info.getCity());
         }
-        List<nmg_city_info> city = nmg_city_infoMapper.cityInfo(param);
-        result.put("city",city);
+        result.put("city",nmg_city_infoService.city());
         result.put("county", nmg_county_infoMapper.countyInfo(param));
         param.put("flag","T");
         param.put("mealState","1");
@@ -364,6 +362,7 @@ public class nmg_order_infoService {
      * @param data
      * @return
      */
+    @Transactional
     public CardResponse orderDetail(String data,HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
@@ -392,6 +391,8 @@ public class nmg_order_infoService {
         if (!"".equals(jsonObject.get("orderId"))) {
             param.put("orderId",jsonObject.get("orderId"));
         }
+        param.put("orderState","3");
+        nmg_order_infoMapper.orderStateUpdate(param);
         int curr = jsonObject.getInteger("curr");
         int limit = jsonObject.getInteger("limit");
         RowBounds rowBounds = new RowBounds((curr - 1) * limit,limit);
@@ -435,13 +436,13 @@ public class nmg_order_infoService {
         if (!"".equals(jsonObject.get("orderId"))) {
             param.put("orderId",jsonObject.get("orderId"));
         }
-        if (!"".equals(jsonObject.get("subtime"))) {
-            param.put("subtime",jsonObject.get("subtime"));
+        if (!"".equals(jsonObject.get("subTime"))) {
+            param.put("subTime",jsonObject.get("subTime"));
             param.put("subtimeE",jsonObject.get("subtimeE"));
         }
-        if (!"".equals(jsonObject.get("createtime"))) {
-            param.put("createtime",jsonObject.get("createtime"));
-            param.put("createtimeE",jsonObject.get("createtimeE"));
+        if (!"".equals(jsonObject.get("createTime"))) {
+            param.put("createTime",jsonObject.get("createtime"));
+            param.put("createTimeE",jsonObject.get("createtimeE"));
         }
         int curr = jsonObject.getInteger("curr");
         int limit = jsonObject.getInteger("limit");

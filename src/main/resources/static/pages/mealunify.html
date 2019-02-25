@@ -28,7 +28,7 @@
                     <tbody>
                     <tr v-for="(item,index) in codeList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.meal_code" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.meal_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.meal_name}}</td>
                         <td>{{item.meal_code}}</td>
@@ -52,7 +52,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">套餐资费</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="mealName" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="edit.mealName">
+                        <input type="text" name="mealName" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit.mealName">
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">资费代码</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="mealCode" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="edit.mealCode">
+                        <input type="text" name="mealCode" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit.mealCode">
                     </div>
                 </div>
             </div>

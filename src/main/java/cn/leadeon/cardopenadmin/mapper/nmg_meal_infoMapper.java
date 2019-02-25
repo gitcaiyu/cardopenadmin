@@ -20,7 +20,7 @@ public interface nmg_meal_infoMapper {
 
     int cardMealUpdate(nmg_meal_info nmg_meal_info);
 
-    int checkUse(String mealCode);
+    Map checkUse(String mealCode);
 
     int onoffLine(Map param);
 }

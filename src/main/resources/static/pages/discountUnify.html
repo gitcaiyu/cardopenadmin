@@ -27,7 +27,7 @@
                     <tbody>
                     <tr v-for="(item,index) in codeList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.discount_id" id="item.discount_id" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.discount_id" :checked="checkInit(item)" id="item.discount_id" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.discount_name}}</td>
                         <td>{{item.city_name}}</td>
@@ -50,7 +50,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">优惠促销</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="discountName" lay-verify="" autocomplete="off" placeholder="" class="layui-input" v-model="edit.discountName">
+                        <input type="text" name="discountName" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" v-model="edit.discountName">
                     </div>
                 </div>
             </div>

@@ -14,13 +14,13 @@
             </select>
         </div>
         <div class="layui-input-inline ml10">
-            <select lay-filter="mealName" name="mealName">
+            <select lay-filter="mealName" name="mealName" id="mealName">
                 <option value="">套餐资费</option>
                 <option v-for="meal in mealList" v-bind:value="meal.meal_code">{{meal.meal_name}}</option>
             </select>
         </div>
         <div class="layui-input-inline ml10">
-            <select lay-filter="mealId" name="mealId">
+            <select lay-filter="mealId" name="mealId" id="mealId">
                 <option value="">资费代码</option>
                 <option v-for="meal in mealList" v-bind:value="meal.meal_code">{{meal.meal_code}}</option>
             </select>

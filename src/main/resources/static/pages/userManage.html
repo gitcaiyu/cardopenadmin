@@ -54,7 +54,7 @@
                     <tbody>
                     <tr v-for="(item,index) in codeList" v-bink::key="index">
                         <td>
-                            <input type="checkbox" :value="item.user_id" lay-filter="check" lay-skin="primary" >
+                            <input type="checkbox" :value="item.user_id" :checked="checkInit(item)" lay-filter="check" lay-skin="primary" >
                         </td>
                         <td>{{item.user_tel}}</td>
                         <td>{{item.user_name}}</td>
@@ -102,7 +102,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">角色名称</label>
                     <div class="layui-input-inline">
-                        <select name="userRole" id="userRole">
+                        <select name="userRole" id="userRole" lay-verify="required">
                             <option value="">请选择</option>
                             <option v-for="role in roleList" v-bind:value="role.role_type">{{role.role_name}}</option>
                         </select>
@@ -113,7 +113,7 @@
                 <div class="layui-block">
                     <label class="layui-form-label">盟市</label>
                     <div class="layui-input-inline">
-                        <select name="cityCode" id="cityCode">
+                        <select name="cityCode" id="cityCode" lay-verify="required">
                             <option value="">请选择</option>
                             <option v-model="edit_data.city" v-for="city in cityList" v-bind:value="city.cityCode">{{city.cityName}}</option>
                         </select>

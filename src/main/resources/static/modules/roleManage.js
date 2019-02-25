@@ -77,22 +77,31 @@ define(['layui', 'text!../../pages/roleManage.html'], function (layui, roleManag
                 var _this = this;
                 var datas = {detail:_this.checkList}
                 if (datas.detail.length > 0) {
-                    $.ajax({
-                        url: _this.ajax_url+'/roleDel',
-                        type: 'post',
-                        data: JSON.stringify(datas),
-                        contentType: false,
-                        processData: false,
-                        success: function () {
-                            layer.msg('删除成功！',{icon:1});
-                            _this.getPage();
+                    layer.confirm('确认删除', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        if (datas.detail.length > 0) {
+                            $.ajax({
+                                url: _this.ajax_url+'/roleDel',
+                                type: 'post',
+                                data: JSON.stringify(datas),
+                                contentType: false,
+                                processData: false,
+                                success: function () {
+                                    layer.msg('删除成功！',{icon:1});
+                                    _this.getPage();
+                                }
+                            })
+                        } else {
+                            layer.msg('请选择一条角色信息',{icon:7});
+                            return;
                         }
-                    })
+                        form.render();
+                    });
                 } else {
-                    layer.msg('请选择一条角色信息',{icon:7});
+                    layer.msg('请选择渠道编号',{icon:7});
                     return;
                 }
-                form.render();
             },
             searchChannel:function(){
                 var _this=this;

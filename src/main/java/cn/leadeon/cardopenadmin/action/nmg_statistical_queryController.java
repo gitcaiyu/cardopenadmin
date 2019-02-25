@@ -74,8 +74,10 @@ public class nmg_statistical_queryController {
         jsonObject.put("orderState",httpServletRequest.getParameter("orderState"));
         jsonObject.put("cardnum",httpServletRequest.getParameter("cardnum"));
         jsonObject.put("simnum",httpServletRequest.getParameter("simnum"));
-        jsonObject.put("subTimeE",httpServletRequest.getParameter("subTimeE"));
+        jsonObject.put("subTime",httpServletRequest.getParameter("subTime"));
+        jsonObject.put("subtimeE",httpServletRequest.getParameter("subTimeE"));
         jsonObject.put("createTime",httpServletRequest.getParameter("createTime"));
+        jsonObject.put("createTimeE",httpServletRequest.getParameter("createTimeE"));
         return nmg_order_infoService.simCount(jsonObject.toJSONString());
     }
 

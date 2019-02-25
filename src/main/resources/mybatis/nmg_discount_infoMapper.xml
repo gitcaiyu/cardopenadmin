@@ -107,8 +107,18 @@
     update nmg_discount_info set discount_code=#{discountCode,jdbcType=VARCHAR},discount_name=#{discountName,jdbcType=VARCHAR},city=#{city,jdbcType=VARCHAR} where discount_id=#{discountId,jdbcType=VARCHAR}
   </update>
 
-  <select id="checkUse" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select count(*) from nmg_order_detail where order_discount = #{discount,jdbcType=VARCHAR}
+  <select id="checkUse" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT
+        ndi.discount_name
+    FROM
+        nmg_discount_info ndi
+        LEFT JOIN nmg_order_info noi ON noi.order_discount = ndi.discount_id
+    WHERE
+        ndi.discount_id = #{discount,jdbcType=VARCHAR}
+        AND state = '1'
+        AND noi.order_state NOT IN ( '4', '5' )
+    GROUP BY
+        ndi.discount_name
   </select>
 
   <update id="onoffLine" parameterType="java.util.Map">
