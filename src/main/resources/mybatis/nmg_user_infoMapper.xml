@@ -117,9 +117,9 @@
     WHEN user_role = 1 THEN
     '超级管理员'
     WHEN user_role = 2 THEN
-    '盟市负责人'
+    '社渠负责人	'
     WHEN user_role = 3 THEN
-    '社渠负责人' ELSE '写卡人员'
+    '盟市负责人' ELSE '写卡人员'
     END role_name,
     user_type,
     user_tel,

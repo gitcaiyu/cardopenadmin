@@ -19,6 +19,11 @@
 </head>
 
 <script type="application/javascript">
+	function onEnterDown(){
+		if(window.event.keyCode == 13){
+			login();
+		}
+	}
 	function login() {
 		var userTel = $("#logname").val();
 		var userPass = $("#logpass").val();
@@ -51,7 +56,7 @@
 		})
 	}
 </script>
-<body>
+<body onkeydown="onEnterDown()">
 <div class="container demo-1">
 	<div class="content">
 		<div id="large-header" class="large-header">
