@@ -3,7 +3,7 @@ spring:
     name: cardopenadmin
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/card?autoReconnect=true&useUnicode=true&createDatabaseIfNotExist=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://192.168.10.101:3306/card?autoReconnect=true&useUnicode=true&createDatabaseIfNotExist=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
     username: leadeon
     password: leadeon
   session:
@@ -18,4 +18,4 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     call-setters-on-nulls: true
 file:
-  path: /home/leadeon/下载/
+  path: /data/cardopenadmin/

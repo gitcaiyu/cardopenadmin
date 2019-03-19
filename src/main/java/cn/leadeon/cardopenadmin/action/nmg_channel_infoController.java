@@ -3,6 +3,7 @@ package cn.leadeon.cardopenadmin.action;
 import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
 import cn.leadeon.cardopenadmin.entity.nmg_channel_info;
 import cn.leadeon.cardopenadmin.service.nmg_channel_infoService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -63,15 +64,22 @@ public class nmg_channel_infoController {
 
     /**
      * 渠道信息导出
-     * @param nmg_channel_info
      * @param httpServletRequest
      * @return
      * @throws IOException
      */
-    @PostMapping(value = "/channelExport")
+    @GetMapping(value = "/channelExport")
     @ResponseBody
-    public CardResponse channelExport(@RequestBody nmg_channel_info nmg_channel_info,HttpServletRequest httpServletRequest) throws IOException {
-        return nmg_channel_infoService.channelExport(nmg_channel_info,httpServletRequest);
+    public void channelExport(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        nmg_channel_info nmg_channel_info = new nmg_channel_info();
+        nmg_channel_info.setCity(httpServletRequest.getParameter("city"));
+        nmg_channel_info.setCounty(httpServletRequest.getParameter("county"));
+        nmg_channel_info.setChannelName(httpServletRequest.getParameter("channelName"));
+        nmg_channel_info.setChannelId(httpServletRequest.getParameter("channelId"));
+        nmg_channel_info.setChannelType(httpServletRequest.getParameter("channelType"));
+        nmg_channel_info.setChargeName(httpServletRequest.getParameter("chargeName"));
+        nmg_channel_info.setChargeTel(httpServletRequest.getParameter("chargeTel"));
+        nmg_channel_infoService.channelExport(nmg_channel_info,httpServletRequest,httpServletResponse);
     }
 
     /**

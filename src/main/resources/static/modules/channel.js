@@ -180,28 +180,29 @@ define(['layui', 'text!../../pages/channel.html'], function (layui, channel) {
             },
             channelExport:function() {
                 var _this=this;
-                var datas = {city:_this.city,
-                    county:_this.county,
-                    channelName:_this.channel_name,
-                    channelId:_this.channel_id,
-                    channelType:_this.channel_type,
-                    chargeName:_this.charge_name,
-                    chargeTel:_this.charge_tel,
-                    curr:_this.curr,
-                    limit:_this.limit}
-                $.ajax({
-                    url: _this.ajax_url+'/channelExport',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-                        layer.msg('导出成功！',{icon:1});
-                    }
-                })
+                // var datas = {city:_this.city,
+                //     county:_this.county,
+                //     channelName:_this.channel_name,
+                //     channelId:_this.channel_id,
+                //     channelType:_this.channel_type,
+                //     chargeName:_this.charge_name,
+                //     chargeTel:_this.charge_tel,
+                //     curr:_this.curr,
+                //     limit:_this.limit}
+                // $.ajax({
+                //     url: _this.ajax_url+'/channelExport',
+                //     type: 'post',
+                //     data:JSON.stringify(datas),
+                //     headers : {
+                //         'Content-Type' : 'application/json;charset=utf-8'
+                //     },
+                //     contentType: false,
+                //     processData: false,
+                //     success: function () {
+                //         layer.msg('导出成功！',{icon:1});
+                //     }
+                // })
+                window.location.href = _this.ajax_url+'/channelExport?city='+_this.city+'&county='+_this.county+'&channelName='+_this.channel_name+'&channelId='+_this.channel_id+'&channelType='+_this.channel_type+'&chargeName='+_this.charge_name+'&chargeTel='+_this.charge_tel;
             },
             channelDel:function() {
                 var _this = this;

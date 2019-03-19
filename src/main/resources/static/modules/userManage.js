@@ -147,22 +147,23 @@ define(['layui', 'text!../../pages/userManage.html'], function (layui, userManag
             },
             channelExport:function() {
                 var _this=this;
-                var datas = {userName:_this.userName,
-                    userTel:_this.userTel,
-                    userRole:_this.userRole}
-                $.ajax({
-                    url: _this.ajax_url+'/userExport',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-                        layer.msg('导出成功！',{icon:1});
-                    }
-                })
+                // var datas = {userName:_this.userName,
+                //     userTel:_this.userTel,
+                //     userRole:_this.userRole}
+                // $.ajax({
+                //     url: _this.ajax_url+'/userExport',
+                //     type: 'post',
+                //     data:JSON.stringify(datas),
+                //     headers : {
+                //         'Content-Type' : 'application/json;charset=utf-8'
+                //     },
+                //     contentType: false,
+                //     processData: false,
+                //     success: function () {
+                //         layer.msg('导出成功！',{icon:1});
+                //     }
+                // })
+                window.location.href = _this.ajax_url+'/userExport?userName='+_this.userName+'&userTel='+_this.userTel+'&userRole='+_this.userRole
             },
             channelDel:function() {
                 var _this = this;

@@ -1,6 +1,8 @@
 package cn.leadeon.cardopenadmin.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -11,9 +13,10 @@ import java.io.IOException;
 /**
  * 过滤器，控制session过期
  */
-@Slf4j
 @WebFilter
 public class SessionFilter implements Filter {
+
+    private Logger log = LoggerFactory.getLogger(SessionFilter.class);
 
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {

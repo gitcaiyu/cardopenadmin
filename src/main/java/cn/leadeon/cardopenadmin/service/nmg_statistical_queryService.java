@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,12 +47,11 @@ public class nmg_statistical_queryService {
     private String path;
 
 
-    public CardResponse workExport(nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest) {
-        CardResponse cardResponse = new CardResponse();
+    public void workExport(nmg_order_info nmg_order_info, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         try {
             HttpSession httpSession = httpServletRequest.getSession();
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
-            String fileName = path + nmg_user_info.getUserName() + "的工单统计信息" + DateUtil.getDateString()+".xls";;
+            String fileName = nmg_user_info.getUserName() + "的工单统计信息" + DateUtil.getDateString()+".xls";;
             Map param = new HashMap();
             if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
                 param.put("city", nmg_order_info.getCity());
@@ -143,31 +143,33 @@ public class nmg_statistical_queryService {
                     row.createCell(10).setCellValue((String) maps.get("order_count"));
                 }
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            hssfWorkbook.write(fileOutputStream);
-            fileOutputStream.close();
-            hssfWorkbook.close();
-            cardResponse.setResDesc(fileName);
+//            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//            hssfWorkbook.write(fileOutputStream);
+//            fileOutputStream.close();
+//            hssfWorkbook.close();
+//            cardResponse.setResDesc(fileName);
+            httpServletResponse.setContentType("application/octet-stream");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+            httpServletResponse.flushBuffer();
+            hssfWorkbook.write(httpServletResponse.getOutputStream());
         } catch (Exception e) {
-            cardResponse.setResDesc(e.getMessage());
-            cardResponse.setResCode(CodeEnum.failed.getCode());
+//            cardResponse.setResDesc(e.getMessage());
+//            cardResponse.setResCode(CodeEnum.failed.getCode());
         }
-        return cardResponse;
+//        return cardResponse;
     }
 
     /**
      * 工单明细导出
-     * @param data
+     * @param jsonObject
      * @return
      */
-    public CardResponse simExport(String data,HttpServletRequest httpServletRequest) {
-        CardResponse cardResponse = new CardResponse();
+    public void simExport(JSONObject jsonObject,HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
-        String fileName = path + nmg_user_info.getUserName() + "的SIM卡计信息" + DateUtil.getDateString()+".xls";;
+        String fileName = nmg_user_info.getUserName() + "的SIM卡计信息" + DateUtil.getDateString()+".xls";;
         Map param = new HashMap();
         try {
-            JSONObject jsonObject = JSONObject.parseObject(data);
             if (null != jsonObject.get("orderMeal") && !"".equals(jsonObject.get("orderMeal"))) {
                 param.put("orderMeal",jsonObject.get("orderMeal"));
             }
@@ -242,15 +244,19 @@ public class nmg_statistical_queryService {
                     row.createCell(7).setCellValue((String) maps.get("SIMNum"));
                 }
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            hssfWorkbook.write(fileOutputStream);
-            fileOutputStream.close();
-            hssfWorkbook.close();
-            cardResponse.setResDesc(fileName);
+//            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//            hssfWorkbook.write(fileOutputStream);
+//            fileOutputStream.close();
+//            hssfWorkbook.close();
+//            cardResponse.setResDesc(fileName);
+            httpServletResponse.setContentType("application/octet-stream");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+            httpServletResponse.flushBuffer();
+            hssfWorkbook.write(httpServletResponse.getOutputStream());
         } catch (Exception e) {
-            cardResponse.setResCode(CodeEnum.failed.getCode());
-            cardResponse.setResDesc(CodeEnum.failed.getDesc());
+//            cardResponse.setResCode(CodeEnum.failed.getCode());
+//            cardResponse.setResDesc(CodeEnum.failed.getDesc());
         }
-        return cardResponse;
+//        return cardResponse;
     }
 }

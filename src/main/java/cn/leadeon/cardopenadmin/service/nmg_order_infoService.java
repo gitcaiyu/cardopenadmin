@@ -195,11 +195,10 @@ public class nmg_order_infoService {
         return result;
     }
 
-    public CardResponse orderExport(nmg_order_info nmg_order_info, HttpSession httpSession) {
-        CardResponse cardResponse = new CardResponse();
+    public void orderExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,nmg_order_info nmg_order_info, HttpSession httpSession) {
         try {
             nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
-            String fileName = path + nmg_user_info.getUserName() + "的工单信息" + DateUtil.getDateString() + ".xls";
+            String fileName = nmg_user_info.getUserName() + "的工单信息" + DateUtil.getDateString() + ".xls";
             Map param = new HashMap();
             if (null != nmg_order_info.getCity() && !"".equals(nmg_order_info.getCity())) {
                 param.put("city", nmg_order_info.getCity());
@@ -321,16 +320,20 @@ public class nmg_order_infoService {
                     row.createCell(13).setCellValue((String) maps.get("order_phone"));
                 }
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            hssfWorkbook.write(fileOutputStream);
-            fileOutputStream.close();
-            hssfWorkbook.close();
-            cardResponse.setResDesc(fileName);
+//            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//            hssfWorkbook.write(fileOutputStream);
+//            fileOutputStream.close();
+//            hssfWorkbook.close();
+//            cardResponse.setResDesc(fileName);
+            httpServletResponse.setContentType("application/octet-stream");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+            httpServletResponse.flushBuffer();
+            hssfWorkbook.write(httpServletResponse.getOutputStream());
         } catch (Exception e) {
-            cardResponse.setResCode(CodeEnum.failed.getCode());
-            cardResponse.setResDesc(CodeEnum.failed.getDesc());
+//            cardResponse.setResCode(CodeEnum.failed.getCode());
+//            cardResponse.setResDesc(CodeEnum.failed.getDesc());
         }
-        return cardResponse;
+//        return cardResponse;
     }
 
     @Transactional
@@ -462,17 +465,14 @@ public class nmg_order_infoService {
 
     /**
      *工单明细导出
-     * @param data
      * @return
      */
-    public CardResponse orderDetailExport(String data,HttpServletRequest httpServletRequest) {
+    public void orderDetailExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,JSONObject jsonObject) {
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
-        CardResponse cardResponse = new CardResponse();
-        String fileName = path + nmg_user_info.getUserName()+"的SIM卡回录信息"+DateUtil.getDateString()+".xls";;
+        String fileName = nmg_user_info.getUserName()+"的SIM卡回录信息"+DateUtil.getDateString()+".xls";;
         Map param = new HashMap();
         try {
-            JSONObject jsonObject = JSONObject.parseObject(data);
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
             HSSFSheet sheet= hssfWorkbook.createSheet("工单信息");
             sheet.setColumnHidden(6,true);
@@ -544,16 +544,20 @@ public class nmg_order_infoService {
                     row.createCell(6).setCellValue((String) maps.get("order_discount"));
                 }
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            hssfWorkbook.write(fileOutputStream);
-            fileOutputStream.close();
-            hssfWorkbook.close();
-            cardResponse.setResDesc(fileName);
+//            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//            hssfWorkbook.write(fileOutputStream);
+//            fileOutputStream.close();
+//            hssfWorkbook.close();
+//            cardResponse.setResDesc(fileName);
+            httpServletResponse.setContentType("application/octet-stream");
+            httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+            httpServletResponse.flushBuffer();
+            hssfWorkbook.write(httpServletResponse.getOutputStream());
         } catch (Exception e) {
-            cardResponse.setResCode(CodeEnum.failed.getCode());
-            cardResponse.setResDesc(CodeEnum.failed.getDesc());
+//            cardResponse.setResCode(CodeEnum.failed.getCode());
+//            cardResponse.setResDesc(CodeEnum.failed.getDesc());
         }
-        return cardResponse;
+//        return cardResponse;
     }
 
     /**

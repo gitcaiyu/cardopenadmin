@@ -206,15 +206,14 @@ public class nmg_user_infoService {
         return cardResponse;
     }
 
-    public CardResponse userExport(String data,HttpServletRequest httpServletRequest) {
+    public void userExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,JSONObject jsonObject) {
         CardResponse cardResponse = new CardResponse();
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info user = (nmg_user_info) httpSession.getAttribute("userInfo");
-        String fileName = path+ user.getUserName() +"用户信息"+DateUtil.getDateString()+".xls";
+        String fileName = user.getUserName() +"用户信息"+DateUtil.getDateString()+".xls";
         Map param = new HashMap();
-        if (data != null) {
+        if (jsonObject != null) {
             try {
-                JSONObject jsonObject = JSONObject.parseObject(data);
                 HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
                 HSSFSheet sheet= hssfWorkbook.createSheet("用户信息");
                 HSSFRow row = sheet.createRow(0);
@@ -269,11 +268,15 @@ public class nmg_user_infoService {
                         row.createCell(6).setCellValue((String) maps.get("create_people"));
                     }
                 }
-                FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-                hssfWorkbook.write(fileOutputStream);
-                fileOutputStream.close();
-                hssfWorkbook.close();
-                cardResponse.setResDesc(fileName);
+//                FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//                hssfWorkbook.write(fileOutputStream);
+//                fileOutputStream.close();
+//                hssfWorkbook.close();
+//                cardResponse.setResDesc(fileName);
+                httpServletResponse.setContentType("application/octet-stream");
+                httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+                httpServletResponse.flushBuffer();
+                hssfWorkbook.write(httpServletResponse.getOutputStream());
             } catch (Exception e) {
                 cardResponse.setResDesc(e.getMessage());
                 cardResponse.setResCode(CodeEnum.failed.getCode());
@@ -282,7 +285,7 @@ public class nmg_user_infoService {
             cardResponse.setResCode(CodeEnum.nullValue.getCode());
             cardResponse.setResDesc(CodeEnum.nullValue.getDesc());
         }
-        return cardResponse;
+//        return cardResponse;
     }
 
     @Transactional

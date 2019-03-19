@@ -183,24 +183,27 @@ define(['layui', 'text!../../pages/orderTotal.html'], function (layui, orderTota
             },
             orderExport:function () {
                 var _this = this;
-                var datas={city:_this.city,county:_this.county,meal:_this.mealId,discount:_this.discount,state:_this.state,subTime:_this.subTime,subTimeE:_this.subTimeE,createTime:_this.createTime,createTimeE:_this.createTimeE}
-                $.ajax({
-                    url: _this.ajax_url + '/workExport',
-                    type: 'post',
-                    data: JSON.stringify(datas),
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.resCode == '000000') {
-                            layer.msg('导出成功', {icon: 1});
-                            _this.getDetail();
-                        } else {
-                            layer.msg('导出失败', {icon: 7});
-                        }
-                    }
-                })
+                // var datas={city:_this.city,county:_this.county,meal:_this.mealId,discount:_this.discount,state:_this.state,subTime:_this.subTime,subTimeE:_this.subTimeE,createTime:_this.createTime,createTimeE:_this.createTimeE}
+                // $.ajax({
+                //     url: _this.ajax_url + '/workExport',
+                //     type: 'post',
+                //     data: JSON.stringify(datas),
+                //     headers: {
+                //         'Content-Type': 'application/json;charset=utf-8'
+                //     },
+                //     dataType: 'json',
+                //     success: function (result) {
+                //         if (result.resCode == '000000') {
+                //             layer.msg('导出成功', {icon: 1});
+                //             _this.getDetail();
+                //         } else {
+                //             layer.msg('导出失败', {icon: 7});
+                //         }
+                //     }
+                // })
+                window.location.href = _this.ajax_url + '/workExport?city='+_this.city+'&county='+_this.county+'&meal='+_this.mealId
+                    +'&discount='+_this.discount+'&state='+_this.state+'&subTime='+_this.subTime
+                    +'&subTimeE='+_this.subTimeE+'&createTime='+_this.createTime+'&createTimeE='+_this.createTimeE
             }
         }
     }

@@ -6,8 +6,39 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
 public class CardResponse {
+
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
+    }
+
+    public Map getResBody() {
+        return resBody;
+    }
+
+    public void setResBody(Map resBody) {
+        this.resBody = resBody;
+    }
+
+    public String getResDesc() {
+        return resDesc;
+    }
+
+    public void setResDesc(String resDesc) {
+        this.resDesc = resDesc;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
 
     private String resCode;
 

@@ -49,13 +49,26 @@ public class nmg_order_infoController {
 
     /**
      * 订单信息导出
-     * @param nmg_order_info
      * @param httpSession
      * @return
      */
-    @PostMapping(value = "/orderExport")
-    public CardResponse orderExport(@RequestBody nmg_order_info nmg_order_info,HttpSession httpSession) {
-        return nmg_order_infoService.orderExport(nmg_order_info,httpSession);
+    @GetMapping(value = "/orderExport")
+    public void orderExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse, HttpSession httpSession) {
+        nmg_order_info nmg_order_info = new nmg_order_info();
+        nmg_order_info.setCity(httpServletRequest.getParameter("city"));
+        nmg_order_info.setCounty(httpServletRequest.getParameter("county"));
+        nmg_order_info.setChannelName(httpServletRequest.getParameter("channelName"));
+        nmg_order_info.setChannelType(httpServletRequest.getParameter("channelType"));
+        nmg_order_info.setOrderMeal(httpServletRequest.getParameter("orderMeal"));
+        nmg_order_info.setOrderDiscount(httpServletRequest.getParameter("orderDiscount"));
+        nmg_order_info.setOrderState(httpServletRequest.getParameter("orderState"));
+        nmg_order_info.setSubTime(httpServletRequest.getParameter("subTime"));
+        nmg_order_info.setSubTimeE(httpServletRequest.getParameter("subTimeE"));
+        nmg_order_info.setCreateTime(httpServletRequest.getParameter("createTime"));
+        nmg_order_info.setCreateTimeE(httpServletRequest.getParameter("createTimeE"));
+        nmg_order_info.setOrderOtherPeople(httpServletRequest.getParameter("orderOtherPeople"));
+        nmg_order_info.setOrderOtherPhone(httpServletRequest.getParameter("orderOtherPhone"));
+        nmg_order_infoService.orderExport(httpServletRequest,httpServletResponse,nmg_order_info,httpSession);
     }
 
     /**
@@ -91,13 +104,18 @@ public class nmg_order_infoController {
 
     /**
      * 订单信息导出
-     * @param data
      * @param httpServletRequest
      * @return
      */
-    @PostMapping(value = "/orderDetailExport")
-    public CardResponse orderDetailExport(@RequestBody String data,HttpServletRequest httpServletRequest) {
-        return nmg_order_infoService.orderDetailExport(data,httpServletRequest);
+    @GetMapping(value = "/orderDetailExport")
+    public void orderDetailExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cardnum",httpServletRequest.getParameter("cardnum"));
+        jsonObject.put("simnum",httpServletRequest.getParameter("simnum"));
+        jsonObject.put("orderMeal",httpServletRequest.getParameter("orderMeal"));
+        jsonObject.put("orderDiscount",httpServletRequest.getParameter("orderDiscount"));
+        jsonObject.put("orderId",httpServletRequest.getParameter("orderId"));
+        nmg_order_infoService.orderDetailExport(httpServletRequest,httpServletResponse,jsonObject);
     }
 
     /**

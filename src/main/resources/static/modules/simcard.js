@@ -263,30 +263,32 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
                 form.render();
             },
             detailExport:function() {
-              var _this = this;
-                var datas = {cardnum:_this.write_data.cardnum,
-                    simnum:_this.write_data.simnum,
-                    orderMeal:_this.write_data.mealId,
-                    orderDiscount:_this.write_data.discount,
-                    curr:_this.curr,
-                    limit:_this.limit,
-                    orderId:_this.orderId}
-                $.ajax({
-                    url: _this.ajax_url+'/orderDetailExport',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.resCode == '000000') {
-                            layer.msg('导出成功',{icon:1});
-                        } else {
-                            layer.msg('导出失败',{icon:7});
-                        }
-                    }
-                })
+                var _this = this;
+                // var datas = {cardnum:_this.write_data.cardnum,
+                //     simnum:_this.write_data.simnum,
+                //     orderMeal:_this.write_data.mealId,
+                //     orderDiscount:_this.write_data.discount,
+                //     curr:_this.curr,
+                //     limit:_this.limit,
+                //     orderId:_this.orderId}
+                // $.ajax({
+                //     url: _this.ajax_url+'/orderDetailExport',
+                //     type: 'post',
+                //     data:JSON.stringify(datas),
+                //     headers : {
+                //         'Content-Type' : 'application/json;charset=utf-8'
+                //     },
+                //     dataType: 'json',
+                //     success: function (result) {
+                //         if (result.resCode == '000000') {
+                //             layer.msg('导出成功',{icon:1});
+                //         } else {
+                //             layer.msg('导出失败',{icon:7});
+                //         }
+                //     }
+                // })
+                window.location.href = _this.ajax_url+'/orderDetailExport?orderId='+_this.orderId+'&cardnum='+_this.write_data.cardnum+'&simnum='+_this.write_data.simnum
+                    +'&orderMeal='+_this.write_data.mealId+'&orderDiscount='+_this.write_data.discount;
             },
             detailDel:function() {
                 var _this = this;
@@ -455,34 +457,38 @@ define(['layui', 'text!../../pages/simcard.html'], function (layui, simcard) {
             },
             orderExport:function () {
                 var _this=this;
-                var datas = {city:_this.city,
-                    county:_this.county,
-                    channelName:_this.channel_name,
-                    channelType:_this.channel_type,
-                    orderMeal:_this.mealId,
-                    orderDiscount:_this.discount,
-                    orderState:_this.state,
-                    subTime:_this.subTime,
-                    subTimeE:_this.subTimeE,
-                    createTime:_this.createTime,
-                    createTimeE:_this.createTimeE,
-                    orderOtherPeople:_this.orderOtherPeople,
-                    orderOtherPhone:_this.orderOtherPhone,
-                    curr:_this.curr,
-                    limit:_this.limit}
-                $.ajax({
-                    url: _this.ajax_url+'/orderExport',
-                    type: 'post',
-                    data:JSON.stringify(datas),
-                    headers : {
-                        'Content-Type' : 'application/json;charset=utf-8'
-                    },
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-                        layer.msg('导出成功！',{icon:1});
-                    }
-                })
+                // var datas = {city:_this.city,
+                //     county:_this.county,
+                //     channelName:_this.channel_name,
+                //     channelType:_this.channel_type,
+                //     orderMeal:_this.mealId,
+                //     orderDiscount:_this.discount,
+                //     orderState:_this.state,
+                //     subTime:_this.subTime,
+                //     subTimeE:_this.subTimeE,
+                //     createTime:_this.createTime,
+                //     createTimeE:_this.createTimeE,
+                //     orderOtherPeople:_this.orderOtherPeople,
+                //     orderOtherPhone:_this.orderOtherPhone,
+                //     curr:_this.curr,
+                //     limit:_this.limit}
+                // $.ajax({
+                //     url: _this.ajax_url+'/orderExport',
+                //     type: 'post',
+                //     data:JSON.stringify(datas),
+                //     headers : {
+                //         'Content-Type' : 'application/json;charset=utf-8'
+                //     },
+                //     contentType: false,
+                //     processData: false,
+                //     success: function () {
+                //         layer.msg('导出成功！',{icon:1});
+                //     }
+                // })
+                window.location.href = _this.ajax_url+'/orderExport?city='+_this.city+'&county='+_this.county+'&channelName='+_this.channel_name+'&channelType='+_this.channel_type
+                    +'&orderMeal='+_this.mealId+'&orderDiscount='+_this.discount+'&orderState='+_this.state
+                    +'&subTime='+_this.subTime+'&subTimeE='+_this.subTimeE+'&createTime='+_this.createTime
+                    +'&createTimeE='+_this.createTimeE+'&orderOtherPeople='+_this.orderOtherPeople+'&orderOtherPhone='+_this.orderOtherPhone;
             },
             merge: function (res) {
                 var data = res.data;

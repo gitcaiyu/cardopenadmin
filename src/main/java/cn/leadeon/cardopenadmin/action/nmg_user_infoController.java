@@ -4,6 +4,7 @@ import cn.leadeon.cardopenadmin.common.resBody.CardResponse;
 import cn.leadeon.cardopenadmin.entity.nmg_user_info;
 import cn.leadeon.cardopenadmin.entity.nmg_user_role;
 import cn.leadeon.cardopenadmin.service.nmg_user_infoService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,13 +97,16 @@ public class nmg_user_infoController {
 
     /**
      * 用户导出
-     * @param data
      * @param httpServletRequest
      * @return
      */
-    @PostMapping(value = "/userExport")
-    public CardResponse userExport(@RequestBody String data,HttpServletRequest httpServletRequest) {
-        return nmg_user_infoService.userExport(data,httpServletRequest);
+    @GetMapping(value = "/userExport")
+    public void userExport(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userName",httpServletRequest.getParameter("userName"));
+        jsonObject.put("userTel",httpServletRequest.getParameter("userTel"));
+        jsonObject.put("userRole",httpServletRequest.getParameter("userRole"));
+        nmg_user_infoService.userExport(httpServletRequest,httpServletResponse,jsonObject);
     }
 
     /**

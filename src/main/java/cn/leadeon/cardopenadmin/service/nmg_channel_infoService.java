@@ -122,12 +122,11 @@ public class nmg_channel_infoService {
         return cardResponse;
     }
 
-    public CardResponse channelExport(nmg_channel_info nmg_channel_info,HttpServletRequest httpServletRequest) throws IOException {
-        CardResponse cardResponse = new CardResponse();
+    public void channelExport(nmg_channel_info nmg_channel_info,HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) throws IOException {
         HttpSession httpSession = httpServletRequest.getSession();
         nmg_user_info nmg_user_info = (nmg_user_info) httpSession.getAttribute("userInfo");
         Map param = new HashMap();
-        String fileName = path + nmg_user_info.getUserName() + "的渠道信息" + DateUtil.getDateString() + ".xls";
+        String fileName = nmg_user_info.getUserName() + "的渠道信息" + DateUtil.getDateString() + ".xls";
         if (nmg_user_info.getUserRole().equals("2")) {
             param.put("city",nmg_channel_info.getCity());
         }
@@ -192,12 +191,10 @@ public class nmg_channel_infoService {
                 row.createCell(6).setCellValue((String) maps.get("channel_address"));
             }
         }
-        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-        hssfWorkbook.write(fileOutputStream);
-        fileOutputStream.close();
-        hssfWorkbook.close();
-        cardResponse.setResDesc(fileName);
-        return cardResponse;
+        httpServletResponse.setContentType("application/octet-stream");
+        httpServletResponse.setHeader("Content-Disposition", "attachment;fileName="+fileName);
+        httpServletResponse.flushBuffer();
+        hssfWorkbook.write(httpServletResponse.getOutputStream());
     }
 
     @Transactional
